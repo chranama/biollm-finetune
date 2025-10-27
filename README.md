@@ -90,16 +90,16 @@ export PYTORCH_ENABLE_MPS_FALLBACK=1
 
 ### 🧠 Inference (tiny model)
 ~~~bash
-bioasq-generate \
+biollm-generate \
   --config configs/inference_tiny.yaml \
   --input data/samples/integration_questions.jsonl \
   --out results/generated/integration_answers.jsonl
 
-bioasq-postprocess \
+biollm-postprocess \
   --inputs results/generated/integration_answers.jsonl \
   --outdir results/processed --format jsonl
 
-bioasq-metrics \
+biollm-metrics \
   --pred results/generated/integration_answers.jsonl \
   --gold data/samples/integration_gold.json \
   --out results/metrics/metrics.json
@@ -107,7 +107,7 @@ bioasq-metrics \
 
 ### 🔥 Tiny smoke fine-tuning
 ~~~bash
-bioasq-finetune --config configs/finetune_tiny.yaml
+biollm-finetune --config configs/finetune_tiny.yaml
 ~~~
 
 This runs a short (~10-step) fine-tuning loop with **TinyLlama**, verifying end-to-end functionality.
@@ -140,7 +140,7 @@ training:
   learning_rate: 5e-5
 ~~~
 ~~~bash
-python -m bioasq_llm.training.finetune --config configs/finetune_tiny.yaml
+python -m biollm_finetune.training.finetune --config configs/finetune_tiny.yaml
 ~~~
 
 ---
@@ -158,7 +158,7 @@ Fast tests run on CPU; model-dependent tests are marked `@pytest.mark.slow`.
 
 ## 🧷 Reproducibility and Data Sample Generation
 
-All test/smoke datasets are balanced subsets of BioASQ (`training12b_new.json`), generated via `bioasq-sample`.
+All test/smoke datasets are balanced subsets of BioASQ (`training12b_new.json`), generated via `biollm-sample`.
 
 Stored under:
 ~~~text
@@ -171,7 +171,7 @@ Each dataset exports:
 
 ### 🧪 1. Unit Test Sample
 ~~~bash
-bioasq-sample \
+biollm-sample \
   --inputs data/training12b_new.json \
   --out-questions data/samples/unit_questions.jsonl \
   --out-gold data/samples/unit_gold.json \
@@ -181,7 +181,7 @@ bioasq-sample \
 
 ### 🔗 2. Integration Test Sample
 ~~~bash
-bioasq-sample \
+biollm-sample \
   --inputs data/training12b_new.json \
   --out-questions data/samples/integration_questions.jsonl \
   --out-gold data/samples/integration_gold.json \
@@ -191,7 +191,7 @@ bioasq-sample \
 
 ### 🔥 3. Smoke Fine-Tuning Sample
 ~~~bash
-bioasq-sample \
+biollm-sample \
   --inputs data/training12b_new.json \
   --out-questions data/samples/smoke_train.jsonl \
   --out-gold data/samples/smoke_gold.json \
@@ -217,12 +217,12 @@ make regen-samples
 
 ### GPU build
 ~~~bash
-docker build -t bioasq-llm-qa -f Dockerfile .
+docker build -t biollm-finetune -f Dockerfile .
 ~~~
 
 ### CPU build (for Mac)
 ~~~bash
-docker build -t bioasq-llm-qa-cpu -f Dockerfile.cpu .
+docker build -t biollm-finetune-cpu -f Dockerfile.cpu .
 ~~~
 
 Run:
