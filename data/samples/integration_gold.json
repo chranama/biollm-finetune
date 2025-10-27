@@ -1,0 +1,348 @@
+{
+  "questions": [
+    {
+      "type": "yesno",
+      "exact_answer": "yes",
+      "body": "Is daridorexant effective for insomnia?",
+      "ideal_answer": [
+        "Yes. Daridorexant an orally administered dual orexin type 1 and type 2 (OX1 and OX2) receptor antagonist (DORA) being developed for the treatment of insomnia."
+      ],
+      "id": "64041e97201352f04a00001e"
+    },
+    {
+      "type": "yesno",
+      "exact_answer": "yes",
+      "body": "Are histone deacetylase (HDAC) inhibitors good candidates to control metastasis of solid tumors?",
+      "ideal_answer": [
+        "Yes, some HDAC inhibitors, such as Vorinostat, are on trial for human treatment after proving successful in animal models. Combination with other drugs is likely to be needed to control metastasis."
+      ],
+      "id": "517404878ed59a060a000023"
+    },
+    {
+      "type": "yesno",
+      "exact_answer": "no",
+      "body": "Is the abnormal dosage of ultraconserved elements disfavored in cancer cells?",
+      "ideal_answer": [
+        "No. Abnormal dosage of ultraconserved elements is highly disfavored in healthy cells but not cancer cells."
+      ],
+      "id": "56c0708eef6e39474100001f"
+    },
+    {
+      "type": "yesno",
+      "exact_answer": "yes",
+      "body": "Has the gorilla genome been determined?",
+      "ideal_answer": [
+        "Yes, the gorilla genome has been sequenced."
+      ],
+      "id": "58dfec676fddd3e83e000006"
+    },
+    {
+      "type": "yesno",
+      "exact_answer": "yes",
+      "body": "Is rucaparib used for ovarian cancer treatment?",
+      "ideal_answer": [
+        "Yes, rucaparib is a PARP inhibitor that is used for ovarian cancer treatment."
+      ],
+      "id": "588485bbe56acf517600000b"
+    },
+    {
+      "type": "yesno",
+      "exact_answer": "no",
+      "body": "Is cardiac magnetic resonance imaging indicated in the pre-participation screening of athletes?",
+      "ideal_answer": [
+        "Currently cardiac magnetic resonance imaging is not indicated in the pre-participation screening of athletes. However the potential of this imaging technique to provide new information on cardiac function morphology and myocardial composition, in particular with regard to myocardial fibrosis, gets it potentially suitable to be applied in the pre-participation screening of athletes"
+      ],
+      "id": "531d3dc0267d7dd053000005"
+    },
+    {
+      "type": "factoid",
+      "exact_answer": [
+        "S-phase"
+      ],
+      "body": "During which stage of the cell cycle is cohesin deposited on the yeast genome?",
+      "ideal_answer": [
+        "In the budding yeast, cohesin is loaded onto the chromosome during the late G1 phase, establishes sister chromatid cohesion concomitant with DNA replication, and dissociates by the telophase.",
+        "In the budding yeast, cohesin is loaded onto the chromosome during the late G1 phase, establishes sister chromatid cohesion concomitant with DNA replication, and dissociates by the telophase. ",
+        "Cohesin association with G1 chromosomes requires continued activity of the cohesin loader Mis4/Ssl3, suggesting that repeated loading cycles maintain cohesin binding. In mammalian cells, cohesin binding to chromatin is dynamic in G1, but becomes stabilized during S-phase. Instead, we find that cohesin stability increases at the time of S-phase in a reaction that can be uncoupled from DNA replication. Budding yeast Scc1p/Mcd1p, an essential subunit, is cleaved and dissociates from chromosomes in anaphase, leading to sister chromatid separation."
+      ],
+      "id": "56e2acfe51531f7e33000014"
+    },
+    {
+      "type": "factoid",
+      "exact_answer": [
+        "10-12%"
+      ],
+      "body": "What is the estimated cost reduction when using telegenetics?",
+      "ideal_answer": [
+        "The estimated cost reduction by online counseling is about 10-12%."
+      ],
+      "id": "6415bb3c690f196b5100000e"
+    },
+    {
+      "type": "factoid",
+      "exact_answer": [
+        "free fetal DNA from maternal cirulcation"
+      ],
+      "body": "How can the fetal Rhesus be determined with non-invasive testing?",
+      "ideal_answer": [
+        "The detection of fetal RhD status can be achieved with the non-invasive method of assessing free fetal DNA in the maternal blood."
+      ],
+      "id": "571366ba1174fb1755000005"
+    },
+    {
+      "type": "factoid",
+      "exact_answer": [
+        "trfermikit"
+      ],
+      "body": "Which tool has been developed to discover VNTR-associated deletions?",
+      "ideal_answer": [
+        "Τrfermikit is a software tool designed to detect deletions larger than 50 bp occurring in Variable Number Tandem Repeats (VNTRs) using Illumina DNA sequencing reads. In such regions, it achieves a better trade-off between sensitivity and false discovery than a state-of-the-art structural variation (SV) caller, Manta, and complements it by recovering a significant number of deletions that Manta missed. trfermikit is based upon the fermikit pipeline, which performs read assembly, maps the assembly to the reference genome, and calls variants from the alignment."
+      ],
+      "id": "621911323a8413c653000038"
+    },
+    {
+      "type": "factoid",
+      "exact_answer": [
+        "XXY"
+      ],
+      "body": "What is the chromosomal abnormality associated with Klinefelter Syndrome",
+      "ideal_answer": [
+        "About 1 in 650 boys are born with an extra X chromosome (47,XXY or Klinefelter syndrome). 47,XXY",
+        "About 1 in 650 boys are born with an extra X chromosome (47,XXY or Klinefelter syndrome)"
+      ],
+      "id": "5e669e0e1af46fc130000019"
+    },
+    {
+      "type": "factoid",
+      "exact_answer": [
+        "Coordination of the progression of helicase and DNA polymerase alpha at the eukaryotic replication fork."
+      ],
+      "body": "What is the main role of Ctf4 in dna replication?",
+      "ideal_answer": [
+        "coupling MCM2-7 to replicative polymerases is an important feature of the regulation of chromosome replication in eukaryotes, and highlight a key role for Ctf4 in this processAnd-1/Ctf4 is therefore a new replication initiation factor that brings together the MCM2-7 helicase and the DNA pol alpha-primase complex, analogous to the linker between helicase and primase or helicase and polymerase that is seen in the bacterial replication machinery",
+        "Ctf4 coordinates the progression of helicase and DNA polymerase alpha.  Mcm10 and And-1/CTF4 recruit DNA polymerase alpha to chromatin for initiation of DNA replication. And-1/Ctf4 is therefore a new replication initiation factor that brings together the MCM2-7 helicase and the DNA pol alpha-primase complex, analogous to the linker between helicase and primase or helicase and polymerase that is seen in the bacterial replication machinery."
+      ],
+      "id": "530cf22aa177c6630c000004"
+    },
+    {
+      "type": "list",
+      "exact_answer": [
+        [
+          "ITGA4"
+        ],
+        [
+          "ITGB8"
+        ],
+        [
+          "ITGAL"
+        ],
+        [
+          "ICAM1"
+        ]
+      ],
+      "body": "Which integrin genes are activated by the immune system in inflammatory bowel disease?",
+      "ideal_answer": [
+        "ITGA4, ITGB8, ITGAL and ICAM1. In all four cases, the expression-increasing allele also increases disease risk."
+      ],
+      "id": "5c596ad686df2b9174000015"
+    },
+    {
+      "type": "list",
+      "exact_answer": [
+        [
+          "Tokuhashi"
+        ],
+        [
+          "Tomita"
+        ],
+        [
+          "Bauer"
+        ],
+        [
+          "Oswestry"
+        ]
+      ],
+      "body": "List scales that are used for scoring of patients with spinal metastasis?",
+      "ideal_answer": [
+        "Tokuhashi, Tomita, Bauer, and Oswestry scores are used for survival prediction of patients with spinal metastases."
+      ],
+      "id": "589a245878275d0c4a000025"
+    },
+    {
+      "type": "list",
+      "exact_answer": [
+        [
+          "Enterovirus"
+        ],
+        [
+          "Adenovirus"
+        ],
+        [
+          "Coxsackie B virus"
+        ]
+      ],
+      "body": "Which viruses are best known to cause myocarditis?",
+      "ideal_answer": [
+        "The most frequent viruses causing myocarditis are Enterovirus, Adenovirus and Coxsackie B viruses."
+      ],
+      "id": "517a8c918ed59a060a000043"
+    },
+    {
+      "type": "list",
+      "exact_answer": [
+        [
+          "weight gain"
+        ],
+        [
+          "growth retardation"
+        ],
+        [
+          "hirsutism"
+        ],
+        [
+          "obesity"
+        ],
+        [
+          "striae"
+        ],
+        [
+          "acne"
+        ],
+        [
+          "hypertension"
+        ]
+      ],
+      "body": "Which are the common symptoms of Cushing's syndrome?",
+      "ideal_answer": [
+        "Cushing syndrome is the constellation of signs and symptoms caused by protracted exposure to glucocorticoids. Presenting features commonly include weight gain, growth retardation, hirsutism, obesity, striae, acne and hypertension."
+      ],
+      "id": "571f3b320fd6f91b68000007"
+    },
+    {
+      "type": "list",
+      "exact_answer": [
+        [
+          "benign ovarian tumor"
+        ],
+        [
+          "ascites"
+        ],
+        [
+          "pleural effusion"
+        ]
+      ],
+      "body": "List symptoms of Meigs' Syndrome.",
+      "ideal_answer": [
+        "Meigs' syndrome is a benign ovarian tumor associated with ascites and pleural effusion."
+      ],
+      "id": "56be0a18ef6e394741000006"
+    },
+    {
+      "type": "list",
+      "exact_answer": [
+        [
+          "Gfi-1b"
+        ],
+        [
+          "MeCP1",
+          "MeCP1 complex"
+        ],
+        [
+          "ACF/WCRF complex"
+        ],
+        [
+          "FOG-1"
+        ],
+        [
+          "TAL-1"
+        ],
+        [
+          "Ldb1",
+          "Ldb-1"
+        ],
+        [
+          "LMO2-C"
+        ],
+        [
+          "PIAS3"
+        ],
+        [
+          "RUNX1"
+        ],
+        [
+          "Ski"
+        ],
+        [
+          "EKLF"
+        ],
+        [
+          "SP1"
+        ],
+        [
+          "CBP/p300"
+        ],
+        [
+          "PU.1"
+        ]
+      ],
+      "body": "List interaction partners for the protein GATA1.",
+      "ideal_answer": [
+        "GATA-1 interact with factor Gfi-1b, the repressive MeCP1 complex, the chromatin remodeling ACF/WCRF complex, FOG-1, TAL-1, Ldb-1 and LMO2-C.",
+        "GATA1 interacts with the essential hematopoietic factor Gfi-1b, the repressive MeCP1 complex, the chromatin remodeling ACF/WCRF complex, in addition to the known GATA-1/FOG-1 and GATA-1/TAL-1 complexes. Ldb1 is a known partners of GATA1. LMO2-C can bind endogenous GATA1. Novel transcription factor binding partners for PIAS3 include GATA1. Combinatorial interactions occurre between RUNX1 and its coregulator GATA1. Ski interacts with GATA1. GATA-1 interacts with multiple proteins including FOG-1, EKLF, SP1, CBP/p300 and PU.1."
+      ],
+      "id": "52f89fd32059c6d71c000051"
+    },
+    {
+      "type": "summary",
+      "body": "What is Mondor's disease?",
+      "ideal_answer": [
+        "Mondor's disease is a rare benign and self-limiting condition characterized by thrombophlebitis of the superficial veins of the anterolateral thoracoabdominal wall and genital area."
+      ],
+      "id": "589a246778275d0c4a00002f"
+    },
+    {
+      "type": "summary",
+      "body": "What is caused by SCUBE3 loss of function?",
+      "ideal_answer": [
+        "SCUBE3 loss-of-function causes a recognizable recessive developmental disorder due to defective bone morphogenetic protein signaling.",
+        "SCUBE3 is a BMP2/BMP4 co-receptor. It is responsible for the development of bone and teeth. When it is not functioning properly, it inhibits the growth and development of these tissues.",
+        "SCUBE3 loss-of-function results in a human disease caused by defective function of a member of the SCUBE family that is associated with a previously unrecognized syndromic disorder. The disorder is characterized by reduced growth, skeletal features, distinctive craniofacial appearance, and dental anomalies. It is also associated with dysregulating bone morphogenetic protein signaling."
+      ],
+      "id": "61f86db9882a024a10000045"
+    },
+    {
+      "type": "summary",
+      "body": "Where is the protein CLIC1 localized?",
+      "ideal_answer": [
+        "CLIC1 is an intracellular chloride ion channel that is localized both to the nucleus and to the cytolasm."
+      ],
+      "id": "53319916d6d3ac6a3400003f"
+    },
+    {
+      "type": "summary",
+      "body": "What is the definition of trichotillomania?",
+      "ideal_answer": [
+        "Trichotillomania is defined as an obsessive-compulsive or related disorder in which patients recurrently pull out hair from any region of their body."
+      ],
+      "id": "6414c1ae690f196b51000003"
+    },
+    {
+      "type": "summary",
+      "body": "What are the birth defects associated with Zika-virus infection?",
+      "ideal_answer": [
+        "Although the full spectrum of adverse reproductive outcomes caused by Zika virus infection is not yet determined, a distinctive phenotype-the congenital Zika syndrome-has emerged. Zika virus infection during pregnancy is a cause of microcephaly and other severe birth defects."
+      ],
+      "id": "58a989571978bbde22000002"
+    },
+    {
+      "type": "summary",
+      "body": "What is IDD in relation to organ transplantation?",
+      "ideal_answer": [
+        "Imminent death donation (IDD) has been proposed as a separate category of organ donation: distinct from living donation and donation after cardiac death",
+        "Imminent death donation (IDD) is a proposal to procure organs from patients prior to the withdrawal of life support, which is anticipated to lead to death",
+        "Imminent death donation (IDD) is described as living organ donation prior to a planned withdrawal of life-sustaining care in an imminently dying patient."
+      ],
+      "id": "623648723a8413c6530000af"
+    }
+  ]
+}

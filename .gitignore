@@ -1,0 +1,25 @@
+# Python/build
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# macOS
+.DS_Store
+
+# Virtual env / local env
+.venv/
+.env
+
+# Data & artifacts
+results/**
+data/**/cache/**
+*.pt *.bin *.ckpt *.safetensors
+*.log
+
+# Docker/IDE
+*.local

@@ -1,0 +1,24 @@
+# Python junk
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Data & results
+data/
+results/
+*.pt
+*.bin
+*.ckpt
+*.safetensors
+*.log
+
+# Secrets / tokens / env
+.env
+token/
+
+# Git stuff
+.git/
+.gitignore
+
+# OS cruft
+.DS_Store

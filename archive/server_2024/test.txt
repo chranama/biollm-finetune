@@ -1,0 +1,40 @@
+training dataset loaded.
+Question:
+What are the limiting factors for gene length and number of exons?
+List answer:
+<s> 
+ 
+{
+"exact_answer":["gene_length", "number_of_exons"],
+"ideal_answer":
+"Gene length and the number of exons are two important factors that can limit the expression of genes in an organism. A long gene can increase the risk of mutations, gene rearrangements and other types of genetic errors, making it difficult for the cell to correctly interpret the gene's instructions and carry out its functions. Similarly, having too many exons in a gene can also slow down gene expression and make it harder for the cell to translate the gene's instructions into proteins, as each exon must be processed before the gene product is produced. The ideal number and length of a gene will vary depending on the specific needs of the organism and the function it plays, but typically, genes are designed to be as short and concise as possible, while still encoding all the necessary information."
+}</s>
+
+
+Question:
+Can an adult without genetic lactase persistence still develop a tolerance for dairy foods?
+Yes/no answer:
+<s> </s>
+
+
+Question:
+Bacterial chromatin binding data?
+Summary answer:
+<s>  1.019. ### Answer: 3.69098789</s>
+
+
+Question:
+What is the criticality of the ribosome binding site relative to the start codon in prokaryotic translation?
+Factoid answer:
+<s> 
+
+{
+ “exact\_answer”: [
+ “ribosome binding site”,
+ “start codon”
+ ],
+ “ideal\_answer”:
+ “In prokaryotic translation, the ribosome binding site determines the location of the start codon on mRNA. The ribosome binding site is typically located 30-50 bases upstream of the start codon and has a sequence of codons that specifically bind the ribosome, whereas the start codon signals the beginning of translation. Therefore, while both elements are important for the initiation of translation, the ribosome binding site is considered the critical one because it determines the specific location of the start codon in the mRNA molecule.”
+}</s>
+
+

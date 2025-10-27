@@ -1,0 +1,8 @@
+{
+  "questions": [
+    {"id":"yn-1","type":"yesno","body":"Is insulin a protein?","exact_answer":"yes"},
+    {"id":"fact-1","type":"factoid","body":"What enzyme synthesizes DNA from an RNA template?","exact_answer":["reverse transcriptase","RT"]},
+    {"id":"list-1","type":"list","body":"Name two anticoagulants.","exact_answer":["warfarin","heparin"]},
+    {"id":"sum-1","type":"summary","body":"Describe the role of BRCA1 in DNA repair.","ideal_answer":"BRCA1 participates in homologous recombination (HR)–mediated DNA repair."}
+  ]
+}

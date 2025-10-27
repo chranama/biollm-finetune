@@ -1,0 +1,43 @@
+cff-version: 1.2.0
+message: "If you use this code or build upon it, please cite this work as below."
+title: "LLM Fine-Tuning With Biomedical Open-Source Data"
+authors:
+  - family-names: "Anaya"
+    given-names: "Christopher"
+date-released: "2025-06-01"
+version: "1.0.0"
+abstract: >
+  This repository accompanies the Master's thesis *LLM Fine-Tuning With Biomedical Open-Source Data*,
+  developed at the Faculty of Science of the University of Lisbon. It provides an end-to-end
+  fine-tuning and evaluation pipeline for biomedical question answering using open-weight large
+  language models (LLMs) such as Mistral and TinyLlama, with support for LoRA/QLoRA, reproducible
+  training configurations, and modular evaluation utilities.
+license: "MIT"
+repository-code: "https://github.com/chrisanaya/bioasq-llm-qa"
+keywords:
+  - biomedical question answering
+  - large language models
+  - LoRA
+  - QLoRA
+  - BioASQ
+  - data science
+  - fine-tuning
+  - open-source
+institution: "Faculty of Science of the University of Lisbon (Faculdade de Ciências da Universidade de Lisboa)"
+location:
+  city: "Lisbon"
+  country: "Portugal"
+type: "software"
+preferred-citation:
+  type: thesis
+  title: "LLM Fine-Tuning With Biomedical Open-Source Data"
+  author:
+    - family-names: "Anaya"
+      given-names: "Christopher"
+  year: 2025
+  publisher: "Faculty of Science of the University of Lisbon (Faculdade de Ciências da Universidade de Lisboa)"
+  address:
+    city: "Lisbon"
+    country: "Portugal"
+  notes: "Master’s Thesis in Data Science"
+  url: "https://github.com/chrisanaya/bioasq-llm-qa"

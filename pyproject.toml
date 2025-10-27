@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "biollm-finetune"
+version = "0.1.0"
+description = "BioLLM Finetune: data loaders, preprocessing, training (LoRA/QLoRA), generation, and evaluation."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Christopher Anaya" }]
+keywords = ["BioASQ", "LLM", "MLOps", "Biomedical QA", "RAG", "PEFT", "LoRA"]
+# Keep this lean; add bitsandbytes only via an extra (see below)
+dependencies = [
+  "transformers>=4.40,<5",
+  "accelerate>=0.30,<1",
+  "peft>=0.10,<1",
+  "datasets>=2.17,<3",
+  "pydantic>=2,<3",
+  "rich>=13,<14",
+  "typer>=0.12,<1",
+  "rouge-score>=0.1,<1",
+  "pyyaml>=6,<7"
+]
+
+# Optional extras you can opt into:
+[project.optional-dependencies]
+dev = [
+  "pytest>=7,<9",
+  "pytest-cov>=4,<6",
+  "ruff>=0.5",
+  "black>=24",
+  "mypy>=1",
+  "types-PyYAML"
+]
+# bitsandbytes causes issues on macOS/CPU; keep it opt-in
+gpu = ["bitsandbytes>=0.43", "xformers>=0.0.23; platform_system == 'Linux'"]
+
+# Console scripts for quick CLIs (optional but handy)
+[project.scripts]
+biollm-finetune = "biollm_finetune.training.finetune:main"
+biollm-generate = "biollm_finetune.inference.generate:main"
+biollm-postprocess = "biollm_finetune.eval.postprocess:main"
+biollm-metrics = "biollm_finetune.eval.metrics:main"
+biollm-sample = "biollm_finetune.data.data_sampling:main"
+biollm-preprocess = "biollm_finetune.data.preprocess:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["biollm_finetune*"]
+
+# ---------- Tooling (kept inside pyproject for simplicity) ----------
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E203"]  # play nice with black on slices
+exclude = ["data/", "results/"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-q"
+testpaths = ["tests"]
+filterwarnings = [
+  "ignore::UserWarning",
+]

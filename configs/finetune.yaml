@@ -1,0 +1,45 @@
+# Full fine-tuning config for a CUDA server (QLoRA on Mistral-7B-Instruct)
+
+model:
+  base_model: "mistralai/Mistral-7B-Instruct-v0.1"
+  adapter_output_dir: "results/ckpts/mistral7b_qlora_bioasq"
+  load_4bit: true              # requires bitsandbytes (install via extra: pip install '.[gpu]')
+  load_8bit: false
+  bf16: true                   # set true if your GPU supports bfloat16
+  fp16: false
+  gradient_checkpointing: true
+  use_peft: true
+  lora_r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules: ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
+
+data:
+  train_file: "data/training12b_new.json"   # migrated from train_json
+  validation_split: 0.05
+  max_length: 512
+  include_snippets: true
+  question_field: "body"
+  answer_field: "ideal_answer"
+
+training:
+  output_dir: "results/ckpts/mistral7b_qlora_bioasq"
+  num_train_epochs: 1
+  max_steps: 3000               # from your old config
+  per_device_train_batch_size: 2
+  per_device_eval_batch_size: 2
+  gradient_accumulation_steps: 16
+  learning_rate: 2.0e-4
+  weight_decay: 0.0
+  warmup_ratio: 0.03
+  lr_scheduler_type: "linear"
+  logging_steps: 20
+  save_steps: 200
+  evaluation_strategy: "steps"
+  eval_steps: 200
+  save_total_limit: 2
+  seed: 42
+
+system:
+  device_map: "cuda"
+  report_to: "none"

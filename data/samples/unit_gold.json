@@ -1,0 +1,56 @@
+{
+  "questions": [
+    {
+      "exact_answer": "yes",
+      "body": "Is autosomal dominant inheritanced form of Osteogenesis imperfecta caused by mutations in the genes associated with collagen production?",
+      "ideal_answer": [
+        "Osteogenesis imperfecta (OI), also known as brittle bone disease, is a group of genetic disorders that mainly affect the bones. The autosomal dominant form of the disease is cause by a mutation in the COL1A1 or COL1A2 genes which produce type I collagen.",
+        "steogenesis imperfecta (OI) is a heterogeneous bone disorder characterized by recurrent fractures. Although most cases of OI have heterozygous mutations inCOL1A1orCOL1A2and show autosomal dominant inheritance,"
+      ],
+      "id": "5a6f77d7b750ff4455000051",
+      "type": "yesno"
+    },
+    {
+      "exact_answer": [
+        "epidermal growth factor receptor (EGFR) gene"
+      ],
+      "body": "Mutations in which gene determine response to both erlotinib and gefitinib?",
+      "ideal_answer": [
+        "Patients who carry somatic activating mutations in the tyrosine kinase domain of the epidermal growth factor receptor (EGFR) gene, respond well to erlotinib and gefitinib."
+      ],
+      "id": "51542e44d24251bc05000081",
+      "type": "factoid"
+    },
+    {
+      "exact_answer": [
+        [
+          "Parkinson disease"
+        ],
+        [
+          "essential tremor"
+        ],
+        [
+          "obsessive-compulsive disorder"
+        ],
+        [
+          "chronic neuropathic pain"
+        ]
+      ],
+      "body": "Which diseases that can be treated using the focused ultrasound thalamotomy.",
+      "ideal_answer": [
+        "Focused ultrasound thalamotomy is used for treatment of Parkinson disease, essential tremor, obsessive-compulsive disorder and chronic neuropathic pain."
+      ],
+      "id": "58846be0e56acf5176000005",
+      "type": "list"
+    },
+    {
+      "body": "What is the effect of resveratrol on mTOR activity?",
+      "ideal_answer": [
+        "Resveratrol (RSV) inhibits leucine-stimulated mTORC1 activation by promoting mTOR/DEPTOR.",
+        "Resveratrol downregulates PI3K/Akt/mTOR signaling pathways in human cells. It has been found that resveratrol targets multiple components of the phosphatidylinositol 3- kinase(PI3K)/Akt and mTOR signaling pathways, including PI3K, Akt, PTEN, and DEPTOR, suggesting that this natural compound and its derivatives may offer a promising new cancer treatment."
+      ],
+      "id": "551177626a8cde6b72000005",
+      "type": "summary"
+    }
+  ]
+}

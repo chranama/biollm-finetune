@@ -1,0 +1,23 @@
+model:
+  path: "mistralai/Mistral-7B-Instruct-v0.1"
+  # Option A: keep config-driven adapter loading (rename key to adapter_output_dir):
+  adapter_output_dir: "results/ckpts/mistral7b_qlora_bioasq"
+  load_4bit: true
+  load_8bit: false
+  bf16: true
+  max_length: 512
+
+inference:
+  batch_size: 4
+  max_input_length: 512
+  max_new_tokens: 256
+  do_sample: true
+  temperature: 0.2
+  top_p: 0.9
+  num_beams: 1
+  log_every: 50
+
+data:
+  include_snippets: true
+
+prompts: {}

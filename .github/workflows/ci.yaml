@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "configs/**"
+      - "requirements.txt"
+      - ".github/workflows/ci.yml"
+  pull_request:
+    branches: [ main, master ]
+
+# Prevent piling up old runs on the same branch/PR
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: python -m pip install --upgrade pip
+      - run: pip install ruff black
+      - name: Ruff (lint)
+        run: ruff check .
+      - name: Black (format check)
+        run: black --check .
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: ${{ matrix.python-version }} }
+
+      # Cache pip packages
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            pip-${{ runner.os }}-${{ matrix.python-version }}-
+            pip-
+
+      # (Optional) Cache Hugging Face to speed tiny model downloads
+      - name: Cache HF models
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('tests/data/tiny_prompts.yaml') }}
+          restore-keys: |
+            hf-${{ runner.os }}-${{ matrix.python-version }}-
+            hf-
+
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt pytest
+      - name: Run tests (CPU)
+        env:
+          PYTHONPATH: src
+          HF_HOME: ~/.cache/huggingface
+          PYTORCH_ENABLE_MPS_FALLBACK: "1"
+        run: |
+          pytest -q
+
+      # (Optional) upload test results/coverage if you generate them
+      # - uses: actions/upload-artifact@v4
+      #   with: { name: pytest-logs, path: .pytest_cache, if-no-files-found: ignore }

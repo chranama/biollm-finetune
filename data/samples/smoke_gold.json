@@ -1,0 +1,1269 @@
+{
+  "questions": [
+    {
+      "id": "518ccac0310faafe0800000b",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "YES:"
+      ],
+      "body": "Is intense physical activity associated with longevity?",
+      "type": "yesno"
+    },
+    {
+      "id": "58de34608acda3452900002b",
+      "exact_answer": "no",
+      "ideal_answer": [
+        "We demonstrate that the presence of long inverted repeats (IR) flanking the mouse Sry gene leads to the formation of the Sry circular transcript in cultured cells. We have found that in an in vitro assay, the SRY protein binds to several sites of the Sry gene and especially to a (CA)25 sequence and to a (CAG)30 repeat.",
+        "The presence of long inverted repeats (IR) flanking the mouse Sry gene leads to the formation of the Sry circular transcript in cultured cells.",
+        "We demonstrate that the presence of long inverted repeats (IR) flanking the mouse Sry gene leads to the formation of the Sry circular transcript in cultured cells Circularization requires the presence of both IR.",
+        "We demonstrate that the presence of long inverted repeats (IR) flanking the mouse Sry gene leads to the formation of the Sry circular transcript in cultured cells We have found that in an in vitro assay, the SRY protein binds to several sites of the Sry gene and especially to a (CA)25 sequence and to a (CAG)30 repeat",
+        "We demonstrate that the presence of long inverted repeats (IR) flanking the mouse Sry gene leads to the formation of the Sry circular transcript in cultured cells"
+      ],
+      "body": "Is the mouse Sry gene locus free of repetitive sequences?",
+      "type": "yesno"
+    },
+    {
+      "id": "52b2e97df828ad283c000012",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "Overexpression of sirtuins (NAD(+)-dependent protein deacetylases) has been reported to increase lifespan in budding yeast (Saccharomyces cerevisiae)."
+      ],
+      "body": "Has overexpression of sirtuins been reported to increase lifespan in budding yeast (Saccharomyces cerevisiae)?",
+      "type": "yesno"
+    },
+    {
+      "id": "5c8972d4d558e5f232000006",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "Yes, the gene therapy Strimvelis has been approved by the European Medicines Agency."
+      ],
+      "body": "Has strimvelis been approved by the European Medicines Agency?",
+      "type": "yesno"
+    },
+    {
+      "id": "588383172305cd7e21000004",
+      "exact_answer": "no",
+      "ideal_answer": [
+        "No. The transcription of genes temporally regulated during fly and worm development occurs in the absence of canonically active histone modifications. Conversely, strong chromatin marking is related to transcriptional and post-transcriptional stability, an association also observed in mammals. Consequently, chromatin marking is associated with the stable production of RNA, whereas unmarked chromatin would permit rapid gene activation and deactivation during development. In the latter case, regulation by transcription factors would have a comparatively more important regulatory role than chromatin marks."
+      ],
+      "body": "Are there canonical marks of active chromatin in developmentally regulated genes?",
+      "type": "yesno"
+    },
+    {
+      "id": "5540a8d20083d1bf0e000001",
+      "exact_answer": "no",
+      "ideal_answer": [
+        "Selective sweep is a phenomenon in which the fixation of strongly beneficial alleles within a population reduces genetic diversity at partially linked neutral loci. Reduced variation or deviations from neutrality, along with an excess of fixed replacement sites, are indicative of selective sweep."
+      ],
+      "body": "Does a selective sweep increase genetic variation?",
+      "type": "yesno"
+    },
+    {
+      "id": "56bc8d65ac7ad1001900001a",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "Yes, reduced-nicotine cigarettes are effective for smoking cessation."
+      ],
+      "body": "Are reduced-nicotine cigarettes effective for smoking cessation?",
+      "type": "yesno"
+    },
+    {
+      "id": "5c57031107647bbc4b000014",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "Glyceraldehyde 3-phosphate dehydrogenase (GAPDH) has been reported to be a plasminogen receptor in many pathogenic bacteria."
+      ],
+      "body": "Has Glyceraldehyde 3-phosphate dehydrogenase (GAPDH) been reported to be a plasminogen receptor in pathogenic bacteria?",
+      "type": "yesno"
+    },
+    {
+      "id": "6026de661cb411341a0000d1",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "Yes, there are several small molecule CGRPs under development for the treatment of migraine."
+      ],
+      "body": "Are there small molecule CGRPs under development for the treatment of migraine?",
+      "type": "yesno"
+    },
+    {
+      "id": "62211b973a8413c65300006c",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "The  2H2-6M(4)-oxazole telomestatin derivative (6OTD) targets Glioma stem cells through G4 stabilization and promotion of DNA damage responses. Therefore, G4s are promising therapeutic targets for glioblastoma.",
+        "G-quadruplex DNA structures (G4 DNA) are a promising therapeutic target for glioblastoma because of their ability to stabilize DNA damage and promote DNA damage response in response to 6-oxazole 6-methyl-CoA reductase inhibitors (6OTD)."
+      ],
+      "body": "Are G-quadruplexes(G4) possible drug targets for glioblastoma?",
+      "type": "yesno"
+    },
+    {
+      "id": "5a8dc57ffcd1d6a10c000025",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "The human bombesin receptors, GRPR and NMBR, are two of the most frequently overexpressed G-protein-coupled-receptors by lung-cancers",
+        "All 3 bombesin receptor subtypes (GRPR, NMBR, and BRS-3) were present on pulmonary and intestinal carcinoids by immunohistochemistry. "
+      ],
+      "body": "Are the human bombesin receptors, GRPR and NMBR, frequently overexpressed G-protein-coupled-receptors by lung-cancers?",
+      "type": "yesno"
+    },
+    {
+      "id": "5a80dbaafaa1ab7d2e000026",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "Yes. RiVIERA (Risk Variant Inference using Epigenomic Reference Annotations) is a Bayesian model for inference of driver variants from summary statistics across multiple traits using hundreds of epigenomic annotations."
+      ],
+      "body": "Are there ways of joint Bayesian inference of risk variants?",
+      "type": "yesno"
+    },
+    {
+      "id": "530cefaaad0bf1360c000004",
+      "exact_answer": "no",
+      "ideal_answer": [
+        "Clinical trials have demonstrated that bapineuzumab, a humanized monoclonal antibody against the end terminus of amyloid plaques, is not effective for treatment of patients with Alzheimer's disease. The burden of beta amyloid plaques was reduced in response to bapineuzumab therapy. However, bapineuzumab therapy did not improve cognitive functioning and was associated with significant adverse effects in Alzheimer's disease patients."
+      ],
+      "body": "Is bapineuzumab effective for treatment of patients with Alzheimer's disease?",
+      "type": "yesno"
+    },
+    {
+      "id": "530cf4fe960c95ad0c00000a",
+      "exact_answer": "no",
+      "ideal_answer": [
+        "No, zolpidem is a short-acting imidazopyridine hypnotic drug"
+      ],
+      "body": "Is zolpidem an antibiotic?",
+      "type": "yesno"
+    },
+    {
+      "id": "54d9f7894b1fd0d33c00000a",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "Epigenetic changes such as DNA methylation alter gene expression at the level of transcription by upregulating, downregulating, or silencing genes completely."
+      ],
+      "body": "Is DNA methylation an epigenetic modification of chromatin related to gene expression?",
+      "type": "yesno"
+    },
+    {
+      "id": "5a6d2558b750ff4455000036",
+      "exact_answer": "no",
+      "ideal_answer": [
+        "No. Uc.160+ is a T-UCR reported to be downregulated in human cancer. In addition, Uc.160+ could possibly have a tumor suppressive role in gastric cancer."
+      ],
+      "body": "Does Uc.160 promote cancer?",
+      "type": "yesno"
+    },
+    {
+      "id": "621b950f3a8413c653000044",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "Yes,\nSMOC2 response to wounding."
+      ],
+      "body": "Is SMOC2 expressed during wound healing?",
+      "type": "yesno"
+    },
+    {
+      "id": "5a773c50faa1ab7d2e000002",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "Yes, ATF4 transcription factor has been linked to cancer and neoplastic transformation."
+      ],
+      "body": "Has ATF4 transcription factor been linked to cancer and neoplastic transformation?",
+      "type": "yesno"
+    },
+    {
+      "id": "58b9585c22d3005309000010",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "Yes, hypophosphatemic rickets could cause craniosynostosis."
+      ],
+      "body": "Could hypophosphatemic rickets cause craniosynostosis?",
+      "type": "yesno"
+    },
+    {
+      "id": "5523e8cc7b523f2123000007",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "Yes, the stable transgenesis of genes encoding functional or spatially localized proteins, fused to fluorescent proteins such as green fluorescent protein (GFP) or red fluorescent protein (RFP), is an extremely important research tool in cell and developmental biology."
+      ],
+      "body": "Has the protein GFP been used in transgenesis for live protein imaging?",
+      "type": "yesno"
+    },
+    {
+      "id": "51406e6223fec90375000009",
+      "exact_answer": "no",
+      "ideal_answer": [
+        "No. There are not reported data indicating that metformin reduce with thyroxine absorption."
+      ],
+      "body": "Does metformin interfere thyroxine absorption?",
+      "type": "yesno"
+    },
+    {
+      "id": "5e57fa23b761aafe09000008",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "Traditional Chinese medicine is associated with a decreased risk of heart failure in breast cancer patients receiving doxorubicin treatmen",
+        "Yes, there is evidence to suggest that traditional Chinese medicine is associated with a decreased risk of heart failure in breast cancer patients receiving doxorubicin treatment.",
+        "Yes, traditional Chinese medicine is associated with a decreased risk of heart failure in breast cancer patients receiving doxorubicin treatment, as determined by studies in humans and in animal models.",
+        "Traditional Chinese medicine is associated with a decreased risk of heart failure in breast cancer patients receiving doxorubicin treatment",
+        "Traditional Chinese medicine is associated with a decreased risk of heart failure in breast cancer patients receiving doxorubicin treatment."
+      ],
+      "body": "Is traditional Chinese medicine associated with a decreased risk of heart failure in breast cancer patients receiving doxorubicin treatment?",
+      "type": "yesno"
+    },
+    {
+      "id": "531a31a1b166e2b806000035",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "A rare variant of the TREM2 gene, which encodes the triggering receptor encoded in myeloid cells 2 (rs75932628-T) causing a R47H substitution has been associated with both early and late onset Alzheimer's disease in various populations.  Emerging evidence has demonstrated that TREM2 could suppress inflammatory response by repression of microglia-mediated cytokine production and secretion, which may prevent inflammation-induced bystander damage of neurons. Higher levels of TREM2 mRNA (p = 0.002) and protein (p < 0.001) were identified in AD patients which indicates that TREM2 might serve as a novel noninvasive biomarker for AD diagnosis. Based on the potential protective actions of TREM2 in AD pathogenesis, targeting TREM2 might provide new opportunities for AD treatment."
+      ],
+      "body": "Is TREM2 associated with Alzheimer's disease?",
+      "type": "yesno"
+    },
+    {
+      "id": "627a6ef856bf9aee6f000020",
+      "exact_answer": "no",
+      "ideal_answer": [
+        "No. A lumbar puncture is contraindicated in any patient with signs of increased intracranial pressure because it may precipitate cerebral herniation and death. For this reason, a computed tomography (CT) or magnetic resonance imaging (MRI) scan is done first. When the findings of the scan are normal, a lumbar puncture can be performed, if needed.",
+        "Lumbar puncture (LP) is usually contra-indicated in situations where the ICP is suspected to be high."
+      ],
+      "body": "Is lumbar puncture the first test that should be performed on a patient with increased intracranial pressure?",
+      "type": "yesno"
+    },
+    {
+      "id": "5c640fa1e842deac67000011",
+      "exact_answer": "no",
+      "ideal_answer": [
+        "No. In colorectal cancer (CRC) TIAM1 suppresses tumor progression by regulating YAP/TAZ activity."
+      ],
+      "body": "Is TIAM1 favoring tumor progression in colorectal cancer (CRC)?",
+      "type": "yesno"
+    },
+    {
+      "id": "5544bcde5beec11c10000003",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "Vertebrate genomes contain thousands of conserved noncoding elements (CNEs) that often function as tissue-specific enhancers. In this study, we have identified CNEs in human, dog, chicken, Xenopus, and four teleost fishes (zebrafish, stickleback, medaka, and fugu) using elephant shark, a cartilaginous vertebrate, as the base genome and investigated the evolution of these ancient vertebrate CNEs (aCNEs) in bony vertebrate lineages  ",
+        "Yes. Vertebrate genomes contain thousands of conserved noncoding elements (CNEs) that often function as tissue-specific enhancers. CNEs have been identified, among others, in human, dog, chicken, Xenopus, and four teleost fishes (zebrafish, stickleback, medaka, and fugu)."
+      ],
+      "body": "Are there conserved noncoding elements identified between genomes of human and teleosts?",
+      "type": "yesno"
+    },
+    {
+      "id": "54fefff26ad7dcbc1200000b",
+      "exact_answer": "yes",
+      "ideal_answer": [
+        "Results suggest the potential value of self-management for chronic pain patients and the potential acceptability of web-based delivery of intervention content.  ",
+        "Yes, there are successful web based self management strategies for chronic pain."
+      ],
+      "body": "Are there web based self management strategies for chronic pain ?",
+      "type": "yesno"
+    },
+    {
+      "id": "58ee2515eda5a57672000016",
+      "exact_answer": [
+        "members of agrarian societies"
+      ],
+      "ideal_answer": [
+        "Although the distinction of enterotypes as either discrete clusters or a continuum will require additional investigation, numerous studies have demonstrated the co-exclusion of the closely related Prevotellaceae and Bacteroides genera in the gut microbiota of healthy human subjects where Prevotella appears to be a discriminatory taxon for residence in more agrarian societies."
+      ],
+      "body": "Which individuals show preferential colonization of the Prevotellaceae bacteria in their guts?",
+      "type": "factoid"
+    },
+    {
+      "id": "6415c53e690f196b51000012",
+      "exact_answer": [
+        "October 24, 2016"
+      ],
+      "ideal_answer": [
+        "On October 24, 2016, the U.S. Food and Drug Administration (FDA) approved pembrolizumab (Keytruda) for treatment of metastatic non-small cell lung cancer."
+      ],
+      "body": "When was Keytruda approved by the FDA for the treatment of metastatic non-small cell lung cancer?",
+      "type": "factoid"
+    },
+    {
+      "id": "5c960f21ecadf2e73f000020",
+      "exact_answer": [
+        "Disease Modifying anti-rheumatic drugs"
+      ],
+      "ideal_answer": [
+        "To determine the utility of ultrasonography in guiding modification of disease-modifying anti-rheumatic drug (DMARD) and steroid therapy for inflammatory arthritis (IA)",
+        "DMARDs are Disease Modifying anti-rheumatic drugs (DMARD).",
+        "Treatment with disease-modifying antirheumatic drugs (DMARDs)",
+        "Treatment with disease-modifying antirheumatic drugs (DMARDs) was 61% (claims data)",
+        "Treatment with disease-modifying antirheumatic drugs (DMARDs) was 61% (claims data) and"
+      ],
+      "body": "What are DMARDs?",
+      "type": "factoid"
+    },
+    {
+      "id": "52c7311903868f1b0600001d",
+      "exact_answer": [
+        "One"
+      ],
+      "ideal_answer": [
+        "Muenke syndrome, also known as FGFR3-associated coronal synostosis, is defined molecularly by the presence of a heterozygous nucleotide transversion, c.749C>G, encoding the amino acid substitution Pro250Arg, in the fibroblast growth factor receptor type 3 gene (FGFR3)."
+      ],
+      "body": "How many different mutations have been associated with Muenke syndrome?",
+      "type": "factoid"
+    },
+    {
+      "id": "52f350042059c6d71c000010",
+      "exact_answer": [
+        "1:5000"
+      ],
+      "ideal_answer": [
+        "Between 0.125 and 39 in every 1000 live births. Most probably 1:5000 of live-born."
+      ],
+      "body": "What is the incidence of Edwards syndrom in the european population?",
+      "type": "factoid"
+    },
+    {
+      "id": "5311bcc2e3eabad021000005",
+      "exact_answer": [
+        "reducing sodium"
+      ],
+      "ideal_answer": [
+        "People can help prevent kidney stones by making changes in fluid intake and, depending on the type of kidney stone, changes in consumption of sodium, animal protein, calcium, and oxalate.\nDrinking enough fluids each day is the best way to help prevent most types of kidney stones. Health care providers recommend that a person drink 2 to 3 liters of fluid a day. People with cystine stones may need to drink even more. Though water is best, other fluids may also help prevent kidney stones, such as citrus drinks."
+      ],
+      "body": "Describe a diet that reduces the chance of kidney stones.",
+      "type": "factoid"
+    },
+    {
+      "id": "6217d9493a8413c653000022",
+      "exact_answer": [
+        "Immunosuppressive activity"
+      ],
+      "ideal_answer": [
+        "Indoleamine 2,3-dioxygenase 1 (IDO1), a known immunosuppressive enzyme that catalyzes the rate-limiting step in the oxidation of tryptophan (Trp) to kynurenine (Kyn), has received increasing attention as an attractive immunotherapeutic target for cancer therapy."
+      ],
+      "body": "What is the activity of Indoleamine 2,3-dioxygenase 1.",
+      "type": "factoid"
+    },
+    {
+      "id": "53617eeb7d100faa0900000a",
+      "exact_answer": [
+        "Anorexia Athletica"
+      ],
+      "ideal_answer": [
+        "Anorexia athletica"
+      ],
+      "body": "What is the name for anorexia in gymnasts?",
+      "type": "factoid"
+    },
+    {
+      "id": "52bf1f1303868f1b06000014",
+      "exact_answer": [
+        "antioxidant"
+      ],
+      "ideal_answer": [
+        "Peroxiredoxin 2 (PRDX2) is an antioxidant enzyme that uses cysteine residues to decompose peroxides. \nPeroxiredoxin-2 (PRDX2), an enzyme reducing hydrogen peroxide and lipid peroxides \nPeroxiredoxin 2 (Prx2) is a thiol-dependent peroxidase."
+      ],
+      "body": "What type of enzyme is peroxiredoxin 2 (PRDX2)?",
+      "type": "factoid"
+    },
+    {
+      "id": "56c073fcef6e394741000020",
+      "exact_answer": [
+        "Spermidine protects against α-synuclein neurotoxicity"
+      ],
+      "ideal_answer": [
+        "Spermidine protects against α-synuclein neurotoxicity. In the fruit fly, simple feeding with spermidine inhibited loss of climbing activity and early organismal death upon heterologous expression of human α-synuclein, which is thought to be the principal toxic trigger of Parkinson's Disease (PD). In this line, administration of spermidine rescued α-synuclein-induced loss of dopaminergic neurons, a hallmark of PD, in nematodes. Alleviation of PD-related neurodegeneration by spermidine was accompanied by induction of autophagy, suggesting that this cytoprotective process may be responsible for the beneficial effects of spermidine administration."
+      ],
+      "body": "What is the association of spermidine with α-synuclein neurotoxicity?",
+      "type": "factoid"
+    },
+    {
+      "id": "58da1aa08acda34529000012",
+      "exact_answer": [
+        "Human chorionic gonadotropin",
+        "hCG"
+      ],
+      "ideal_answer": [
+        "Human chorionic gonadotropin (hCG) is associated with hyperemesis gravidarum during pregrancy."
+      ],
+      "body": "Which protein is associated with hyperemesis gravidarum during pregrancy?",
+      "type": "factoid"
+    },
+    {
+      "id": "5c85234775a4a5d219000007",
+      "exact_answer": [
+        "Fidaxomicin"
+      ],
+      "ideal_answer": [
+        "Fidaxomicin has recently been introduced as a new antibiotic that has been shown to significantly reduce the recurrence of this infection. Fidaxomicin is a new antibiotic used to treat Clostridium difficile infection (CDI).",
+        "Fidaxomicin has recently been introduced as a new antibiotic that has been shown to significantly reduce the recurrence of this infection.Fidaxomicin is a new antibiotic used to treat Clostridium difficile infection (CDI)",
+        "fidaxomicin has recently been introduced as a new antibiotic that has been shown to significantly reduce the recurrence of this infection. fidaxomicin is a new antibiotic used to treat clostridium difficile infection (cdi).",
+        "Clostridium difficile continues to be one of the most prevalent hospital-acquired bacterial infections in the developed world, despite the recent introduction of a novel and effective antibiotic agent  fidaxomicin"
+      ],
+      "body": "What antibiotic is currently used as the standard of care for Clostridium Difficile infection as of 2018",
+      "type": "factoid"
+    },
+    {
+      "id": "601db8111cb411341a00004b",
+      "exact_answer": [
+        "a haplotype map of the human genome",
+        "The \"HapMap\" project is now underway to characterize patterns of LD in the human genome",
+        "Phase II HapMap, which characterizes over 3.1 million human single nucleotide polymorphisms"
+      ],
+      "ideal_answer": [
+        "HapMap is a international effort for creating an annotated haplotype map of the world’s most commonhaplotype sequences.",
+        "HapMap provides linkage disequilibrium information on a sample of 3.7 million SNPs that can be used for tag SNP selection in whole-genome association studies.",
+        "A haplotype map (HapMap)is aimed at describing these variation patterns across the entire genome and has been recently developed by the International HapMap Consortium. HapMap characterizes over 3.1 million human single nucleotide polymorphisms (SNPs) genotyped in 270 individuals from four geographically diverse populations and includes 25-35% of common SNP variation in the populations surveyed.",
+        "The \"HapMap\" project is now underway to characterize patterns of LD in the human genome.",
+        "The HapMap haplotype map project aims to systematically map all human haplotypes, chromosome by chromosome, in a gene-dependent manner through dedicated efforts from national and international teams.",
+        "The HapMap haplotype map project aims to systematically map all human haplotypes, chromosome by chromosome, in a gene-rich manner through dedicated efforts from national and international teams.",
+        "The International Haplotype Map Project (HapMap) is an international effort for creating an annotated haplotype map of the human genome using protein sequences and other genomic data.",
+        "A HapMap is a map of the human genome. It's a 3.1 million human single nucleotide polymorphisms (SNPs) that can be genotyped and mapped."
+      ],
+      "body": "What is a HapMap",
+      "type": "factoid"
+    },
+    {
+      "id": "5e49c2356d0a277941000010",
+      "exact_answer": [
+        "SNP2TFBS"
+      ],
+      "ideal_answer": [
+        "SNP2TFBS is a computational resource intended to support researchers investigating the molecular mechanisms underlying regulatory variation in the human genome. The database essentially consists of a collection of text files providing specific annotations for human single nucleotide polymorphisms (SNPs), namely whether they are predicted to abolish, create or change the affinity of one or several transcription factor (TF) binding sites. A SNP's effect on TF binding is estimated based on a position weight matrix (PWM) model for the binding specificity of the corresponding factor.",
+        "SNP2TFBS is a computational resource intended to support researchers investigating the molecular mechanisms underlying regulatory variation in the human genome. The database essentially consists of a collection of text files providing specific annotations for human single nucleotide polymorphisms (SNPs), namely whether they are predicted to abolish, create or change the affinity of one or several transcription factor (TF) binding sites.",
+        "SN2TFBS is a computational resource intended to support researchers investigating the molecular mechanisms underlying regulatory variation in the human genome. The database essentially consists of a collection of text files providing specific annotations for human single nucleotide polymorphisms (SNPs), namely whether they are predicted to abolish, create or change the affinity of one or several transcription factor (TF) binding sites. A SNP's effect on TF binding is estimated based on a position weight matrix (PWM) model for the binding specificity of the corresponding factor.",
+        "SNP2TFBS is a computational resource intended to support researchers investigating the molecular mechanisms underlying regulatory variation in the human genome. The database essentially consists of a collection of text files providing specific annotations for human single nucleotide polymorphisms (SNPs), namely whether they are predicted to abolish, create or change the affinity of one or several transcription factor (TF) binding sites. A SNP's effect on TF binding is estimated based on a position weight matrix (PWM) model for the binding specificity of the corresponding factor. These data files are regenerated at regular intervals by an automatic procedure that takes as input a reference genome, a comprehensive SNP catalogue and a collection of PWMs. SNP2TFBS is also accessible over a web interface, enabling users to view the information provided for an individual SNP, to extract SNPs based on various search criteria, to annotate uploaded sets of SNPs or to display statistics about the frequencies of binding sites affected by selected SNPs."
+      ],
+      "body": "Which database exists that contains regulatory SNPs which affect predicted transcription factor binding site affinity?",
+      "type": "factoid"
+    },
+    {
+      "id": "58ce9bf1d46b5c2951000002",
+      "exact_answer": [
+        "SOX2 anophthalmia syndrome"
+      ],
+      "ideal_answer": [
+        "SOX2 anophthalmia syndrome is an uncommon autosomal dominant syndrome caused by mutations in the SOX2 gene and clinically characterized by severe eye malformations (anophthalmia/microphthalmia) and extraocular anomalies mainly involving brain, esophagus, and genitalia."
+      ],
+      "body": "Which disease is associated with mutated Sox2?",
+      "type": "factoid"
+    },
+    {
+      "id": "5e319617fbd6abf43b000049",
+      "exact_answer": [
+        "Xa"
+      ],
+      "ideal_answer": [
+        "Andexxa(r) is a first-in-class recombinant modified factor Xa protein. It is available to reverse life-threatening or uncontrolled bleeding with the factor Xa inhibitors apixaban and rivaroxaban."
+      ],
+      "body": "Which clotting factor is in the Andexxa?",
+      "type": "factoid"
+    },
+    {
+      "id": "571f609c0fd6f91b6800000c",
+      "exact_answer": [
+        "β-galactosidase"
+      ],
+      "ideal_answer": [
+        "GM1 gangliosidoses are associated with deficiency of β-galactosidase."
+      ],
+      "body": "Which enzyme deficiency can cause GM1 gangliosidoses?",
+      "type": "factoid"
+    },
+    {
+      "id": "593ff22b70f9fc6f0f000023",
+      "exact_answer": [
+        "four",
+        "4"
+      ],
+      "ideal_answer": [
+        "The groucho-related genes  of the mouse comprise at least four family members. The Grg gene encodes a 197 amino acid protein homologous to the amino-terminal domain of the product of the groucho gene of the Drosophila Enhancer of split complex. The murine grg  products are believed to interact with transcription factors and repress transcription, thereby regulating cell proliferation and differentiation. ",
+        "We have isolated cDNAs representing multiple members of murine groucho homologues, designated Grg for groucho-related genes.  The groucho-related genes (Grg) of the mouse comprise at least four family members.",
+        "The groucho-related genes (Grg) of the mouse comprise at least four family members.",
+        "It spans approximately 7 kb on chromosome 10 and consists of seven exons. The groucho-related genes (Grg) of the mouse comprise at least four family members."
+      ],
+      "body": "How many Groucho-related genes (GRG) are contained in the mouse genome?",
+      "type": "factoid"
+    },
+    {
+      "id": "5a9d29571d1251d03b000018",
+      "exact_answer": [
+        "Inhibitory"
+      ],
+      "ideal_answer": [
+        "Azeliragon is an inhibitor of receptor for advanced glycation end products (RAGE)."
+      ],
+      "body": "What effect does azeliragon have on RAGE?",
+      "type": "factoid"
+    },
+    {
+      "id": "5d35ef017bc3fee31f000001",
+      "exact_answer": [
+        "H3K27me3"
+      ],
+      "ideal_answer": [
+        "H3K27me3 is the major histone methyltransferase activity of PRC2.",
+        "The Polycomb Repressive Complex 2 (PRC2) has been identified as a key regulator of epigenetic mark H3K27me3.",
+        "There are data showing coordinate regulation between DNAme and H3K27me3, which are both involved in the establishment and maintenance of epigenetic gene silencing. We found that the Polycomb Repressive Complex 2 (PRC2), which is responsible for di- and trimethylation of H3K27 (H3K27me2/me3), binds to its own site of methylation.",
+        "H3K27me3 is the endogenous epigenetic mark deposited by PRC2.",
+        "H3K27me3 is an epigenetic mark deposited by PRC2 (Polycomb repressive complex 2).",
+        "polycomb repressive complex 2 (prc2 ) mediates trimethylation of lysine 27 on histone h3",
+        "Polycomb repressive complex 2 (PRC2) trimethylates histone H3 at lysine 27, which establishes H3K27me3 repressive epigenetic marks that promote tissue-specific differentiation by silencing ectopic gene programs.",
+        "PRC2 is H3K27me3 ubiquitously-associated and acts as an epigenetic mark deposition mechanism."
+      ],
+      "body": "Which epigenetic mark is deposited by PRC2?",
+      "type": "factoid"
+    },
+    {
+      "id": "5e805e62835f4e4777000023",
+      "exact_answer": [
+        "Classic Bartter's syndrome has been demonstrated to result from defective chloride transport across the basolateral membrane in the distal nephron due to mutations in the chloride channel gene CLCNKB."
+      ],
+      "ideal_answer": [
+        "Classic Bartter's syndrome has been demonstrated to result from defective chloride transport across the basolateral membrane in the distal nephron due to mutations in the chloride channel gene CLCNKB."
+      ],
+      "body": "Which gene is mutated in the classic Bartter's syndrome?",
+      "type": "factoid"
+    },
+    {
+      "id": "54f9c40ddd3fc62544000001",
+      "exact_answer": [
+        "Calcineurin",
+        "CaN",
+        "phosphatase 2b"
+      ],
+      "ideal_answer": [
+        "The activity of NFAT proteins is tightly regulated by the Ca(2+)/calmodulin-dependent protein phosphatase 2B/calcineurin (CaN).Dephosphorylation of NFAT by CaN is required for NFAT nuclear localization."
+      ],
+      "body": "Which calcium/calmodulin dependent protein phosphatase is involved in the activation of the family of NFAT transcription factors (Nuclear Factors of Activated T cells)?",
+      "type": "factoid"
+    },
+    {
+      "id": "606b7e5694d57fd879000070",
+      "exact_answer": [
+        "324"
+      ],
+      "ideal_answer": [
+        "FoundationOne CDx comprises a 324-gene panel."
+      ],
+      "body": "How many genes are screened by the FoundationOne companion diagnostic?",
+      "type": "factoid"
+    },
+    {
+      "id": "6081b0b44e6a4cf630000009",
+      "exact_answer": [
+        "Fibrolamellar carcinoma"
+      ],
+      "ideal_answer": [
+        "Fibrolamellar carcinoma is distinctive at clinical and histologic levels. A novel DNAJB1-PRKACA fusion gene characterizes almost all cases."
+      ],
+      "body": "Which disease is associated with DNAJB1-PRKACA fusion gene?",
+      "type": "factoid"
+    },
+    {
+      "id": "5e7641a0c6a8763d23000011",
+      "exact_answer": [
+        "Vaxchora"
+      ],
+      "ideal_answer": [
+        "Vaxchora is the first vaccine approved by the Food and Drug Administration for the prophylaxis of cholera infection."
+      ],
+      "body": "Which was the first cholera vaccine approved in the US?",
+      "type": "factoid"
+    },
+    {
+      "id": "601cb4541cb411341a000024",
+      "exact_answer": [
+        "Eosinophilic Gastritis and Duodenitis"
+      ],
+      "ideal_answer": [
+        "Anti-Siglec-8 Antibody was shown to be effective for Eosinophilic Gastritis and Duodenitis. It is also undergoing clinical investigation for treatment of allergic, inflammatory, and proliferative diseases."
+      ],
+      "body": "Which disease is treated with Anti–Siglec-8 Antibody?",
+      "type": "factoid"
+    },
+    {
+      "id": "5a885daa61bb38fb24000018",
+      "exact_answer": [
+        "Asp(D)-Glu-(E)-Ala(A)-Asp(D)"
+      ],
+      "ideal_answer": [
+        "The conserved motif is: Asp(D)-Glu-(E)-Ala(A)-Asp(D)"
+      ],
+      "body": "Which is the conserved motif of DEAD box proteins?",
+      "type": "factoid"
+    },
+    {
+      "id": "56c868a95795f9a73e000017",
+      "exact_answer": [
+        "The study of protein-protein interactions in a physiologically relevant developing context."
+      ],
+      "ideal_answer": [
+        "Bimolecular fluorescence complementation (BiFC) is a powerful method for studying protein-protein interactions in different cell types and organisms. This method was recently developed in the fruit fly Drosophila melanogaster, allowing analyzing protein interaction properties in a physiologically relevant developing context."
+      ],
+      "body": "What is the application of the Bimolecular Fluorescence Complementation (BiFC) assay in Drosophila embryos?",
+      "type": "factoid"
+    },
+    {
+      "id": "5c56b96e07647bbc4b000010",
+      "exact_answer": [
+        "ezTag"
+      ],
+      "ideal_answer": [
+        "ezTag is a web-based annotation tool that supports annotating a wide variety of biological concepts with or without pre-existing training data. It allows curators to perform annotation and provide training data with humans in the loop. ezTag supports both abstracts in PubMed and full-text articles in PubMed Central. It also provides lexicon-based concept tagging as well as the state-of-the-art pre-trained taggers such as TaggerOne, GNormPlus and tmVar. ezTag is freely available at http://eztag.bioqrator.org."
+      ],
+      "body": "Which tool has been developed for tagging biomedical concepts via interactive learning?",
+      "type": "factoid"
+    },
+    {
+      "id": "626aef83e764a53204000044",
+      "exact_answer": [
+        "1999"
+      ],
+      "ideal_answer": [
+        "Vitravene was approved in Brazil in the summer of 1999."
+      ],
+      "body": "When was Vitravene approved in Brazil?",
+      "type": "factoid"
+    },
+    {
+      "id": "5e2daaa2fbd6abf43b00000e",
+      "exact_answer": [
+        "Selective adenosine A2A receptor antagonist"
+      ],
+      "ideal_answer": [
+        "Istradefylline is a selective adenosine A2A receptor antagonist."
+      ],
+      "body": "What type of antagonist is istradefylline?",
+      "type": "factoid"
+    },
+    {
+      "id": "58948cb47d9090f353000008",
+      "exact_answer": [
+        [
+          "Mcidas"
+        ],
+        [
+          "GemC1",
+          "Lynkeas"
+        ]
+      ],
+      "ideal_answer": [
+        "Mcidas and GemC1/Lynkeas specify embryonic radial glial cells. Both proteins were initially described as cell cycle regulators revealing sequence similarity to Geminin. They are expressed in radial glial cells committed to the ependymal cell lineage during embryogenesis, while overexpression and knock down experiments showed that are sufficient and necessary for ependymal cell generation."
+      ],
+      "body": "Which are the key players on radial glial specification to ependymal cells?",
+      "type": "list"
+    },
+    {
+      "id": "5c7a4ed5d774d04240000008",
+      "exact_answer": [
+        [
+          "real-time information"
+        ],
+        [
+          "non-invasive"
+        ],
+        [
+          "reflects spatiotemporal heterogeneity"
+        ]
+      ],
+      "ideal_answer": [
+        "Liquid biopsy reflected spatial and temporal heterogeneity of the tumor under treatment pressure.",
+        ". These plasma-isolated exosomes can be used as a non-invasive and repeatable way for the detection and follow-up of these biomarkers.. We report for the first time that the CellSearch System coupled with NGS is a very sensitive and specific diagnostic tool for EGFR mutation analysis in CTC preparations with potential clinical impact.. In summary, the panel concluded that liquid biopsy approaches have significant potential to improve patient care, and immediate implementation in the clinic is justified in a number of therapeutic settings relevant to NSCLC.. Liquid biopsy reflected spatial and temporal heterogeneity of the tumor under treatment pressure. We provide the proof-of-concept that the complementary use of ctDNA and ctcDNA represents a reliable, minimally invasive and dynamic tool for a more comprehensive view of tumor evolution.. In this respect, mutation analysis of circulating tumor cells (CTCs) may be desirable since they may provide real-time information on patient's disease status.",
+        "Mutation analysis of circulating tumor cells (CTCs) may be desirable since they may provide real-time information on patient's disease status. Plasma-isolated exosomes can be used as a non-invasive and repeatable way for the detection and follow-up of these biomarkers. Liquid biopsy reflected spatial and temporal heterogeneity of the tumor under treatment pressure. Complementary use of ctDNA and ctcDNA represents a reliable, minimally invasive and dynamic tool for a more comprehensive view of tumor evolution."
+      ],
+      "body": "What are the advantages of liquid biopsy in NSCLC?",
+      "type": "list"
+    },
+    {
+      "id": "5ac0f7b919833b0d7b000006",
+      "exact_answer": [
+        [
+          "Idarucizumab"
+        ],
+        [
+          "andexanet alfa"
+        ],
+        [
+          "ciraparantag"
+        ],
+        [
+          "Protamine sulfate"
+        ],
+        [
+          "Aripazine"
+        ]
+      ],
+      "ideal_answer": [
+        " two potential reversal agents for oral direct factor Xa inhibitors (andexanet alfa and ciraparantag) are at various stages of clinical development. Idarucizumab, a reversal agent for the oral direct thrombin inhibitor dabigatran, was approved by FDA in October 2015.",
+        " two potential reversal agents for oral direct factor Xa inhibitors (andexanet alfa and ciraparantag) are at various stages of clinical development. Idarucizumab, a reversal agent for the oral direct thrombin inhibitor dabigatran, was approved by FDA in October 2015. Idarucizumab and andexanet alfa have been reported to produce anticoagulation reversal effects within minutes of administration. ",
+        "Two potential reversal agents for oral direct factor Xa inhibitors (andexanet alfa and ciraparantag) are at various stages of clinical development. Idarucizumab, a reversal agent for the oral direct thrombin inhibitor dabigatran. Protamine sulfate reverses the effect of unfractionated heparin completely and of low-molecular-weight heparin (LMWH) partially.  Aripazine has shown promising results to reverse the effects of LMWH, fondaparinux, and direct oral anticoagulants but is still in the developmental phase."
+      ],
+      "body": "What are the 3 antidotes for anticoagulant (anti-blood clotting) drugs, including factor Xa inhibitors, as of November 2017.",
+      "type": "list"
+    },
+    {
+      "id": "5e6e5d1d51b80c9423000003",
+      "exact_answer": [
+        [
+          "schizophrenia"
+        ],
+        [
+          "attention-deficit/hyperactivity disorder"
+        ],
+        [
+          "bipolar"
+        ]
+      ],
+      "ideal_answer": [
+        "attention-deficit/hyperactivity disorder\nbipolar\nschizophrenia"
+      ],
+      "body": "List psychiatric diseases that are associated with Synaptosome Associated Protein 25 (snap25).",
+      "type": "list"
+    },
+    {
+      "id": "60292e661cb411341a000112",
+      "exact_answer": [
+        [
+          "pancreas"
+        ],
+        [
+          "bile duct"
+        ],
+        [
+          "duodenum"
+        ]
+      ],
+      "ideal_answer": [
+        "Sphincter of Oddi is associated with the pancreatic duct, duodenum and gallbladder.",
+        "The sphincter of Oddi is associated with the pancreatic duct, the duodenal crypts and gallbladder.",
+        "Sphincter of Oddi (SO) is a dynamic structure located strategically at the confluence of the bile duct, the pancreatic duct and the duodenum.",
+        "The sphincter of oddsi is associated with the pancreatic duct, the duodenal crypts and the gallbladder.",
+        "The sphincter ofoddi is associated with the pancreatic duct, the duodenal crypts and gallbladder.",
+        "The sphincter of Oddi is a dynamic structure located strategically at the confluence of the bile duct, the pancreatic duct and the duodenum."
+      ],
+      "body": "What 3 organs are the sphincter of Oddi associated with?",
+      "type": "list"
+    },
+    {
+      "id": "5e48100bd14c9f295d000007",
+      "exact_answer": [
+        [
+          "leukaemia"
+        ],
+        [
+          "lung cancer"
+        ],
+        [
+          "breast cancer"
+        ],
+        [
+          "stomach cancer"
+        ],
+        [
+          "thyroid cancer"
+        ]
+      ],
+      "ideal_answer": [
+        "well-known increase in leukaemia, increases in solid cancer such as cancers of the lung, breast, stomach and thyroid have also been demonstrated."
+      ],
+      "body": "List the most common cancers after a radiation exposure?",
+      "type": "list"
+    },
+    {
+      "id": "5c928958ecadf2e73f000017",
+      "exact_answer": [
+        [
+          "four-channel single-reaction multiplexing with orthogonal CRISPR enzymes"
+        ],
+        [
+          "quantitative measurement of input as low as 2 attomolar"
+        ],
+        [
+          "3.5-fold increase in signal sensitivity by combining Cas13 with Csm6, an auxiliary CRISPR-associated enzyme"
+        ],
+        [
+          "lateral-flow readout"
+        ]
+      ],
+      "ideal_answer": [
+        "SHERLOCKv2 presents with four distinct advances: (i) four-channel single-reaction multiplexing with orthogonal CRISPR enzymes; (ii) quantitative measurement of input as low as 2 attomolar; (iii) 3.5-fold increase in signal sensitivity by combining Cas13 with Csm6, an auxiliary CRISPR-associated enzyme; and (iv) lateral-flow readout."
+      ],
+      "body": "List the four advances integrated into the SHERLOCKv2 platform.",
+      "type": "list"
+    },
+    {
+      "id": "64316f8e57b1c7a315000016",
+      "exact_answer": [
+        [
+          "chondrocytes"
+        ],
+        [
+          "Stem cells",
+          "progenitor",
+          "Mesenchymal stem cells",
+          "fibrocartilage stem cells"
+        ],
+        [
+          "Osteocytes"
+        ]
+      ],
+      "ideal_answer": [
+        "Chondrocytes and stem cells, including mesenchymal stem cells, are used to regenerate cartilage.",
+        "Chondrocytes and stem cells, particularly mesenchymal stem cells, are commonly used to regenerate cartilage.",
+        "Current approaches to regeneration and tissue engineering of articular cartilage include the use of chondrocytes, stem cells, scaffolds and signals, including morphogens and growth factors.",
+        "Chondrocytes, mesenchymal stem cells, and induced pluripotent stem cells are all used to regenerate cartilage.",
+        "Chondrocytes and stem cells are used to regenerate cartilage."
+      ],
+      "body": "What cells are used to regenerate cartilage?",
+      "type": "list"
+    },
+    {
+      "id": "62008130c9dfcb9c0900001c",
+      "exact_answer": [
+        [
+          "Asymmetry"
+        ],
+        [
+          "Leukocytosis"
+        ],
+        [
+          "Tachycardia"
+        ],
+        [
+          "age ≥70"
+        ]
+      ],
+      "ideal_answer": [
+        "ALT-70 cellulitis score includes: Asymmetry (3 points), Leukocytosis (1 point), Tachycardia (1 point), and age ≥70 (2 points)."
+      ],
+      "body": "Which variables are included in the ALT-70 Score for cellulitis?",
+      "type": "list"
+    },
+    {
+      "id": "5a678d63b750ff4455000003",
+      "exact_answer": [
+        [
+          "redness or rubor"
+        ],
+        [
+          "heat or calor"
+        ],
+        [
+          "swelling or tumor"
+        ],
+        [
+          "pain or dolor"
+        ]
+      ],
+      "ideal_answer": [
+        "redness or rubor , heat or calor, swelling or tumor, and pain or dolor",
+        "Tumor, calor, rubor, and dolor describe four cardinal signs of inflammation. "
+      ],
+      "body": "What are the 4 cardinal signs of inflammation according to Celsus?",
+      "type": "list"
+    },
+    {
+      "id": "5a96c74cfcd1d6a10c000029",
+      "exact_answer": [
+        [
+          "human monocytic ehrlichiosis"
+        ],
+        [
+          "tuleremia"
+        ],
+        [
+          "southern tick-associated rash illness [STARI] or Masters disease"
+        ],
+        [
+          "tide water spotted fever"
+        ]
+      ],
+      "ideal_answer": [
+        "Amblyomma americanum (Lone star tick) is an important disease vector in the United States. It transmits several human pathogens, including the agents of human monocytic ehrlichiosis, tularemia, and southern tick-associated rash illness [STARI] or Masters disease",
+        "Today,A americanumremains an important vector for tick-borne illness. In addition to others, species ofRickettsia,Ehrlichia, andBorreliaare all transmitted by the lone star tick.  It transmits several human pathogens, including the agents of human monocytic ehrlichiosis, tularemia, and southern tick-associated rash illness."
+      ],
+      "body": "What illness is transmitted by the Lone Star Tick, Amblyomma americanum?",
+      "type": "list"
+    },
+    {
+      "id": "5e30ee25fbd6abf43b00003f",
+      "exact_answer": [
+        [
+          "severe dermatitis"
+        ],
+        [
+          "multiple allergies"
+        ],
+        [
+          "metabolic wasting"
+        ]
+      ],
+      "ideal_answer": [
+        "SAM syndrome is characterized by severe dermatitis, multiple allergies and metabolic wasting. It is caused by mutations in the desmoglein 1 gene (DSG1)."
+      ],
+      "body": "List features of the SAM syndrome.",
+      "type": "list"
+    },
+    {
+      "id": "58b52c8822d3005309000001",
+      "exact_answer": [
+        [
+          "Ascher's syndrome"
+        ],
+        [
+          "Waardenburg Syndrome type II",
+          "WS2",
+          "WS Type II"
+        ],
+        [
+          "Horner's syndrome"
+        ]
+      ],
+      "ideal_answer": [
+        "The syndromes that are associated with heterochromia iridum are:\n1) Ascher's syndrome\n2) Waardenburg Syndrome type II (WS2)\n3) Horner's syndrome."
+      ],
+      "body": "Which syndromes are associated with heterochromia iridum?",
+      "type": "list"
+    },
+    {
+      "id": "5717cdd2070aa3d072000001",
+      "exact_answer": [
+        [
+          "Cyclosporine A"
+        ],
+        [
+          "Atractyloside"
+        ],
+        [
+          "N-metyl-4-isoleucine-cyclosporine",
+          "NIM811"
+        ],
+        [
+          "Sanglifehrin A"
+        ],
+        [
+          "TRO-19622"
+        ]
+      ],
+      "ideal_answer": [
+        "Cyclosporine A\nAtractyloside\nN-metyl-4-isoleucine-cyclosporine\nSanglifehrin A \nTRO-19622",
+        "The opening of the mitochondrial permeability transition pore appears to be inhibited by KB-R 7943, diacylglycerol analog 1-oleoyl-2-acetyl-sn-glycerol, cyclosporin A (CsA) and BRL37344."
+      ],
+      "body": "List inhibtors targeting the mitochondrial permeability transition pore.",
+      "type": "list"
+    },
+    {
+      "id": "5a8afbf2fcd1d6a10c00001c",
+      "exact_answer": [
+        [
+          "femur"
+        ],
+        [
+          "tibia"
+        ],
+        [
+          "patella"
+        ]
+      ],
+      "ideal_answer": [
+        "In quadruped mammals, the stifle is composed of 3 bones, the femur, the tibia and the patella."
+      ],
+      "body": "In quadruped mammals, what bones make up the stifle?",
+      "type": "list"
+    },
+    {
+      "id": "517a8c918ed59a060a000043",
+      "exact_answer": [
+        [
+          "Enterovirus"
+        ],
+        [
+          "Adenovirus"
+        ],
+        [
+          "Coxsackie B virus"
+        ]
+      ],
+      "ideal_answer": [
+        "The most frequent viruses causing myocarditis are Enterovirus, Adenovirus and Coxsackie B viruses."
+      ],
+      "body": "Which viruses are best known to cause myocarditis?",
+      "type": "list"
+    },
+    {
+      "id": "6278e49256bf9aee6f000017",
+      "exact_answer": [
+        [
+          "G12C",
+          "g12c",
+          "KRAS G12C",
+          "kras g12c"
+        ],
+        [
+          "G12V",
+          "g12v",
+          "KRAS G12V",
+          "kras g12v"
+        ],
+        [
+          "G12D",
+          "g12d",
+          "KRAS G12D",
+          "kras g12d"
+        ],
+        [
+          "G12A",
+          "g12a",
+          "KRAS G12A",
+          "kras g12a"
+        ]
+      ],
+      "ideal_answer": [
+        "G12C, G12V, G12D and G12A are all observed mutations of the KRAS oncogene."
+      ],
+      "body": "For what known mutations is KRAS gene considered to be oncogenic?",
+      "type": "list"
+    },
+    {
+      "id": "6026af5e1cb411341a0000c9",
+      "exact_answer": [
+        [
+          "microRNA-301b"
+        ],
+        [
+          "microRNA-182",
+          "miR-182"
+        ]
+      ],
+      "ideal_answer": [
+        "Mir-182 and miR-301b are involved in targeting CYLD in triple negative breast cancer.",
+        "MicroRNA-301b promotes cell proliferation and apoptosis resistance in triple-negative breast cancer by targeting CYLD. Knockdown of miR-182 up-regulates the expression of cylindromatosis (CYLD) deubiquitinase, which promotes the formation of death-inducing signaling complex (DISC) and subsequent caspase-8 activation in TNF-α-treated BT-549 cells."
+      ],
+      "body": "Which microRNAs are involved in targeting CYLD in triple negative breast cancer?",
+      "type": "list"
+    },
+    {
+      "id": "5e4609b83f54159529000005",
+      "exact_answer": [
+        [
+          "retinopathy"
+        ],
+        [
+          "aplastic anemia"
+        ],
+        [
+          "nail dystrophy"
+        ],
+        [
+          "cerebellar hypoplasia"
+        ]
+      ],
+      "ideal_answer": [
+        "Revesz syndrome is characterized by retinopathy, aplastic anemia, nail dystrophy, and cerebellar hypoplasia."
+      ],
+      "body": "List characteristic features of the Revesz syndrome.",
+      "type": "list"
+    },
+    {
+      "id": "52ed27c098d0239505000030",
+      "ideal_answer": [
+        "Thyroid hormone treatment of Human-induced pluripotent stem cell-derived cardiomyocytes attenuates the fetal gene expression and induces differentiation. Liganded T3 receptor (TR) regulates cell autonomous formation of adult intestinal progenitor cells and that T3 action in the connective tissue is important for the establishment of the stem cell niche. In the intestinal epithelium, TRα1 and TRβ2 are expressed at the level of  stem/progenitor cell populations where they induce cell proliferation and differentiation, respectively.  Thyroid hormone is implicated in neural stem cell function and differentiation and acts as a neurogenic switch in the adult neural stem cell niche. Furthermore, thyroid hormone enhances maturation of oligodendrocyte precursor cells. Thyroid hormones also induce hemopoietic pluripotent stem cell differentiation toward erythropoiesis and  c-erbA/TR appears to act as a binary switch affecting erythroid cell fate: unliganded c-erbA/TR supports growth while ligand-activated c-erbA/TR induces differentiation. Finally, thyroid hormone modulates late differentiation stages of mesenchymal stem cells chondrogenesis via BMP signaling."
+      ],
+      "body": "What is the role of thyroid hormone in Stem cell differentiation?",
+      "type": "summary"
+    },
+    {
+      "id": "51600ca2298dcd4e51000037",
+      "ideal_answer": [
+        "The Aft1 transcription factor regulates the iron regulon in response to iron availability in Saccharomyces cerevisiae. Aft1 activates a battery of genes required for iron uptake under iron-starved conditions, whereas Aft1 function is inactivated under iron-replete conditions. Aft1 interacts with  the FOB (ferrioxamine B) transporter Arn3 and may regulate the ubiquitination of Arn3 in the cytosolic compartment. Aft1 has been implicated in numerous cellular processes including cell-cycle progression and chromosome stability.  Aft1 has also been shown to affect a diverse range of cellular processes, including the RIM101 pH pathway, cell-wall stability, DNA damage, protein transport, chromosome stability, mitochondrial function, while it was recently shown to interact with the kinetochore protein Iml3 and to promote pericentromeric cohesin."
+      ],
+      "body": "What is the function of the yeast protein Aft1?",
+      "type": "summary"
+    },
+    {
+      "id": "5fdb4112a43ad31278000016",
+      "ideal_answer": [
+        "Super-enhancers are defined as genomic regions spanned by highly conserved non-coding elements (HCNEs), most of which serve as regulatory inputs of one target gene in the region.",
+        "Super-enhancers (SEs) are large clusters of transcriptional enhancers that drive expression of genes controlling cell identity.",
+        "Super-enhancers are defined as genomic regions spanned by highly conserved non-coding elements (HCNEs), which include enhancers, transcription factor binding sites that can activate or repress gene expression by multiple mechanisms.",
+        "Super-enhancers comprise of clusters of enhancers that are typically defined by the ChIP-seq analysis for active histone marks. called super-enhancers, that recruit much of the cell's transcriptional apparatus and are defined by extensive acetylation of histone H3 lysine 27 (H3K27ac). Super-enhancers (SEs) are large clusters of transcriptional enhancers that drive expression of genes controlling cell identity. Super-enhancers are large clusters of transcriptional enhancers regarded as having essential roles in driving the expression of genes that control cell identity during development and tumorigenesis.",
+        "Super-enhancers (SEs) are large clusters of enhancers that drive expression of genes controlling cell identity. Super-enhancers are important for controlling and defining the expression of cell-specific genes.",
+        "Super enhancers are chromosomal regions spanned by highly conserved non-coding elements (HCNEs), most of which serve as enhancers of one target gene in the region.",
+        "Super-enhancers are defined as genomic regions spanned by highly conserved non-coding elements (HCNEs), which include both syntenic and nonsyntenic regions, that are easy to recognize and to extract, and are scattered densely throughout the chromosomes of many genes, including those encoding major transcription factors.",
+        "The super enhancers are important for defining cell identity in mammalian developmental processes and human diseases. They are defined as genomic regions containing clusters of multiple enhancers, which regulate cell-identity genes and oncogenes. The enhancers can be identified by ChIP sequencing (ChIP-seq) to identify domains enriched for the histone marks histone H3 lysine 4 trimethylation (H3K4me3, H3k4me1, and H3K27ac) and define, for the first time, the super enhancementancers and typical enhancers active in primary human cor",
+        "Super-enhancers comprise of clusters of enhancers that are typically defined by the ChIP-seq analysis for active histone marks. called super-enhancers, that recruit much of the cell's transcriptional apparatus and are defined by extensive acetylation of histone H3 lysine 27 (H3K27ac). Super-enhancers (SEs) are large clusters of transcriptional enhancers that drive expression of genes controlling cell identity.",
+        "Super-enhancers (SEs) are large clusters of transcriptional enhancers that drive expression of genes controlling cell identity. They recruit much of the cell's transcriptional apparatus and are defined by extensive acetylation of histone H3 lysine 27 (H3K27ac)."
+      ],
+      "body": "How are super enhancers defined?",
+      "type": "summary"
+    },
+    {
+      "id": "5a7345792dc08e987e000019",
+      "ideal_answer": [
+        "Napabucasin (BBI608) is an orally administered small molecule that blocks stem cell activity in cancer cells by targeting the signal transducer and activator of transcription 3 (STAT3) pathway."
+      ],
+      "body": "Describe mechanism of action of Napabucasin.",
+      "type": "summary"
+    },
+    {
+      "id": "56c3104c50c68dd416000001",
+      "ideal_answer": [
+        "The growth/differentiation factor-10 (GDF-10) is a new member of the transforming growth factor-beta (TGF-beta) superfamily. It is highly related to bone morphogenetic protein-3 (BMP-3) and often referred to as BMP3b. The nucleotide sequence of GDF-10 encodes a predicted protein of 476 amino acids with a molecular weight of approximately 52,000. The GDF-10 polypeptide contains a potential signal sequence for secretion, a putative RXXR proteolytic processing site, and a carboxy-terminal domain with considerable homology to other known members of the TGF-beta superfamily. GDF10 is found primarily in murine uterus, adipose tissue, and brain and to a lesser extent in liver and spleen. In addition, GDF-10 mRNA was present in both neonatal and adult bone samples, with higher levels being detected in calvaria than in long bone. These results suggest that GDF10 may play multiple roles in regulating cell differentiation events, including those involved in skeletal morphogenesis. Gdf10 was mapped to the proximal region of mouse chromosome 14 close to a region known to contain a spontaneous recessive mutation that is associated with a craniofacial defect."
+      ],
+      "body": "What is GDF10?",
+      "type": "summary"
+    },
+    {
+      "id": "5c54600207647bbc4b000004",
+      "ideal_answer": [
+        "DiseaseEnhancer is a manually curated resource of human disease-associated enhancer catalog. As of July 2017, DiseaseEnhancer includes 847 disease-associated enhancers in 143 human diseases. Database features include basic enhancer information (i.e. genomic location and target genes); disease types; associated variants on the enhancer and their mediated phenotypes (i.e. gain/loss of enhancer and the alterations of transcription factor bindings)."
+      ],
+      "body": "What is DiseaseEnhancer?",
+      "type": "summary"
+    },
+    {
+      "id": "5c70001f7c78d6947100005c",
+      "ideal_answer": [
+        "Regulatory Trait Concordance (RTC) that accounts for local LD structure and integrates eQTLs and GWAS results in order to reveal the subset of association signals that are due to cis eQTLs. After stringently testing for a shared causal variant using both the Joint Likelihood Mapping and Regulatory Trait Concordance frameworks, we found that gene-level quantification significantly underestimated the number of causal cis-eQTLs. We have adapted the regulatory trait concordance (RTC) score to measure the probability of eQTLs being active in multiple tissues and to calculate the probability that a GWAS-associated variant and an eQTL tag the same functional effect.",
+        "Regulatory Trait Concordance (RTC) that accounts for local LD structure and integrates eQTLs and GWAS results in order to reveal the subset of association signals that are due to cis eQTLs.",
+        "Regulatory Trait Concordance (RTC) that accounts for local LD structure and integrates eQTLs and GWAS results in order to reveal the subset of association signals that are due to cis eQTLs. After stringently testing for a shared causal variant using both the Joint Likelihood Mapping and Regulatory Trait Concordance frameworks, we found that gene-level quantification significantly underestimated the number of causal cis-eQTLs.",
+        "Regulatory Trait Concordance (RTC) that accounts for local LD structure and integrates eQTLs and GWAS results in order to reveal the subset of association signals that are due to cis eQTLs. We have adapted the regulatory trait concordance (RTC) score to measure the probability of eQTLs being active in multiple tissues and to calculate the probability that a GWAS-associated variant and an eQTL tag the same functional effect."
+      ],
+      "body": "How is the Regulatory Trait Concordance (RTC) calculated?",
+      "type": "summary"
+    },
+    {
+      "id": "64371c5957b1c7a31500002a",
+      "ideal_answer": [
+        "Enhancers are important cis-acting elements that can regulate gene transcription and cell fate alongside promoters by providing binding sites for transcription factors and their complexes. Unlike promoters, enhancers are not necessarily adjacent to target genes and can exert their functions regardless of enhancer orientations, positions and spatial segregations from target genes. In fact, because enhancers are highly cell/tissue specific, lack common motifs, and are far from the target gene, the systematic and precise identification of enhancer regions in DNA sequences is a big challenge. Despite that, many human cancers and diseases have been shown to be associated with the malfunction of enhancers."
+      ],
+      "body": "What are enhancers?",
+      "type": "summary"
+    },
+    {
+      "id": "5e3c83c548dab47f26000001",
+      "ideal_answer": [
+        "Tauopathies are a group of neurodegenerative disorders with accumulation of three-repeat (3R) or four-repeat (4R) Tau protein.",
+        "Tauopathies are a group of neurodegenerative disorders with accumulation of three-repeat (3R) or four-repeat (4R) Tau",
+        "Taupathy is a progressive neurodegenerative disease of the central nervous system caused by autosomal recessive mutations in the Tau (amyloid precursor protein 1) gene.",
+        "Taupathy is an autosomal-dominant neurodegenerative disease characterized by the progressive degeneration of substantia nigra pars compacta (SNpc) dopaminergic neurones and is characterized by loss of motor, sensory, and sensory function."
+      ],
+      "body": "What is Taupathy?",
+      "type": "summary"
+    },
+    {
+      "id": "54fd5dd86ad7dcbc12000008",
+      "ideal_answer": [
+        "SR calcium uptake is mediated by a Ca(2+)-ATPase (SERCA2), whose activity is reversibly regulated by phospholamban (PLN). Dephosphorylated PLN is an inhibitor of SERCA and phosphorylation of PLN relieves this inhibition. Phospholamban (PLN) is a small integral membrane protein, which binds and inhibits in a yet unknown fashion the Ca(2+)-ATPase (SERCA) in the sarcoplasmic reticulum. Based on structural and dynamics data, a model in which PLN undergoes allosteric activation upon encountering SERCA has been proposed. The allosteric regulation of SERCA depends on the conformational equilibrium of PLN, whose cytoplasmic regulatory domain interconverts between three different states: a ground T state (helical and membrane associated), an excited R state (unfolded and membrane detached), and a B state (extended and enzyme-bound), which is noninhibitory. Phosphorylation of PLN shifts the populations toward the B state, increasing SERCA activity. Phospholamban (PLN) regulates cardiac contractility via its modulation of sarco(endo)plasmic reticulum calcium ATPase (SERCA) activity. Impairment of this regulatory process causes heart failure."
+      ],
+      "body": "How does phospholamban affect the biological activity of the calcium ATPase SERCA?",
+      "type": "summary"
+    },
+    {
+      "id": "60527fc794d57fd879000013",
+      "ideal_answer": [
+        "Fingolimod has been shown to reduce/prevent both focal and diffuse grey matter (GM) damage in active multiple sclerosis. The percentage of patients with new cortical lesions (CL) (13.5 vs. 89%, p < 0.001) and the percentage of GM volume change was lower in the fingolimod treated group (p < 0.001). The regional analysis revealed that the treated group had also less volume loss in thalamus, caudatus, globus pallidus, cingulate cortex, and hippocampus (p < 0.001), as well as in, cerebellum, superior frontal gyrus, and insular-long gyrus (p < 0.05)."
+      ],
+      "body": "What does fingolimod do to the grey matter of the brain?",
+      "type": "summary"
+    },
+    {
+      "id": "5e44af0848dab47f26000015",
+      "ideal_answer": [
+        "Ozanimod is a specific and potent small molecule modulator of the sphingosine 1-phosphate receptor 1 (S1PR1) and receptor 5 (S1PR5), which has shown therapeutic benefit in clinical trials of relapsing multiple sclerosis and ulcerative colitis."
+      ],
+      "body": "What is the mechanism of action of ozanimod?",
+      "type": "summary"
+    },
+    {
+      "id": "644ea46d57b1c7a31500007c",
+      "ideal_answer": [
+        "Each human has slightly different DNA sequences, called genetic variants, which make each of us unique. Genome-wide association studies (GWAS) provide an important avenue for undertaking an agnostic evaluation of the association between common genetic variants and the risk of disease. Recent advances in our understanding of human genetic variation and the technology to measure such variation have made GWAS feasible. Over the past few years, a multitude of GWAS has identified and replicated many associated variants. These associations could reveal the molecular mechanisms altered in common complex diseases and result in the identification of novel drug targets.",
+        "Genome-wide association studies (GWAS) are a type of genetic study that aims to identify genetic variations associated with particular diseases or traits. GWAS analyze the entire genome of large groups of people to identify common genetic variants that may be associated with a particular disease or trait. These studies have been successful in identifying thousands of genetic variants associated with various diseases, including cancer, diabetes, and heart disease. GWAS can also provide insights into the underlying biological mechanisms of these diseases and help identify potential targets for drug development. However, it is important to note that GWAS only identify associations between genetic variants and diseases or traits and do not necessarily establish causality. Additionally, GWAS often require large sample sizes to achieve statistical significance and may not capture rare genetic variants that may also contribute to disease risk.",
+        "Genome-wide association studies (GWAS) are a powerful research approach used to identify associations between genetic variants and human phenotypes, such as diseases or complex traits. By examining the entire genome, GWAS aim to detect common genetic variations that may contribute to an individual's risk of developing a particular condition. These studies have successfully mapped thousands of loci associated with complex traits, enriching our knowledge about the genetic basis of diseases and potentially leading to the identification of novel drug targets. However, the underlying mechanisms for many GWAS findings remain unclear, and they often explain only a limited amount of heritability. Despite these limitations, GWAS provide an important avenue for understanding human genetic variation and its impact on disease risk."
+      ],
+      "body": "What are genome-wide association studies (GWAS)?",
+      "type": "summary"
+    },
+    {
+      "id": "5c76e20f7c78d694710000ab",
+      "ideal_answer": [
+        "Macrophage scavenger function was assessed by an in vitro latex bead phagocytosis assay.\nWe developed a scanning cytometry-based high-throughput assay of macrophage phagocytosis that quantitates bound and internalized unopsonized latex beads."
+      ],
+      "body": "What is latex bead phagocytosis?",
+      "type": "summary"
+    },
+    {
+      "id": "531b2fc3b166e2b80600003c",
+      "ideal_answer": [
+        "Altered thyroid profile, particularly sick euthyroid syndrome, is an independent predictor of mortality in patients with chronic heart failure, adding prognostic information to conventional clinical and functional cardiac parameters."
+      ],
+      "body": "What is the prognostic role of thyroid hormone in patients with heart failure?",
+      "type": "summary"
+    },
+    {
+      "id": "5509ce9ec2af5d5b70000001",
+      "ideal_answer": [
+        "Endoscopy trials have demonstrated a higher prevalence of nonspecific colitis, lymphoid hyperplasia and focally enhanced gastritis compared with controls."
+      ],
+      "body": "What colonoscopy findings have been reported in autism",
+      "type": "summary"
+    },
+    {
+      "id": "6410f8b2201352f04a000033",
+      "ideal_answer": [
+        "A \"virtual digital twin,\" could serve to guide nutrition in a personalized manner, thus revolutionizing the management of obesity and its comorbidities, and providing a pillar for healthy aging.",
+        "The benefits of using a virtual digital twin in nutrition include:\n\n1. Individualized nutrition recommendations\n2. Improved health outcomes\n3. Reduced risk of chronic diseases\n4. Improved quality of life"
+      ],
+      "body": "What would be the benefits of using a virtual digital twin in nutrition?",
+      "type": "summary"
+    },
+    {
+      "id": "5319a80fb166e2b80600002b",
+      "ideal_answer": [
+        "When subjected to pressure overload, mTOR-ablated mice demonstrated an impaired hypertrophic response and accelerated heart failure progression. Thus, mTOR complex 1 signaling plays an important role in myocardial response to stress, to regulate cardiomyocyte viability and heart failure."
+      ],
+      "body": "What is the role played by mTOR in hypertrophic response and heart failure?",
+      "type": "summary"
+    },
+    {
+      "id": "5c8962e8d558e5f232000001",
+      "ideal_answer": [
+        "Super-enhancers are clusters of transcriptional enhancers that drive cell-type-specific gene expression and are crucial to cell identity. Many disease-associated sequence variations are enriched in super-enhancer regions of disease-relevant cell types. Thus, super-enhancers can be used as potential biomarkers for disease diagnosis and therapeutics. Current studies have identified super-enhancers in more than 100 cell types and demonstrated their functional importance."
+      ],
+      "body": "How can super-enhancers be used in disease diagnosis?",
+      "type": "summary"
+    },
+    {
+      "id": "56f112932ac5ed145900000d",
+      "ideal_answer": [
+        "Natural RNA circles function as efficient microRNA sponges. Recently, miRNA activity has been shown to be affected by the presence of miRNA sponge transcripts, the so-called competing endogenous RNA in humans and target mimicry in plants.",
+        "Recently, miRNA activity has been shown to be affected by the presence of miRNA sponge transcripts, the so-called competing endogenous RNA in humans and target mimicry in plants. Natural RNA sponges sequestering cellular noncoding RNA molecules have been found in diverse organisms. In this issue, Lalaouna et al. (2015) report another type of RNA sponge, showing that stable intermediates of bacterial tRNA processing control endogenous small RNAs. Furthermore, survival analysis suggests that high OCT4-pg4 level is significantly correlated with poor prognosis of HCC patients."
+      ],
+      "body": "Which is the main function of \"RNA sponges\"?",
+      "type": "summary"
+    },
+    {
+      "id": "5c536c427e3cb0e23100001d",
+      "ideal_answer": [
+        "Achalasia is a primary esophageal motility disorder characterized by aperistalsis of the esophagus and failed relaxation of the lower esophageal sphincter that presents rarely in childhood.",
+        "Achalasia is a primary esophageal motility disorder characterized by aperistalsis of the esophagus and failed relaxation of the lower esophageal sphincter that presents rarely in childhood. Idiopathic achalasia is a rare esophageal motor disorder. The pathophysiology of achalasia is largely unknown, and involves the destruction of ganglion cell in the esophageal myenteric plexus.",
+        "achalasia is a primary esophageal motility disorder",
+        "Achalasia is a primary esophageal motility disorder characterized by aperistalsis of the esophagus and failed relaxation of the lower esophageal sphincter that presents rarely in childhood. Idiopathic achalasia is a rare esophageal motor disorder.",
+        "Achalasia is a rare idiopathic disease, associated with significant morbidity and negative impact on life quality. The disorder is characterized by impairments in the esophageal motility and loss of the lower esophageal sphincter (LES) relaxation."
+      ],
+      "body": "What is achalasia?",
+      "type": "summary"
+    },
+    {
+      "id": "589a245678275d0c4a000023",
+      "ideal_answer": [
+        "The Pediatric Index of Mortality 2 (PIM2) is one of the most commonly used scoring systems to predict mortality in patients admitted to pediatric intensive care units. The PIM2 score adequately discriminates survivors from non-survivor"
+      ],
+      "body": "Describe clinical applications of the PIM2 scoring system.",
+      "type": "summary"
+    },
+    {
+      "id": "5e49c5ee6d0a277941000012",
+      "ideal_answer": [
+        "Transcription factors regulate gene expression by binding to specific short DNA sequences of 5-20 bp to regulate the rate of transcription of genetic information from DNA to messenger RNA. PWMScan is a fast web-based tool to scan server-resident genomes for matches to a user-supplied PWM or transcription factor binding site model from a public database."
+      ],
+      "body": "What is PWMScan?",
+      "type": "summary"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+# ==========================================================
+# Tiny fine-tuning configuration (stable on macOS / MPS)
+# ==========================================================
+# Runs a short LoRA fine-tuning on TinyLlama-1.1B.
+# Avoids quantization and mixed precision to prevent NaNs.
+# ==========================================================
+
+# -----------------------------
+# Model setup
+# -----------------------------
+model:
+  base_model: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+  adapter_output_dir: "results/ckpts/tiny_adapter"
+  load_4bit: false
+  load_8bit: false
+  bf16: false
+  fp16: false
+  gradient_checkpointing: false
+  use_peft: true
+  lora_r: 8
+  lora_alpha: 16
+  lora_dropout: 0.05
+  target_modules: ["q_proj", "v_proj"]
+  torch_dtype: "float32"
+  torch_compile: false
+  attn_implementation: "eager"
+
+# -----------------------------
+# Training data
+# -----------------------------
+data:
+  train_file: "data/samples/smoke_train.jsonl"
+  validation_split: 0.1
+  max_length: 384
+  include_snippets: true
+  question_field: "body"
+  answer_field: "ideal_answer"
+
+# -----------------------------
+# Trainer settings
+# -----------------------------
+training:
+  output_dir: "results/ckpts/tiny_run"
+  num_train_epochs: 1
+  max_steps: 30              # slightly longer for more stable gradients
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 1
+  gradient_accumulation_steps: 2
+  learning_rate: 5e-5        # faster warm-up on tiny batch
+  weight_decay: 0.01
+  warmup_ratio: 0.05
+  lr_scheduler_type: "linear"
+  logging_steps: 5
+  save_steps: 15
+  save_total_limit: 1
+  max_grad_norm: 1.0         # <-- crucial to prevent gradient explosion
+  evaluation_strategy: "no"  # disable eval loop (avoid extra forward passes)
+  seed: 42
+
+# -----------------------------
+# System
+# -----------------------------
+system:
+  device_map: "auto"
+  use_mps: true
+  report_to: "none"
+  disable_tqdm: false

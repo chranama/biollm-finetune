@@ -1,0 +1,4 @@
+{"id":"yn-1","type":"yesno","body":"Is insulin a protein?","snippets":[{"text":"Insulin is a peptide hormone produced by pancreatic β-cells."}]}
+{"id":"fact-1","type":"factoid","body":"What enzyme synthesizes DNA from an RNA template?","snippets":[{"text":"Reverse transcriptase catalyzes the synthesis of DNA from RNA."}]}
+{"id":"list-1","type":"list","body":"Name two anticoagulants.","snippets":[{"text":"Warfarin and heparin are anticoagulant drugs."}]}
+{"id":"sum-1","type":"summary","body":"Describe the role of BRCA1 in DNA repair.","snippets":[{"text":"BRCA1 forms complexes involved in homologous recombination repair."}]}
