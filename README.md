@@ -32,7 +32,7 @@ Two subdirectories under `archive/` contain the **original local and server code
 | `archive/server_2024/` | Original remote GPU server code used for BioASQ fine-tuning and model evaluation. |
 
 These directories are retained **for historical and academic documentation only** and are not part of the current executable system.  
-All active modules are under `src/bioasq_llm/`.
+All active modules are under `src/biollm_finetune/`.
 
 ---
 
@@ -268,7 +268,7 @@ If you use this code or build upon it, please cite:
 > Master’s Thesis in Data Science, Faculty of Science of the University of Lisbon (Faculdade de Ciências da Universidade de Lisboa), Lisbon, Portugal.  
 > URL: *forthcoming institutional repository link*
 >
-> [https://github.com/chrisanaya/bioasq-llm-qa](https://github.com/chrisanaya/bioasq-llm-qa)
+> [https://github.com/chranama/biollm-finetune](https://github.com/chranama/biollm-finetune)
 
 ### BibTeX
 ```bibtex
@@ -279,7 +279,7 @@ If you use this code or build upon it, please cite:
   school={Faculty of Science of the University of Lisbon (Faculdade de Ciências da Universidade de Lisboa)},
   address={Lisbon, Portugal},
   note={Master’s Thesis in Data Science},
-  url={https://github.com/chrisanaya/bioasq-llm-qa}
+  url={https://github.com/chranama/biollm-finetune}
 }
 
 ---
