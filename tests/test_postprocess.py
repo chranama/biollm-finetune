@@ -1,5 +1,5 @@
 import json
-from bioasq_llm.eval.postprocess import merge_data, categorize_data
+from biollm_finetune.eval.postprocess import merge_data, categorize_data
 
 def test_merge_and_categorize(sample_questions_path, tmp_path):
     # Re-use questions as "preds" shape; add minimal predicted field

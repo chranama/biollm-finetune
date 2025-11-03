@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 import pytest
-from bioasq_llm.inference.generate import main as gen_main
+from biollm_finetune.inference.generate import main as gen_main
 
 CFG = """
 model:

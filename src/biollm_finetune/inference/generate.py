@@ -20,11 +20,11 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from transformers import LogitsProcessor, LogitsProcessorList
 import torch
 
-from bioasq_llm.utils.config import load_config
-from bioasq_llm.utils.device import resolve_device
+from biollm_finetune.utils.config import load_config
+from biollm_finetune.utils.device import resolve_device
 
-from bioasq_llm.utils.logging import get_logger, console as rich_console
-from bioasq_llm.utils.repro import set_seed, start_manifest, write_manifest
+from biollm_finetune.utils.logging import get_logger, console as rich_console
+from biollm_finetune.utils.repro import set_seed, start_manifest, write_manifest
 
 console = Console()
 
@@ -132,7 +132,7 @@ def main() -> None:
     )
     console.print(f"[bold green]Device:[/bold green] {device} | [bold]dtype:[/bold] {dtype}")
 
-    log = get_logger("bioasq_llm.generate")
+    log = get_logger("biollm_finetune.generate")
 
     # Seed (optional: add 'seed' under inference in YAML; fallback to 42)
     seed_info = set_seed(getattr(cfg.inference, "seed", 42))

@@ -5,14 +5,14 @@ Balanced sampler for BioASQ-style QA data.
 Examples
 --------
 # Sample ~5 per type (≈20 total) and write JSONL + gold JSON
-python -m bioasq_llm.data.data_sampling \
+python -m biollm_finetune.data.data_sampling \
   --inputs data/BioASQ-train.json \
   --out-questions data/samples/sample_questions.jsonl \
   --out-gold data/samples/sample_gold.json \
   --per-type 5 --seed 42
 
 # Sample exactly 24 examples, auto-balanced across types
-python -m bioasq_llm.data.data_sampling \
+python -m biollm_finetune.data.data_sampling \
   --inputs data/BioASQ-train.json \
   --out-questions data/samples/sample24.jsonl \
   --out-gold data/samples/sample24_gold.json \

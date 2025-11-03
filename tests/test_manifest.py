@@ -1,6 +1,6 @@
 from pathlib import Path
 import json
-from bioasq_llm.utils.repro import start_manifest, write_manifest
+from biollm_finetune.utils.repro import start_manifest, write_manifest
 
 def test_manifest_written(tmp_path):
     man = start_manifest(

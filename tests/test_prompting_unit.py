@@ -1,4 +1,4 @@
-from bioasq_llm.inference.generate import build_prompt, DEFAULT_TEMPLATES
+from biollm_finetune.inference.generate import build_prompt, DEFAULT_TEMPLATES
 
 def test_prompt_contains_headers(sample_questions_path):
     import json

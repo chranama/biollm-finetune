@@ -1,5 +1,5 @@
 import json
-from bioasq_llm.data.preprocess import preprocess
+from biollm_finetune.data.preprocess import preprocess
 
 def test_preprocess_to_jsonl(tmp_path, sample_questions_path):
     outp = tmp_path / "train.jsonl"

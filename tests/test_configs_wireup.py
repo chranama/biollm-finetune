@@ -1,5 +1,5 @@
 import yaml
-from bioasq_llm.inference.generate import read_yaml
+from biollm_finetune.inference.generate import read_yaml
 
 def test_read_yaml(samples_dir):
     cfg = read_yaml(samples_dir / "tiny_prompts.yaml")

@@ -24,12 +24,12 @@ from transformers import (
     TrainingArguments,
 )
 
-from bioasq_llm.utils.config import load_config
-from bioasq_llm.utils.device import resolve_device
+from biollm_finetune.utils.config import load_config
+from biollm_finetune.utils.device import resolve_device
 
 # >>> Minimal additions for logging + reproducibility manifest
-from bioasq_llm.utils.logging import get_logger
-from bioasq_llm.utils.repro import set_seed, start_manifest, write_manifest
+from biollm_finetune.utils.logging import get_logger
+from biollm_finetune.utils.repro import set_seed, start_manifest, write_manifest
 # <<<
 
 console = Console()
@@ -203,7 +203,7 @@ def main() -> None:
     console.print(f"[bold green]Device:[/bold green] {device} | [bold]dtype:[/bold] {dtype}")
 
     # --- Minimal logger + seed ---
-    log = get_logger("bioasq_llm.finetune")
+    log = get_logger("biollm_finetune.finetune")
     seed_info = set_seed(cfg.training.seed if cfg.training and cfg.training.seed else 42)
     log.info(f"[bold]Seed:[/bold] {seed_info['seed']} (deterministic={seed_info['deterministic']})")
     # -----------------------------

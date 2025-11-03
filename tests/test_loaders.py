@@ -1,4 +1,4 @@
-from bioasq_llm.data.loaders import load_questions_any, flatten_bioasq, basic_stats
+from biollm_finetune.data.loaders import load_questions_any, flatten_bioasq, basic_stats
 
 def test_load_and_flatten(sample_questions_path):
     rows = load_questions_any(sample_questions_path)
