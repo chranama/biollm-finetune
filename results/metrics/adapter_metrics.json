@@ -1,0 +1,29 @@
+{
+  "counts": {
+    "yesno": 6,
+    "factoid": 6,
+    "list": 6,
+    "summary": 6
+  },
+  "yesno": {
+    "accuracy": 0.0
+  },
+  "factoid": {
+    "em": 0.0,
+    "f1": 0.0
+  },
+  "list": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+  },
+  "summary": {
+    "rougeL": 0.0,
+    "rougeL_note": "Requires `pip install rouge-score`"
+  },
+  "missing": {
+    "pred_without_gold": 0,
+    "gold_without_pred": 0
+  },
+  "macro_avg": 0.0
+}

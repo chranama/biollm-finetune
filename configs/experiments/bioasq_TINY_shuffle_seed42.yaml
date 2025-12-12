@@ -1,0 +1,15 @@
+experiment:
+  name: bioasq_TINY_shuffle_seed42
+  seed: 42
+  dataset_split: smoke_integration
+  perturbation: shuffle_snippets
+
+  model:
+    id: hf-internal-testing/tiny-random-Mistral
+    quantization: "none"
+    adapter_path: null
+
+  data:
+    questions_path: "data/samples/integration_gold.json"
+
+  inference_config: "configs/inference_tiny.yaml"

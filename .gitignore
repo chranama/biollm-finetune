@@ -1,25 +1,102 @@
-# Python/build
+# ============================================================
+# Python / Virtual Environments
+# ============================================================
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
-.ipynb_checkpoints/
-*.egg-info/
-.eggs/
+*.pyd
+*.so
+
+.venv/
+venv/
+env/
+ENV/
+
+# Build / Packaging
 build/
 dist/
+*.egg-info/
+pip-wheel-metadata/
 
-# macOS
-.DS_Store
+# pytest / coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
 
-# Virtual env / local env
-.venv/
-.env
+# mypy / ruff / tooling caches
+.mypy_cache/
+.ruff_cache/
+.cache/
 
-# Data & artifacts
-results/**
-data/**/cache/**
-*.pt *.bin *.ckpt *.safetensors
+
+# ============================================================
+# uv (Python project manager)
+# ============================================================
+.uv/
+
+
+# ============================================================
+# LLM / HF / Model Cache
+# ============================================================
+.hf/
+.huggingface/
+.huggingface_cache/
+.cache/huggingface/
+.cache/transformers/
+.cache/datasets/
+
+# Model artifacts
+*.bin
+*.safetensors
+*.pt
+*.pth
+
+
+# ============================================================
+# Experiment Results (auto-generated)
+# ============================================================
+# Keep experiment configs but ignore experiment *outputs*
+results/experiments/
+results/runs/
+results/generated/
+results/processed/
+results/ckpts/
+
+# Allow empty dirs to be committed with placeholder files
+!results/**/.gitkeep
+
+
+# ============================================================
+# Data
+# ============================================================
+# Ignore raw and intermediate data unless explicitly committed
+data/**/*.jsonl
+data/**/*.json
+data/**/*.txt
+data/**/*.csv
+
+# But DO track sample/unit test data in data/samples/
+!data/samples/**
+
+
+# ============================================================
+# Logs and temporary files
+# ============================================================
 *.log
+*.out
+*.err
+*.tmp
+*.bak
+*.swp
+*.swo
 
-# Docker/IDE
-*.local
+
+# ============================================================
+# Archive / Misc
+# ============================================================
+archive/
+archive.zip
+
+.DS_Store
+Thumbs.db

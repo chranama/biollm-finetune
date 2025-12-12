@@ -1,24 +1,81 @@
-# Python junk
+# ======================================
+# Python environments, build artifacts
+# ======================================
 __pycache__/
-*.pyc
-.ipynb_checkpoints/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
 
-# Data & results
-data/
-results/
-*.pt
+.venv/
+venv/
+env/
+ENV/
+
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# uv environment directories
+.uv/
+
+# ======================================
+# LLM / model / HF / Torch caches
+# ======================================
+.hf/
+.huggingface/
+.huggingface_cache/
+.cache/huggingface/
+.cache/transformers/
+.cache/datasets/
+
+# Model files — never include these in the build context
 *.bin
-*.ckpt
 *.safetensors
+*.pt
+*.pth
+
+# ======================================
+# Experiment results (always exclude)
+# ======================================
+results/
+archive/
+archive.zip
+
+# ======================================
+# Data
+# ======================================
+# Exclude all real datasets, but allow tiny samples for testing
+data/
+!data/samples/
+!data/samples/**
+
+# ======================================
+# Logs / temp files
+# ======================================
 *.log
+*.out
+*.err
+*.tmp
+*.bak
+*.swp
+*.swo
 
-# Secrets / tokens / env
-.env
-token/
+# ======================================
+# OS / Editor artifacts
+# ======================================
+.DS_Store
+Thumbs.db
 
-# Git stuff
+# ======================================
+# Git and VCS metadata
+# ======================================
 .git/
 .gitignore
-
-# OS cruft
-.DS_Store
+.gitattributes

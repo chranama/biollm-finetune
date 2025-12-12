@@ -1,0 +1,16 @@
+experiment:
+  name: bioasq_TINY_clean_seed42
+  seed: 42
+  dataset_split: smoke_integration
+  perturbation: clean
+
+  model:
+    id: hf-internal-testing/tiny-random-Mistral
+    quantization: "none"
+    adapter_path: null  # or just omit this line
+
+  data:
+    questions_path: "data/samples/integration_gold.json"
+
+  # Use the tiny inference config instead of the 4-bit one
+  inference_config: "configs/inference_tiny.yaml"
