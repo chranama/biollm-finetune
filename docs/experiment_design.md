@@ -1,286 +1,212 @@
-# Experiment Design  
-### Biomedical QA Robustness, Reliability & Failure Analysis Suite
+# Experimental Design
 
-This document defines the experimental framework used in this research suite.  
-It specifies what constitutes an experiment, what variations are tested, how the evaluation is structured, and which artifacts are produced.
+This document specifies the **frozen experimental design** for the BioLLM fine-tuning and robustness analysis project. The design is finalized prior to large-scale experimentation and is explicitly aligned with the frozen research questions defined in `research_goals.md`.
 
-The goal is to implement reproducible, controlled, scientifically meaningful experiments that investigate the robustness, reliability, and explainability of biomedical question-answering models.
+The goal of this experimental design is to ensure that all empirical results are **interpretable, reproducible, and directly attributable to controlled factors**, rather than artifacts of ad hoc exploration.
 
 ---
 
-## 1. What Is an Experiment?
+## Design Principles
 
-In this repository, one experiment is defined as:
+The experimental design follows five core principles:
 
-A single combination of model variant, dataset split, and perturbation condition, executed with a fixed random seed and full configuration snapshot, producing predictions, metrics, and error analysis artifacts.
+1. **Alignment with research questions**  
+   Every experiment is mapped to at least one frozen research question.
 
-Each experiment must capture:
+2. **Controlled perturbations**  
+   Perturbations are realistic, parameterized, and applied in isolation unless explicitly stated otherwise.
 
-- Model variant (architecture, fine-tuning, quantization)  
-- Dataset condition (clean or perturbed)  
-- Perturbation type (noise, contradiction, shuffle, lexical variation, etc.)  
-- Phenotype annotations for the evaluated questions  
-- Random seed and configuration state  
-- All outputs needed for analysis and reproducibility  
+3. **Minimal but sufficient grid**  
+   The experiment grid is intentionally small to avoid combinatorial explosion while remaining expressive enough to reveal systematic behavior.
 
-A typical experiment produces an output directory of the form:
+4. **Hardware realism**  
+   All experiments are feasible on a personal computer using a macOS MPS backend.
 
-results/experiments/
-  bioasq_M3-4bit_noise-irrel_seed42/
-    config.yaml
-    run_metadata.json
-    predictions.jsonl
-    metrics.json
-    phenotype_metrics.json
-    robustness.json
-    error_samples.jsonl
+5. **Pre-registration mindset**  
+   The experiment grid is frozen before execution to minimize post-hoc bias.
 
 ---
 
-## 2. Datasets and Splits
+## Dataset Selection
 
-### 2.1 BioASQ Task B
+### Primary Dataset
 
-BioASQ Phase B is the primary evaluation dataset. It includes:
+- **BioASQ (TINY subset)**
 
-- Yes/No questions  
-- Factoid questions  
-- List questions  
-- Summary questions  
+Rationale:
+- Representative mix of biomedical question types
+- Supports yes/no, factoid, list, and summary questions
+- Small enough for rapid iteration and reproducibility on local hardware
 
-Evaluation runs use:
-
-- Development sets for iteration  
-- Held-out test batches (or equivalent custom splits) for final reporting  
-
-### 2.2 Supporting Datasets
-
-BiQA, GO Terms, and DrugBank datasets may be used for:
-
-- Fine-tuning  
-- Creating perturbation sources  
-- Auxiliary robustness checks  
-
-These do not replace BioASQ as the evaluation benchmark.
+No additional datasets are included at this stage to preserve focus and interpretability.
 
 ---
 
-## 3. Model Variants
+## Model and Runtime Configuration
 
-A compact and meaningful model lineup:
+- Single model configuration
+- macOS MPS backend
+- Full-precision inference
+- No 4-bit or 8-bit quantization (hardware constraint)
 
-### 3.1 Core Models
-
-- M1: General LLM (example: Mistral-7B-Instruct)  
-- M2: Biomedical pretrained LLM (example: BioMistral-7B)  
-- M3: Fine-tuned biomedical LLM using QLoRA  
-
-### 3.2 Quantization Variants
-
-- M3-4bit: QLoRA, 4-bit NF4  
-- M3-8bit: Optional 8-bit variant  
-- M3-fp16-CPU: Optional small-scale CPU inference variant  
+The objective is behavioral characterization rather than model comparison.
 
 ---
 
-## 4. Experimental Factors
+## Random Seeds
 
-Experiments systematically vary perturbations, phenotypes, and model types.
+Two seed regimes are used:
 
----
+- **Core experiments:** seed = 42  
+- **Reliability experiments:** seeds = {13, 42, 97}
 
-### 4.1 Factor A — Perturbation Type
-
-Each BioASQ question is evaluated under these conditions:
-
-- A0: Clean (original snippets)  
-- A1: Irrelevant noise injection  
-- A2: Contradictory sentence injection  
-- A3: Snippet reordering  
-- A4: Lexical noise or token substitutions  
-
-Minimal core subset for compute efficiency: A0, A1, A3.
+Multi-seed evaluation is limited to selected perturbations to balance rigor and computational cost.
 
 ---
 
-### 4.2 Factor B — Phenotype Tags
+## Perturbation Families
 
-Each question is labeled with one or more difficulty phenotypes:
+### Baseline
 
-- B1: Long question  
-- B2: Long context  
-- B3: Synonym-heavy answer  
-- B4: Multi-hop reasoning  
-- B5: Temporal or causal structure  
-- B6: Entity-dense answer  
-- B7: Multi-answer list  
+- `clean`
 
-These tags support failure-mode analysis.
+### Control Perturbation
+
+- `shuffle_snippets`  
+  Randomizes snippet order to control for context length effects without introducing new content.
 
 ---
 
-### 4.3 Factor C — Model Variant
+### Lexical Noise (RQ1)
 
-- C1: M1 general model  
-- C2: M2 biomedical pretrained model  
-- C3: M3-4bit fine-tuned model  
-- Optional: C4 (8-bit), C5 (fp16 CPU subset)  
+Surface-form perturbations that preserve semantic content:
 
-Most robustness experiments use C3.
+- `lexical_noise` (low intensity)
+- `lexical_noise_medium`
+- `lexical_noise_heavy`
 
----
-
-## 5. Metrics
-
-### 5.1 BioASQ Task Metrics
-
-- Yes/No: accuracy, precision, recall, F1  
-- Factoid: exact match, lenient match, MRR  
-- List: F1 and exact match  
-- Summary: ROUGE-L, ROUGE-2  
-
-Metrics are computed globally, by question type, by phenotype, and by perturbation.
-
-### 5.2 Robustness Metrics
-
-For any metric M:
-
-- M_clean = score on clean input  
-- M_pert = score on perturbed input  
-
-Derived measures:
-
-- Robustness ratio = M_pert divided by M_clean  
-- Absolute drop = M_pert minus M_clean  
-
-Both are computed per question, per phenotype, per perturbation, and per model.
-
-### 5.3 Statistical Confidence
-
-Bootstrap resampling (for example, one thousand resamples) is recommended for:
-
-- Differences between clean and perturbed performance  
-- Differences between model variants  
-- Robustness estimates  
+These perturbations test graceful versus brittle degradation under increasing surface corruption.
 
 ---
 
-## 6. Experimental Matrix
+### Irrelevant Biomedical Noise (RQ2)
 
-### Phase A — Baseline Characterization
+In-domain distractor perturbations using a balanced PubMed-derived corpus:
 
-Experiments:
+- `irrelevant_noise`
+- `irrelevant_noise_heavy`
 
-- (C1, A0)  
-- (C2, A0)  
-- (C3, A0)  
-
-Outputs:
-
-- Baseline metrics  
-- Phenotype-level performance  
-- Seed error catalog  
-
-Supports research question on phenotype-based failures.
+These perturbations test the model’s ability to filter irrelevant biomedical evidence beyond simple context-length effects.
 
 ---
 
-### Phase B — Robustness to Noise
+### Contradiction (RQ4)
 
-Experiments for the fine-tuned model:
+- `contradiction`
 
-- (C3, A0)  
-- (C3, A1)  
-- (C3, A3)  
-
-Optional comparison:
-
-- (C2, A1)  
-
-Supports robustness and phenotype × perturbation interaction analysis.
+This perturbation injects explicit evidence contradicting the gold answer, primarily targeting yes/no questions. The analysis is behavioral rather than logical.
 
 ---
 
-### Phase C — Quantization vs Robustness
+## Experiment Blocks
 
-Experiments:
+### Block 0 — Smoke Validation
 
-- (M3-4bit, A0 A1 A3)  
-- (M3-8bit, A0 A1 A3)  
-- (M3-fp16 CPU-small, A0 A1)  
+Purpose:
+- Validate end-to-end execution
+- Confirm artifact generation
+- Sanity-check robustness and stability outputs
 
-Supports analysis of reliability under compression.
-
----
-
-### Phase D — Advanced Perturbations
-
-Optional deeper experiments:
-
-- (C3, A2) contradiction  
-- (C3, A4) lexical noise  
+Configuration:
+- Dataset: BioASQ TINY
+- Seed: 42
+- Perturbations:
+  - clean
+  - lexical_noise_medium
+  - contradiction
 
 ---
 
-## 7. Error Analysis and Explainability
+### Block 1 — Robustness Characterization
 
-### 7.1 Error Bucketing
+Purpose:
+- Address RQ1, RQ2, and RQ4
+- Measure clean versus perturbed degradation
+- Enable robustness curves across perturbation intensity
 
-Each incorrect prediction is annotated with:
-
-- Question type  
-- Phenotype tags  
-- Perturbation condition  
-- Error type (hallucination, polarity error, omission, misreading, etc.)
-
-### 7.2 Error Sampling
-
-For each (model, perturbation, phenotype):
-
-- Select worst examples  
-- Select borderline examples  
-- Select representative random examples  
-
-Stored in:
-
-results/error_catalog/<experiment_id>.jsonl
-
-### 7.3 Error Browser
-
-A notebook or lightweight application may later allow interactive exploration of:
-
-- Question  
-- Snippets  
-- Prediction  
-- Gold answer  
-- Notes on reasoning failures  
+Configuration:
+- Dataset: BioASQ TINY
+- Seed: 42
+- Perturbations:
+  - clean
+  - shuffle_snippets
+  - lexical_noise
+  - lexical_noise_medium
+  - lexical_noise_heavy
+  - irrelevant_noise
+  - irrelevant_noise_heavy
+  - contradiction
 
 ---
 
-## 8. Reproducibility
+### Block 2 — Reliability Analysis
 
-Each experiment directory contains:
+Purpose:
+- Address RQ3
+- Measure stability and correctness flips across seeds
 
-- Fully resolved configuration file  
-- Metadata including git commit, seed, model identifiers  
-- Raw predictions  
-- Core metrics  
-- Phenotype-level metrics  
-- Robustness metrics  
-- Selected error samples  
-
-This ensures complete reproducibility and traceability.
+Configuration:
+- Dataset: BioASQ TINY
+- Seeds: {13, 42, 97}
+- Perturbations:
+  - clean
+  - lexical_noise_heavy
+  - irrelevant_noise_heavy
+  - contradiction
 
 ---
 
-## 9. Summary
+## Measurements and Outputs
 
-This experiment design establishes:
+For each experiment run, the following artifacts are produced:
 
-- A robust framework for perturbation-based testing  
-- A phenotype taxonomy for discovering systematic failures  
-- A clear model comparison structure  
-- A reproducible experiment-output layout  
-- Integrated qualitative and quantitative error analysis  
+- Predictions
+- Task-appropriate evaluation metrics
+- Clean versus perturbed deltas
+- Relative percentage drops
+- Prediction stability statistics
+- Correctness flip counts
+- Phenotype-conditioned aggregates
 
-Together, these practices form the backbone of a rigorous research suite for biomedical LLM robustness.
+All artifacts are persisted per experiment to ensure reproducibility and auditability.
+
+---
+
+## Phenotype Conditioning
+
+All robustness and reliability analyses are additionally conditioned on interpretable input phenotypes:
+
+- long questions
+- long contexts
+- multi-answer list questions
+
+This enables structured qualitative error analysis and supports explainability-focused interpretation of failures.
+
+---
+
+## Scope and Limitations
+
+- The design characterizes a single model configuration.
+- No cross-model or cross-dataset generalization claims are made.
+- Contradiction analysis is empirical and behavioral.
+- Interaction effects between perturbations are out of scope for this phase.
+
+---
+
+## Status
+
+- Research questions: frozen  
+- Experiment grid: frozen  
+- Perturbations, phenotypes, and robustness machinery: complete  
+
+The project is ready to proceed to Phase 4 execution without further changes to experimental design.

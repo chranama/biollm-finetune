@@ -1,23 +1,55 @@
 """
 Phenotype tagging for BioASQ-style biomedical QA questions.
 
-Phase 2 focuses on simple, length- and structure-based phenotypes:
+Phase 3 builds on the Phase 2 lightweight phenotypes by:
+- making the phenotype schema explicit and stable
+- adding dict-based tagging outputs for aggregation
+- preserving the Phase 2 list-of-tags API for backward compatibility
 
+Current phenotypes:
 - B1: long_question
 - B2: long_context
 - B7: multi_answer_list
 
-These tags are intentionally lightweight and deterministic, intended to:
-- provide immediate, interpretable structure for error analysis
-- serve as a foundation for more sophisticated phenotypes in later phases
+Design goals:
+- deterministic and lightweight (no model calls, no external deps)
+- robust to BioASQ format variations
+- analysis-friendly outputs (boolean phenotype dicts)
 """
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Sequence, Tuple
+from typing import Any, Dict, List, Sequence
 
 PhenotypeTags = List[str]
+PhenotypeDict = Dict[str, bool]
 Example = Dict[str, Any]
+
+
+# -------------------------
+# Phenotype schema
+# -------------------------
+
+PHENOTYPE_DEFINITIONS: Dict[str, Dict[str, str]] = {
+    "long_question": {
+        "code": "B1",
+        "description": "Question length exceeds token threshold.",
+        "type": "boolean",
+    },
+    "long_context": {
+        "code": "B2",
+        "description": "Total context/snippet text length exceeds character threshold.",
+        "type": "boolean",
+    },
+    "multi_answer_list": {
+        "code": "B7",
+        "description": "List question with at least N distinct exact answers.",
+        "type": "boolean",
+    },
+}
+
+PHENOTYPE_KEYS: List[str] = list(PHENOTYPE_DEFINITIONS.keys())
+
 
 # -------------------------
 # Tunable thresholds
@@ -36,6 +68,22 @@ MULTI_ANSWER_MIN: int = 3
 # -------------------------
 # Internal helpers
 # -------------------------
+
+def get_example_id(ex: Example, idx: int) -> str:
+    """
+    Return a stable id for an example.
+
+    Prefer:
+      - 'id'
+      - '_id'
+    Fallback:
+      - 'idx_{i}'
+    """
+    raw_id = ex.get("id") or ex.get("_id")
+    if raw_id is None:
+        return f"idx_{idx}"
+    return str(raw_id)
+
 
 def _get_question_text(ex: Example) -> str:
     """
@@ -64,15 +112,12 @@ def _normalize_snippet(snippet: Any) -> str:
         return snippet
 
     if isinstance(snippet, dict):
-        # Common BioASQ fields
         for key in ("text", "snippet", "document", "context"):
             value = snippet.get(key)
             if isinstance(value, str):
                 return value
-        # Fallback: stringify dict
         return str(snippet)
 
-    # Fallback: stringify everything else
     return str(snippet)
 
 
@@ -83,7 +128,7 @@ def _get_context_text(ex: Example) -> str:
     BioASQ variations:
       - 'snippets': List[dict] with 'text' or 'snippet'
       - 'snippets': List[str]
-      - occasionally other structures; we normalize defensively.
+      - other structures; we normalize defensively.
     """
     snippets = ex.get("snippets") or ex.get("documents") or []
     if not isinstance(snippets, list):
@@ -125,18 +170,13 @@ def _flatten_exact_answer(ans: Any) -> List[str]:
                 for sub in item:
                     flat.append(str(sub))
             else:
-                # As a last resort
                 flat.append(str(item))
         return flat
 
-    # Any other type: just stringify
     return [str(ans)]
 
 
 def _get_exact_answers(ex: Example) -> List[str]:
-    """
-    Extract exact answers from an example, flattened to a simple list of strings.
-    """
     ans = ex.get("exact_answer") or ex.get("answers") or None
     return _flatten_exact_answer(ans)
 
@@ -162,52 +202,33 @@ def _get_question_type(ex: Example) -> str:
 # -------------------------
 
 def _is_long_question(ex: Example) -> bool:
-    """
-    B1: long_question
-
-    A question is considered long if it has at least LONG_QUESTION_TOKENS tokens.
-    """
     text = _get_question_text(ex)
     tokens = text.split()
     return len(tokens) >= LONG_QUESTION_TOKENS
 
 
 def _is_long_context(ex: Example) -> bool:
-    """
-    B2: long_context
-
-    Context is long if the concatenated snippet text exceeds LONG_CONTEXT_CHARS characters.
-    """
     ctx_text = _get_context_text(ex)
     return len(ctx_text) >= LONG_CONTEXT_CHARS
 
 
 def _is_multi_answer_list(ex: Example) -> bool:
-    """
-    B7: multi_answer_list
-
-    A question qualifies if:
-      - its type is 'list'
-      - it has at least MULTI_ANSWER_MIN distinct exact answers
-    """
     q_type = _get_question_type(ex)
     if q_type != "list":
         return False
 
     answers = _get_exact_answers(ex)
-    # Normalize answers (strip whitespace, drop empties)
     norm = {a.strip() for a in answers if isinstance(a, str) and a.strip()}
     return len(norm) >= MULTI_ANSWER_MIN
 
 
+# -------------------------
+# Public APIs
+# -------------------------
+
 def tag_example(example: Example) -> PhenotypeTags:
     """
-    Assign phenotype tags to a single QA example.
-
-    Current tags (Phase 2):
-      - 'long_question'     (B1)
-      - 'long_context'      (B2)
-      - 'multi_answer_list' (B7)
+    Phase 2-compatible API: returns a list of phenotype tags.
     """
     tags: PhenotypeTags = []
 
@@ -223,24 +244,36 @@ def tag_example(example: Example) -> PhenotypeTags:
     return tags
 
 
+def tag_example_dict(example: Example) -> PhenotypeDict:
+    """
+    Phase 3 API: returns a boolean dict over the canonical phenotype keys.
+
+    Example:
+      {"long_question": True, "long_context": False, "multi_answer_list": False}
+    """
+    tag_list = set(tag_example(example))
+    return {k: (k in tag_list) for k in PHENOTYPE_KEYS}
+
+
 def tag_dataset(examples: Sequence[Example]) -> Dict[str, PhenotypeTags]:
     """
-    Tag an entire dataset of examples, returning a mapping:
-
-        question_id -> [phenotype_tag, ...]
-
-    If an example has no 'id' (or '_id'), a synthetic id based on its index
-    (e.g., 'idx_0', 'idx_1', ...) is used.
+    Phase 2-compatible dataset API:
+      question_id -> [phenotype_tag, ...]
     """
     labeled: Dict[str, PhenotypeTags] = {}
-
     for idx, ex in enumerate(examples):
-        raw_id = ex.get("id") or ex.get("_id")
-        if raw_id is None:
-            qid = f"idx_{idx}"
-        else:
-            qid = str(raw_id)
-
+        qid = get_example_id(ex, idx)
         labeled[qid] = tag_example(ex)
+    return labeled
 
+
+def tag_dataset_dict(examples: Sequence[Example]) -> Dict[str, PhenotypeDict]:
+    """
+    Phase 3 dataset API:
+      question_id -> {phenotype_key -> bool}
+    """
+    labeled: Dict[str, PhenotypeDict] = {}
+    for idx, ex in enumerate(examples):
+        qid = get_example_id(ex, idx)
+        labeled[qid] = tag_example_dict(ex)
     return labeled

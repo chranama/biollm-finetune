@@ -1,177 +1,110 @@
-# Research Goals  
-### Biomedical Question Answering — Robustness, Reliability & Failure Analysis Suite
+# Research Goals
 
-This project extends the user's master's thesis work into a full research suite designed to study **robustness**, **reliability**, **explainability**, and **error behavior** in biomedical question-answering systems built with open-weight large language models (LLMs).  
+This document defines the **frozen research goals and research questions** for the BioLLM fine-tuning and robustness analysis project. These goals are finalized prior to large-scale experimentation in order to minimize post-hoc bias and ensure methodological rigor.
 
-Instead of focusing on productionization, this repository is structured as a **mini research laboratory**: experiments are controlled, reproducible, and centered around understanding *how* and *why* biomedical LLMs fail under various conditions.
-
-The overarching goal is to showcase the ability to design, implement, analyze, and communicate a rigorous applied-LLM research program using limited hardware but strong methodology.
-
+The project is positioned as a **research suite** rather than a production system. Its primary objective is to demonstrate the design, implementation, and analysis of controlled empirical studies of biomedical question answering models under realistic perturbations.
 
 ---
 
-# 1. Research Orientation
+## High-Level Objective
 
-Modern biomedical QA systems must operate in environments full of:
-- noisy evidence,
-- contradictory scientific findings,
-- synonym-rich terminology,
-- multi-hop reasoning demands,
-- varied question types,
-- and domain-specific factual constraints.
+The overarching goal of this research is to **characterize the robustness, reliability, and failure modes of a biomedical question answering model** when subjected to realistic input perturbations and conflicting evidence.
 
-This project evaluates how well fine-tuned LLMs survive these challenges.  
-The aim is not just to measure performance, but to **map the model’s vulnerabilities**, **diagnose reasoning failures**, and **analyze error patterns** both quantitatively and qualitatively.
+Rather than optimizing absolute performance, the focus is on:
 
-The research suite is organized around:
-- controlled perturbation experiments,
-- phenotype-based difficulty analysis,
-- interpretability-oriented diagnostics,
-- qualitative “error galleries,”
-- and comparisons across quantization or fine-tuning variants.
-
+- understanding how and why performance degrades  
+- identifying systematic versus stochastic failures  
+- relating observed failures to interpretable properties of the input  
 
 ---
 
-# 2. Research Questions
+## Frozen Research Questions
 
-## **RQ1 — How robust are biomedical LLMs to noisy, irrelevant, or contradictory evidence snippets?**
+### RQ1 — Surface-Form Robustness
 
-Biomedical text often contains extraneous or inconsistent information.  
-This question evaluates how performance degrades when the input is perturbed.
+How robust is a biomedical question answering model to realistic lexical corruption of the input?
 
-### Experimental manipulations:
-- Adding irrelevant biomedical sentences  
-- Injecting synthetic contradictions  
-- Shuffling snippet order  
-- Injecting token-level noise  
+This question investigates the model’s sensitivity to surface-level noise that preserves semantic content, such as:
 
-### Metrics:
-- **Robustness Ratio:** performance_with_noise / performance_clean  
-- Absolute metric drops per question type  
-- Change in token-probability entropy  
-- Error severity index (custom)  
+- character-level noise including typos and casing errors  
+- token-level noise including duplication, deletion, and swaps  
+- whitespace and punctuation irregularities  
 
+The goal is to assess whether degradation under lexical noise is graceful and monotonic, or brittle and abrupt.
 
 ---
 
-## **RQ2 — What categories of questions systematically cause reasoning or factual failures?**
+### RQ2 — Distractor Robustness
 
-LLM errors are not random — they cluster around certain linguistic or structural features.  
-This question identifies “phenotypes” of hard questions.
+Can the model ignore plausible but irrelevant biomedical information introduced into the context?
 
-### Question phenotypes:
-- Long questions  
-- Long contexts  
-- Synonym-heavy answers  
-- Multi-hop reasoning  
-- Temporal / causal questions  
-- Entity-dense answers  
-- Multi-answer list questions  
+This question examines the model’s ability to distinguish relevant evidence from in-domain distractors. Irrelevant snippets are drawn from a balanced PubMed-derived corpus to ensure ecological validity.
 
-### Metrics:
-- Per-phenotype accuracy / F1 / MRR / ROUGE  
-- Error clustering and heatmaps  
-- Failure rates across BioASQ question types  
+A key distinction explored is whether performance degradation arises from:
 
+- increased context length alone  
+- or the presence of realistic but irrelevant biomedical content  
 
 ---
 
-## **RQ3 — How do robustness failures and phenotype failures interact?**
+### RQ3 — Reliability Under Perturbation
 
-Some types of questions may be disproportionately vulnerable to noise.  
-This question analyzes how perturbations from **RQ1** combine with the difficulty buckets from **RQ2**.
+Are model failures under perturbation stable and systematic, or stochastic and seed-dependent?
 
-### Metrics:
-- Robustness drop per phenotype  
-- Phenotype × perturbation interaction plots  
-- Fragility ranking of question types and structures  
+This question focuses on the reliability of model behavior rather than single-run performance. It evaluates whether failures:
 
+- occur consistently across random seeds  
+- exhibit predictable patterns  
+- or appear chaotic and unstable  
 
----
-
-## **RQ4 — How do quantization and fine-tuning choices influence robustness and error profiles?**
-
-Model compression and efficient training are common in biomedical NLP.  
-This question evaluates how these choices impact reliability.
-
-### Conditions:
-- Base models vs QLoRA-fine-tuned models  
-- 4-bit NF4 vs 8-bit vs CPU inference  
-- Small-rank vs moderate-rank LoRA adapters  
-
-### Metrics:
-- Change in robustness ratio  
-- Change in error distributions  
-- Latency and memory usage (secondary)  
-
+Reliability is assessed via prediction stability metrics and correctness flip analysis.
 
 ---
 
-## **RQ5 — What qualitative reasoning failures underlie incorrect predictions?**
+### RQ4 — Behavior Under Conflicting Evidence
 
-This question focuses on explainability through structured error inspection.
+How does the model behave when presented with evidence that contradicts the gold answer?
 
-### Components:
-- Curated error datasets for each question type  
-- Side-by-side gold vs predicted answers  
-- Perturbation condition metadata  
-- Phenotype labels  
-- Optional token-level attribution or attention heuristics  
+This question studies the model’s empirical behavior when confronted with explicit contradictions, particularly in yes or no questions.
 
-### Deliverables:
-- A qualitative “model pathology report”  
-- An interactive or notebook-based error browser  
+The emphasis is on behavioral characterization rather than formal logical reasoning, including:
 
+- sensitivity to conflicting snippets  
+- correctness flips induced by contradiction  
+- interaction with context length and evidence order  
 
 ---
 
-# 3. Expected Contributions of This Research Suite
+### RQ5 — Phenotype-Conditioned Explainability
 
-This repository aims to contribute:
+Are robustness failures associated with interpretable input properties, referred to as phenotypes?
 
-1. **A unified framework for robustness testing**  
-   Small-scale but rigorous experiments showing how biomedical LLMs fail under noise and contradiction.
+This question bridges robustness and explainability by analyzing whether failures correlate with simple, human-interpretable properties of the input, including:
 
-2. **A dataset-driven analysis of difficulty phenotypes**  
-   Clear evidence of which question families are intrinsically hard for LLMs.
+- long questions  
+- long contexts  
+- multi-answer list questions  
 
-3. **A cross-model comparison of reliability under quantization and efficient fine-tuning**  
-   Linking systems decisions to downstream reliability outcomes.
-
-4. **A qualitative catalog of reasoning failures**  
-   Human-interpretable examples demonstrating how and why models produce incorrect answers.
-
-5. **Reproducible experiment design**  
-   Every experiment is logged, traceable, and understandable in terms of configuration, metrics, and artifacts.
-
-  
----
-
-# 4. What This Enables Next
-
-These research questions and goals establish the foundation for:
-
-- A structured experiment registry  
-- A robustness analysis module  
-- Phenotype-based evaluation scripts  
-- Ablation studies on perturbation strength or LoRA settings  
-- Error visualization notebooks  
-- A publishable short research paper or blog post  
-- Strong portfolio evidence of analysis-driven LLM engineering  
-
+The objective is to explain where and why failures occur, rather than merely quantifying overall degradation.
 
 ---
 
-# 5. Summary
+## Scope and Positioning
 
-This research suite is designed to show depth, rigor, and scientific maturity.  
-It transforms a finetuning project into a complete analytical workflow that investigates the boundaries of model reliability in biomedical question answering.
+The scope of this research is intentionally constrained:
 
-The following phases of the project will implement:
-- experiment architecture,  
-- analysis utilities,  
-- perturbation engines,  
-- and evaluation dashboards.
+- The study characterizes a single model configuration under controlled perturbations.  
+- Results are framed as empirical observations rather than universal claims about all biomedical language models.  
+- Contradiction analysis is behavioral, not symbolic or logical.  
 
-Together, they form a compact but powerful **research lab** for biomedical LLM robustness.
+These constraints are explicit design choices that prioritize interpretability, rigor, and reproducibility.
+
+---
+
+## Status
+
+- Research questions are frozen  
+- Experimental grid is frozen  
+- Infrastructure is complete  
+
+The project is ready to proceed to Phase 4 execution without further changes to research scope or experimental design.
