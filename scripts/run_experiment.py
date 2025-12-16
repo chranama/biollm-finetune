@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Unified experiment runner for BioLLM fine-tuning and robustness analysis.
 
@@ -10,6 +11,12 @@ Phase 3 responsibilities:
 This script assumes:
 - inference is already implemented and correct
 - perturbations are deterministic via seeding
+
+Important notes:
+- We ALWAYS write the exact inputs used for inference to results/.../inputs.jsonl
+- We tag phenotypes on the exact inputs used (clean or perturbed)
+- We evaluate predictions against the clean gold labels (original dataset)
+- We propagate the experiment seed into inference (if generate.py supports --seed)
 """
 
 from __future__ import annotations
@@ -17,29 +24,24 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
+import sys
+from datetime import UTC, datetime
 from pathlib import Path
-from datetime import datetime, UTC
-from typing import Any, Dict, List
+from typing import Any, Optional
 
-from biollm_finetune.utils.config import load_config
-from biollm_finetune.utils.repro import set_seed
-from biollm_finetune.analysis.phenotypes import (
-    tag_dataset_dict,
-    PHENOTYPE_DEFINITIONS,
-)
-from biollm_finetune.analysis.robustness import (
-    compute_robustness_records,
-    compute_stability,
-    save_json,
-)
+from biollm_finetune.analysis.phenotypes import PHENOTYPE_DEFINITIONS, tag_dataset_dict
+from biollm_finetune.analysis.robustness import compute_stability, save_json
 from biollm_finetune.analysis.run_registry import register_run
 from biollm_finetune.data.loaders import load_jsonl
 from biollm_finetune.eval.metrics import evaluate_predictions
+from biollm_finetune.utils.config import RuntimeConfig, load_config
+from biollm_finetune.utils.repro import set_seed
 
 
 # ---------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------
+
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
@@ -51,6 +53,7 @@ def parse_args() -> argparse.Namespace:
 # Helpers
 # ---------------------------------------------------------------------
 
+
 def _now_utc() -> str:
     return datetime.now(UTC).isoformat().replace("+00:00", "Z")
 
@@ -58,35 +61,128 @@ def _now_utc() -> str:
 def _write_json(path: Path, obj: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
-        json.dump(obj, f, indent=2)
+        json.dump(obj, f, indent=2, ensure_ascii=False)
+
+
+def _write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as f:
+        for r in rows:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
 
 def _run_inference(
-    cfg: Dict[str, Any],
+    runtime: RuntimeConfig,
     inputs_path: Path,
     outputs_path: Path,
-    adapter_path: Path | None,
+    adapter_path: Optional[Path],
+    seed: int,
 ) -> None:
-    cmd = [
-        str(Path(cfg["python_bin"])),
+    """
+    Invoke biollm_finetune.inference.generate as a module.
+
+    If generate.py supports --seed, we pass it. If it doesn't, we silently
+    fall back to not passing it (to avoid breaking older versions).
+    """
+    base_cmd = [
+        sys.executable,
         "-m",
         "biollm_finetune.inference.generate",
         "--config",
-        cfg["inference_config"],
+        runtime.inference_config,
         "--input",
         str(inputs_path),
         "--out",
         str(outputs_path),
     ]
-    if adapter_path:
-        cmd.extend(["--adapter", str(adapter_path)])
+    if adapter_path is not None:
+        base_cmd.extend(["--adapter", str(adapter_path)])
 
-    subprocess.check_call(cmd)
+    # Try with --seed first (new behavior); fall back if unsupported.
+    cmd_with_seed = base_cmd + ["--seed", str(seed)]
+    try:
+        subprocess.check_call(cmd_with_seed)
+        return
+    except subprocess.CalledProcessError:
+        raise
+    except Exception as e:
+        # Most commonly: argparse error in generate.py for unknown --seed.
+        # Fall back to the old invocation.
+        subprocess.check_call(base_cmd)
+
+
+def _resolve_task(exp_cfg: Any, examples: list[dict[str, Any]]) -> str:
+    dataset = getattr(exp_cfg, "dataset", None)
+    if dataset is not None:
+        task = getattr(dataset, "task", None)
+        if isinstance(task, str) and task.strip():
+            return task.strip()
+
+    if examples and any(isinstance(ex, dict) and ("type" in ex) for ex in examples):
+        return "bioasq"
+
+    return "bioasq"
+
+
+def _apply_perturbation(
+    perturbation: str,
+    examples: list[dict[str, Any]],
+    seed: int,
+    exp_cfg: Any,
+) -> list[dict[str, Any]]:
+    """
+    Apply a named perturbation to a dataset (list of examples), deterministically.
+
+    NOTE: biollm_finetune.analysis.perturbations.apply_perturbation operates on a
+    single example, so we map over the dataset here.
+    """
+    p = (perturbation or "clean").strip().lower()
+    if p == "clean":
+        return examples
+
+    # Make perturbations deterministic across the dataset.
+    set_seed(seed)
+
+    # Optional per-perturbation configuration (paths, budgets, etc.)
+    cfg: dict[str, Any] = {}
+    pert_cfg = getattr(exp_cfg, "perturbation_config", None)
+    if isinstance(pert_cfg, dict):
+        cfg.update(pert_cfg)
+
+    # Lazily import to avoid overhead on clean runs
+    from biollm_finetune.analysis.perturbations import apply_perturbation as _apply_one
+
+    out: list[dict[str, Any]] = []
+    for ex in examples:
+        # Never mutate the clean dataset in-place
+        ex_copy = json.loads(json.dumps(ex))
+        out.append(_apply_one(ex_copy, p, cfg))
+
+    return out
+
+
+def _count_changed(orig: list[dict[str, Any]], pert: list[dict[str, Any]]) -> int:
+    """
+    Conservative change detector across common fields.
+    """
+    n = min(len(orig), len(pert))
+    changed = 0
+    for i in range(n):
+        a = orig[i]
+        b = pert[i]
+        if (
+            (a.get("body") != b.get("body"))
+            or (a.get("question") != b.get("question"))
+            or (a.get("snippets") != b.get("snippets"))
+        ):
+            changed += 1
+    return changed
 
 
 # ---------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------
+
 
 def main() -> None:
     args = parse_args()
@@ -95,14 +191,13 @@ def main() -> None:
     # -------------------------
     # Experiment metadata
     # -------------------------
-
     set_seed(exp_cfg.seed)
 
     exp_name = exp_cfg.name
     exp_dir = Path(exp_cfg.output_dir) / exp_name
     exp_dir.mkdir(parents=True, exist_ok=True)
 
-    manifest = {
+    manifest: dict[str, Any] = {
         "experiment": exp_name,
         "config": args.config,
         "dataset": exp_cfg.dataset.name,
@@ -113,21 +208,34 @@ def main() -> None:
     }
 
     # -------------------------
-    # Load inputs
+    # Load inputs (clean)
     # -------------------------
+    clean_examples = load_jsonl(exp_cfg.dataset.path)
 
-    examples = load_jsonl(exp_cfg.dataset.path)
+    # -------------------------
+    # Apply perturbations
+    # -------------------------
+    used_examples = _apply_perturbation(
+        perturbation=exp_cfg.perturbation,
+        examples=clean_examples,
+        seed=exp_cfg.seed,
+        exp_cfg=exp_cfg,
+    )
+
+    changed = _count_changed(clean_examples, used_examples)
+    manifest["n_examples"] = len(used_examples)
+    manifest["n_changed_vs_clean"] = int(changed)
+
+    # -------------------------
+    # Write the exact inputs used for inference
+    # -------------------------
     inputs_path = exp_dir / "inputs.jsonl"
-    with inputs_path.open("w", encoding="utf-8") as f:
-        for ex in examples:
-            f.write(json.dumps(ex) + "\n")
+    _write_jsonl(inputs_path, used_examples)
 
     # -------------------------
-    # Phenotype tagging (Phase 3)
+    # Phenotype tagging (tag what you actually ran)
     # -------------------------
-
-    phenotype_map = tag_dataset_dict(examples)
-
+    phenotype_map = tag_dataset_dict(used_examples)
     _write_json(
         exp_dir / "phenotypes.json",
         {
@@ -139,39 +247,41 @@ def main() -> None:
     # -------------------------
     # Inference
     # -------------------------
-
     preds_path = exp_dir / "predictions.jsonl"
+    adapter_str = getattr(exp_cfg.model, "adapter", None)
+    adapter_path = Path(adapter_str) if isinstance(adapter_str, str) and adapter_str.strip() else None
 
     _run_inference(
-        cfg=exp_cfg.runtime,
+        runtime=exp_cfg.runtime,
         inputs_path=inputs_path,
         outputs_path=preds_path,
-        adapter_path=Path(exp_cfg.model.adapter) if exp_cfg.model.adapter else None,
+        adapter_path=adapter_path,
+        seed=exp_cfg.seed,
     )
 
     # -------------------------
     # Evaluation
     # -------------------------
-
     preds = load_jsonl(preds_path)
+    task = _resolve_task(exp_cfg, clean_examples)
+
     metrics = evaluate_predictions(
         predictions=preds,
-        gold=examples,
-        task=exp_cfg.dataset.task,
+        gold=clean_examples,
+        task=task,
     )
-
     _write_json(exp_dir / "metrics.json", metrics)
 
     # -------------------------
     # Register run
     # -------------------------
-
     run_record = {
         "run_id": exp_name,
         "dataset": exp_cfg.dataset.name,
         "model": exp_cfg.model.name,
         "seed": exp_cfg.seed,
         "perturbation": exp_cfg.perturbation,
+        "task": task,
         "metrics": metrics,
         "paths": {
             "inputs": str(inputs_path),
@@ -180,31 +290,31 @@ def main() -> None:
             "phenotypes": str(exp_dir / "phenotypes.json"),
         },
     }
-
     register_run(run_record)
 
     # -------------------------
     # Optional: robustness + stability
     # -------------------------
-
-    if exp_cfg.robustness.enabled:
+    if hasattr(exp_cfg, "robustness") and exp_cfg.robustness and exp_cfg.robustness.enabled:
         clean_preds = load_jsonl(exp_cfg.robustness.clean_predictions)
-        gold = examples
 
         stability = compute_stability(
-            clean_preds=[p["answer"] for p in clean_preds],
-            perturbed_preds=[p["answer"] for p in preds],
-            gold=[ex.get("exact_answer") for ex in gold],
+            clean_preds=[p.get("answer") or p.get("prediction") or "" for p in clean_preds],
+            perturbed_preds=[p.get("answer") or p.get("prediction") or "" for p in preds],
+            gold=[ex.get("exact_answer") for ex in clean_examples],
             run_id=exp_name,
             perturbation=exp_cfg.perturbation,
         )
-
         save_json([stability], exp_dir / "stability.json")
 
+    manifest["task"] = task
     manifest["end_time_utc"] = _now_utc()
     _write_json(exp_dir / "manifest.json", manifest)
 
-    print(f"Experiment '{exp_name}' completed → {exp_dir}")
+    print(
+        f"Experiment '{exp_name}' completed → {exp_dir} "
+        f"(perturbation={exp_cfg.perturbation}, changed_vs_clean={changed}/{len(used_examples)})"
+    )
 
 
 if __name__ == "__main__":

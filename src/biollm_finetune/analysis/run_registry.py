@@ -192,3 +192,39 @@ def load_experiment(
         return None
     meta = _load_run_metadata(run_dir)
     return ExperimentRun(path=run_dir, metadata=meta)
+
+# -------------------------
+# Run registration (writer)
+# -------------------------
+
+def register_run(
+    run_record: Dict[str, Any],
+    root: Path | str = DEFAULT_EXPERIMENTS_ROOT,
+) -> None:
+    """
+    Register a completed experiment run by writing run_metadata.json.
+
+    This function is intentionally simple and mirrors the expectations
+    of the existing registry reader utilities.
+
+    Parameters
+    ----------
+    run_record : dict
+        Dictionary describing the run. Must include:
+          - run_id (experiment name / directory name)
+        All other fields are persisted verbatim.
+
+    root : Path or str, default 'results/experiments'
+        Root directory containing experiment subdirectories.
+    """
+    run_id = run_record.get("run_id")
+    if not run_id:
+        raise ValueError("run_record must include a 'run_id' field")
+
+    root_path = Path(root)
+    run_dir = root_path / run_id
+    run_dir.mkdir(parents=True, exist_ok=True)
+
+    meta_path = run_dir / "run_metadata.json"
+    with meta_path.open("w", encoding="utf-8") as f:
+        json.dump(run_record, f, indent=2)

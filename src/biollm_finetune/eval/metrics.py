@@ -18,12 +18,18 @@ Outputs:
 Notes:
 - Robust to minor schema variation
 - If 'id' missing in either side, falls back to a stable hash of (type, question)
+
+Phase 4 integration:
+- Adds `evaluate_predictions(predictions, gold, task)` as a unified entrypoint
+  used by scripts/run_experiment.py. This wraps the existing evaluation logic
+  without changing CLI behavior.
 """
 
 from __future__ import annotations
+
 import argparse
+import hashlib
 import json
-import math
 import re
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
@@ -31,6 +37,7 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 # Optional ROUGE (install: pip install rouge-score)
 try:
     from rouge_score import rouge_scorer
+
     _ROUGE_OK = True
 except Exception:
     _ROUGE_OK = False
@@ -73,8 +80,6 @@ def _read_json_any(path: str | Path) -> List[Dict[str, Any]]:
 # Canonicalization & matching
 # ---------------------------
 
-import hashlib
-
 def _canonical_id(rec: Mapping[str, Any]) -> str:
     if "id" in rec and rec["id"] is not None:
         return str(rec["id"])
@@ -92,15 +97,15 @@ def _norm_text(s: str) -> str:
     - collapse whitespace
     - strip surrounding quotes and trailing punctuation
     """
-    s = s.lower().strip()
+    s = str(s).lower().strip()
     # remove leading 'answer:' or similar prompt artifacts
-    s = re.sub(r'^\s*(answer|final answer)\s*[:\-]\s*', '', s)
+    s = re.sub(r"^\s*(answer|final answer)\s*[:\-]\s*", "", s)
     # collapse whitespace
-    s = re.sub(r'\s+', ' ', s)
+    s = re.sub(r"\s+", " ", s)
     # strip trivial surrounding quotes
     s = s.strip(' "\'')
     # remove trailing punctuation like periods/commas
-    s = re.sub(r'[.,;:]+$', '', s)
+    s = re.sub(r"[.,;:]+$", "", s)
     return s
 
 
@@ -154,7 +159,7 @@ def _gold_text_for_summary(ideal_answer: Any) -> str:
 
 def _token_f1(pred: str, gold: str) -> Tuple[float, float, float]:
     """
-    Token-level precision, recall, F1 (like SQuAD-style).
+    Token-level precision, recall, F1 (SQuAD-style).
     """
     ps = _norm_text(pred).split()
     gs = _norm_text(gold).split()
@@ -168,16 +173,12 @@ def _token_f1(pred: str, gold: str) -> Tuple[float, float, float]:
         ps_count[t] = ps_count.get(t, 0) + 1
     for t in gs:
         gs_count[t] = gs_count.get(t, 0) + 1
-    # overlap
     overlap = 0
     for t, c in ps_count.items():
         overlap += min(c, gs_count.get(t, 0))
     prec = overlap / len(ps)
     rec = overlap / len(gs)
-    if prec + rec == 0:
-        f1 = 0.0
-    else:
-        f1 = 2 * prec * rec / (prec + rec)
+    f1 = 0.0 if (prec + rec) == 0 else 2 * prec * rec / (prec + rec)
     return prec, rec, f1
 
 
@@ -209,13 +210,14 @@ def _set_f1(pred_items: Iterable[str], gold_items: Iterable[str]) -> Tuple[float
 def score_yesno(pred: str, gold: str) -> float:
     p = _norm_text(pred)
     g = _norm_text(gold)
-    # normalize to yes/no
+
     def yn(x: str) -> str:
         if x in {"yes", "y", "true"}:
             return "yes"
         if x in {"no", "n", "false"}:
             return "no"
         return x
+
     return 1.0 if yn(p) == yn(g) and yn(g) in {"yes", "no"} else 0.0
 
 
@@ -238,7 +240,6 @@ def score_list(pred: str, gold_items: List[str]) -> Tuple[float, float, float]:
     """
     Many generations provide comma-separated items; split heuristically on commas/semicolons/newlines.
     """
-    # split & clean prediction
     raw = re.split(r"[,\n;]", _norm_text(pred))
     pred_items = [s.strip() for s in raw if s.strip()]
     return _set_f1(pred_items, gold_items)
@@ -246,10 +247,9 @@ def score_list(pred: str, gold_items: List[str]) -> Tuple[float, float, float]:
 
 def score_summary(pred: str, gold_text: str) -> float:
     """
-    ROUGE-L (F-measure). If rouge-score is unavailable, return 0.0 and warn.
+    ROUGE-L (F-measure). If rouge-score is unavailable, return 0.0.
     """
     if not _ROUGE_OK:
-        # You can also raise here if you prefer strict behavior.
         return 0.0
     scorer = rouge_scorer.RougeScorer(["rougeL"], use_stemmer=True)
     scores = scorer.score(_norm_text(gold_text), _norm_text(pred))
@@ -257,15 +257,14 @@ def score_summary(pred: str, gold_text: str) -> float:
 
 
 # ---------------------------
-# Orchestration
+# Orchestration (existing)
 # ---------------------------
 
 def build_gold_index(rows: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
-    return { _canonical_id(r): r for r in rows }
+    return {_canonical_id(r): r for r in rows}
 
 
 def evaluate(preds: List[Dict[str, Any]], gold_index: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
-    # Accumulators
     counts = {"yesno": 0, "factoid": 0, "list": 0, "summary": 0}
     yesno_correct = 0
     factoid_em_sum = 0.0
@@ -276,13 +275,12 @@ def evaluate(preds: List[Dict[str, Any]], gold_index: Dict[str, Dict[str, Any]])
     summary_rougel_sum = 0.0
 
     missing_gold = 0
-    missing_pred = 0
+    missing_pred = 0  # reserved
 
     for rec in preds:
         cid = _canonical_id(rec)
         g = gold_index.get(cid)
         if g is None:
-            # Try loose match on type+question if id mismatch in input files
             missing_gold += 1
             continue
 
@@ -309,13 +307,13 @@ def evaluate(preds: List[Dict[str, Any]], gold_index: Dict[str, Dict[str, Any]])
             list_rec_sum += r
             list_f1_sum += f1
 
-        else:  # summary or other treat as summary
+        else:
             counts["summary"] += 1
             gold_text = _gold_text_for_summary(g.get("ideal_answer"))
             summary_rougel_sum += score_summary(predicted, gold_text)
 
-    # Averages (avoid div-by-zero)
-    def _avg(total, n): return (total / n) if n else 0.0
+    def _avg(total, n):
+        return (total / n) if n else 0.0
 
     results = {
         "counts": counts,
@@ -335,11 +333,10 @@ def evaluate(preds: List[Dict[str, Any]], gold_index: Dict[str, Dict[str, Any]])
         },
         "missing": {
             "pred_without_gold": missing_gold,
-            "gold_without_pred": missing_pred,  # reserved; unused in current join-by-id
+            "gold_without_pred": missing_pred,
         },
     }
 
-    # Macro average over types that have at least one example
     per_type_vals = []
     if counts["yesno"] > 0:
         per_type_vals.append(results["yesno"]["accuracy"])
@@ -352,6 +349,47 @@ def evaluate(preds: List[Dict[str, Any]], gold_index: Dict[str, Dict[str, Any]])
     results["macro_avg"] = sum(per_type_vals) / len(per_type_vals) if per_type_vals else 0.0
 
     return results
+
+
+# ---------------------------------------------------------------------
+# Phase 4: unified entrypoint for run_experiment.py
+# ---------------------------------------------------------------------
+
+def evaluate_predictions(
+    predictions: List[Dict[str, Any]],
+    gold: List[Dict[str, Any]],
+    task: str,
+) -> Dict[str, Any]:
+    """
+    Unified entrypoint used by scripts/run_experiment.py.
+
+    Parameters
+    ----------
+    predictions : list[dict]
+        Predictions loaded from JSONL. Supports any of:
+          - predicted
+          - answer
+          - prediction
+        Must also include enough info to match gold by:
+          - id, or
+          - (type + body/question), via canonical hash fallback
+
+    gold : list[dict]
+        Gold examples (BioASQ style).
+
+    task : str
+        Task identifier. Currently supports: 'bioasq'.
+
+    Returns
+    -------
+    dict
+        Metrics dictionary produced by `evaluate(...)`.
+    """
+    if task != "bioasq":
+        raise ValueError(f"Unsupported task: {task}")
+
+    gold_idx = build_gold_index(gold)
+    return evaluate(predictions, gold_idx)
 
 
 # ---------------------------

@@ -9,21 +9,23 @@ Generate answers for BioASQ-style questions using a HF causal LM.
 """
 
 from __future__ import annotations
+
 import argparse
+import inspect
 import json
+import subprocess
+import sys
 from pathlib import Path
 from typing import Dict, Any, Iterable, Optional, List
 
 from rich.console import Console
 from transformers import AutoTokenizer, AutoModelForCausalLM
-
 from transformers import LogitsProcessor, LogitsProcessorList
 import torch
 
-from biollm_finetune.utils.config import load_config
+from biollm_finetune.utils.config import load_inference_config
 from biollm_finetune.utils.device import resolve_device
-
-from biollm_finetune.utils.logging import get_logger, console as rich_console
+from biollm_finetune.utils.logging import get_logger
 from biollm_finetune.utils.repro import set_seed, start_manifest, write_manifest
 
 console = Console()
@@ -88,6 +90,7 @@ def _postcut(generated: str) -> str:
     # Basic cleanup of common stop tokens; customize as needed.
     return generated.strip().replace("</s>", "").strip()
 
+
 class SanitizeLogitsProcessor(LogitsProcessor):
     """
     Guards against NaN/Inf logits during sampling by:
@@ -96,16 +99,38 @@ class SanitizeLogitsProcessor(LogitsProcessor):
       - clamping logits to a safe range
     Keeps behavior as close as possible to original sampling while avoiding runtime errors.
     """
+
     def __init__(self, min_val: float = -1e4, max_val: float = 1e4):
         self.min_val = min_val
         self.max_val = max_val
 
     def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor) -> torch.FloatTensor:
-        # Replace NaN with 0 and +/-Inf with large finite values
         scores = torch.nan_to_num(scores, nan=0.0, posinf=self.max_val, neginf=self.min_val)
-        # Clamp to avoid extreme exponents in softmax (over/underflow)
         scores = scores.clamp_(min=self.min_val, max=self.max_val)
         return scores
+
+
+def _load_causal_lm(model_id: str, dtype: torch.dtype):
+    """
+    Future-proof dtype handling across Transformers versions.
+
+    Newer Transformers favors `dtype=...`.
+    Older versions use `torch_dtype=...`.
+
+    We detect which parameter is supported and pass only that one.
+    """
+    sig = inspect.signature(AutoModelForCausalLM.from_pretrained)
+    kwargs: Dict[str, Any] = {}
+
+    if "dtype" in sig.parameters:
+        kwargs["dtype"] = dtype
+    elif "torch_dtype" in sig.parameters:
+        kwargs["torch_dtype"] = dtype
+    else:
+        # Very old / unexpected API; fall back to no dtype override
+        kwargs = {}
+
+    return AutoModelForCausalLM.from_pretrained(model_id, **kwargs)
 
 
 # ---------- Main ----------
@@ -116,26 +141,28 @@ def main() -> None:
     ap.add_argument("--input", required=True, help="JSONL questions file")
     ap.add_argument("--out", required=True, help="Output JSONL predictions file")
     ap.add_argument("--adapter", help="Optional path to a PEFT adapter (overrides config)")
+    ap.add_argument("--seed", type=int, default=None, help="Override inference seed")
     args = ap.parse_args()
 
     # 1) Parse & validate config
     try:
-        cfg = load_config(args.config)
+        cfg = load_inference_config(args.config)
     except Exception as e:
         raise SystemExit(f"[ConfigError] {e}")
 
     # 2) Resolve device + dtype
-    device, dtype = resolve_device(
+    device, resolved_dtype = resolve_device(
         requested=(cfg.system.device_map if cfg.system else "auto"),
-        prefer_bf16=bool(cfg.model.bf16),
-        prefer_fp16=bool(cfg.model.fp16),
+        prefer_bf16=bool(getattr(cfg.model, "bf16", False)),
+        prefer_fp16=bool(getattr(cfg.model, "fp16", False)),
     )
-    console.print(f"[bold green]Device:[/bold green] {device} | [bold]dtype:[/bold] {dtype}")
+    console.print(f"[bold green]Device:[/bold green] {device} | [bold]dtype:[/bold] {resolved_dtype}")
 
     log = get_logger("biollm_finetune.generate")
 
     # Seed (optional: add 'seed' under inference in YAML; fallback to 42)
-    seed_info = set_seed(getattr(cfg.inference, "seed", 42))
+    seed_val = args.seed if args.seed is not None else getattr(cfg.inference, "seed", 42)
+    seed_info = set_seed(seed_val)
     log.info(f"Seed: {seed_info['seed']} (deterministic={seed_info['deterministic']})")
 
     # 3) Resolve model id before creating manifest
@@ -144,10 +171,10 @@ def main() -> None:
         raise SystemExit("Model id/path missing: set model.path (inference) or model.base_model (training).")
 
     # Adapter path (optional)
-    adapter_path = args.adapter or getattr(cfg.model, "adapter_output_dir", None)
+    adapter_path = args.adapter or getattr(cfg.model, "adapter_output_dir", None) or getattr(cfg.model, "adapter", None)
 
     # Guard quantization on non-CUDA
-    if (cfg.model.load_4bit or cfg.model.load_8bit) and device != "cuda":
+    if (getattr(cfg.model, "load_4bit", False) or getattr(cfg.model, "load_8bit", False)) and device != "cuda":
         raise SystemExit("4/8-bit quantization requires CUDA. Disable these on macOS/CPU/MPS.")
 
     # 4) Write manifest *after* we know model_id and adapter_path
@@ -155,7 +182,7 @@ def main() -> None:
         entrypoint="inference.generate",
         config_path=args.config,
         device=str(device),
-        dtype=str(dtype),
+        dtype=str(resolved_dtype),
         model_id=model_id,
         adapter_path=adapter_path,
         seed_info=seed_info,
@@ -169,7 +196,7 @@ def main() -> None:
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token_id = tokenizer.eos_token_id
 
-    model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=dtype)
+    model = _load_causal_lm(model_id, dtype=resolved_dtype)
 
     # Optional: PEFT adapter
     if adapter_path:
@@ -182,7 +209,6 @@ def main() -> None:
 
     # Move to device for cpu/mps; for cuda, accelerate could use device_map
     if device in {"cpu", "mps"}:
-        import torch
         model.to(torch.device(device))
 
     model.eval()
@@ -191,6 +217,7 @@ def main() -> None:
     infer = cfg.inference
     if infer is None:
         raise SystemExit("Inference section missing in config.")
+
     gen_kwargs = dict(
         max_new_tokens=infer.max_new_tokens,
         do_sample=infer.do_sample,
@@ -216,7 +243,6 @@ def main() -> None:
         )
         toks = {k: v.to(model.device) for k, v in toks.items()}
 
-        # Build logits processors: enable sanitizer only when sampling
         processors = LogitsProcessorList()
         sanitize = getattr(infer, "sanitize_logits", True)
         if sanitize and bool(infer.do_sample):
