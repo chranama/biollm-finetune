@@ -2,40 +2,9 @@
 """
 Phenotype-stratified reaggregation for BioLLM experiment runs.
 
-What it does
-------------
-For each run under results/experiments/<run_id>/ it:
-  - loads config (manifest["config"]) to find dataset path + task
-  - loads gold examples from cfg.dataset.path
-  - loads predictions from predictions.jsonl
-  - loads phenotype tags from phenotypes.json (question_id -> [tags])
-  - computes metrics *within each phenotype slice*
-  - writes:
-      1) phenotype_runs.csv                (one row per run x phenotype)
-      2) phenotype_deltas_vs_clean.csv     (rows for non-clean runs with deltas vs matching clean)
-
-Phenotype slices
-----------------
-- "ALL" (entire dataset)
-- one slice per phenotype tag found in phenotypes.json["schema"] OR in the tags mapping
-
-Assumptions
------------
-- run directory contains:
-    - manifest.json
-    - predictions.jsonl
-    - phenotypes.json
-- manifest.json contains:
-    - config: path to experiment yaml (so we can load dataset.path + task)
-    - dataset, model, seed, perturbation (used for grouping)
-- run_experiment.py evaluated perturbed predictions against clean gold; we do the same.
-
-Usage
------
-uv run scripts/reaggregate_by_phenotype.py \
-  --experiments-root results/experiments \
-  --outdir results/aggregates_re \
-  --overwrite
+Supports phenotypes.json formats:
+1) tags: {qid: {phenotype_name: bool, ...}}   (current)
+2) tags: {qid: [phenotype_name, ...]}         (legacy/alternative)
 """
 
 from __future__ import annotations
@@ -45,7 +14,7 @@ import csv
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from biollm_finetune.data.loaders import load_jsonl
 from biollm_finetune.eval.metrics import evaluate_predictions
@@ -85,10 +54,6 @@ def _index_by_id(rows: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
 
 
 def _flatten_metrics(m: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Pull out a small set of "canonical" fields if present.
-    We keep the full metrics dict separately if you want to persist it later.
-    """
     def g(path: str) -> Optional[float]:
         cur: Any = m
         for part in path.split("."):
@@ -113,20 +78,15 @@ def _flatten_metrics(m: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _infer_runtime_from_name(run_id: str) -> str:
-    """
-    Best-effort runtime inference from canonical naming:
-      <dataset>_<runtime>_<perturbation>_seed<seed>
-    """
+    # canonical: <dataset>_<runtime>_<perturbation>_seed<seed>
     parts = run_id.split("_")
     if len(parts) < 4:
         return ""
-    # dataset could itself contain underscores, but in your current scheme it's "bioasq_TINY".
-    # So runtime is typically parts[2], e.g. "mps"
-    # But your runtime tag is "mps_fp32" which becomes two parts: ["mps", "fp32"].
-    # So we reconstruct runtime as parts[2] + "_" + parts[3] when it matches that pattern.
-    if parts[2] in {"mps", "cpu", "cuda"} and parts[3] in {"fp32", "fp16", "bf16"}:
-        return f"{parts[2]}_{parts[3]}"
-    return parts[2]
+    # common runtime tags are 2 tokens: mps_fp32, cuda_bf16, cpu_fp32
+    if len(parts) >= 5 and parts[-4] in {"mps", "cpu", "cuda"} and parts[-3] in {"fp32", "fp16", "bf16"}:
+        return f"{parts[-4]}_{parts[-3]}"
+    # fallback
+    return parts[2] if len(parts) > 2 else ""
 
 
 def _resolve_task(exp_cfg: Any, gold_examples: List[Dict[str, Any]]) -> str:
@@ -142,6 +102,50 @@ def _resolve_task(exp_cfg: Any, gold_examples: List[Dict[str, Any]]) -> str:
 
 def _ensure_parent(p: Path) -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
+
+
+def _normalize_tag_map(raw_tags: Any) -> Tuple[Dict[str, Dict[str, bool]], List[str]]:
+    """
+    Normalize phenotypes.json["tags"] into:
+      norm: { qid: { phenotype: bool, ... } }
+    and return observed phenotype names.
+
+    Accepts:
+      - {qid: {phenotype: bool}}
+      - {qid: [phenotype, ...]}
+    """
+    norm: Dict[str, Dict[str, bool]] = {}
+    observed = set()
+
+    if not isinstance(raw_tags, dict):
+        return norm, []
+
+    for qid, v in raw_tags.items():
+        qid = str(qid)
+        if isinstance(v, dict):
+            # already {phenotype: bool}
+            vv: Dict[str, bool] = {}
+            for k, b in v.items():
+                if not isinstance(k, str):
+                    continue
+                bb = bool(b)
+                vv[k] = bb
+                if bb:
+                    observed.add(k)
+            norm[qid] = vv
+        elif isinstance(v, list):
+            # list[str] => mark True
+            vv = {}
+            for t in v:
+                if isinstance(t, str) and t.strip():
+                    vv[t.strip()] = True
+                    observed.add(t.strip())
+            norm[qid] = vv
+        else:
+            # unknown => empty
+            norm[qid] = {}
+
+    return norm, sorted(observed)
 
 
 # ----------------------------
@@ -180,7 +184,6 @@ def discover_runs(experiments_root: Path) -> List[RunInfo]:
 
         config_path = Path(cfg_str)
         if not config_path.exists():
-            # allow relative paths if manifest stored relative to repo root
             alt = Path.cwd() / cfg_str
             if alt.exists():
                 config_path = alt
@@ -195,38 +198,30 @@ def discover_runs(experiments_root: Path) -> List[RunInfo]:
 def compute_rows_for_run(run: RunInfo) -> List[Dict[str, Any]]:
     cfg = load_config(str(run.config_path))
 
-    # Gold always comes from dataset.path (clean labels)
     gold_examples = load_jsonl(cfg.dataset.path)
     gold_by_id = _index_by_id(gold_examples)
 
-    preds_path = run.run_dir / "predictions.jsonl"
-    preds = load_jsonl(preds_path)
+    preds = load_jsonl(run.run_dir / "predictions.jsonl")
     preds_by_id = _index_by_id(preds)
 
     phenos = _read_json(run.run_dir / "phenotypes.json")
-    tag_map: Dict[str, List[str]] = phenos.get("tags") if isinstance(phenos.get("tags"), dict) else {}
+
     schema = phenos.get("schema")
     schema_tags: List[str] = []
     if isinstance(schema, dict):
-        schema_tags = sorted(schema.keys())
+        schema_tags = sorted([k for k in schema.keys() if isinstance(k, str) and k.strip()])
 
-    # If schema is missing or incomplete, infer tags from observed data
-    observed_tags = set()
-    for _, tags in tag_map.items():
-        if isinstance(tags, list):
-            for t in tags:
-                if isinstance(t, str) and t.strip():
-                    observed_tags.add(t.strip())
+    raw_tags = phenos.get("tags")
+    tag_map, observed_tags = _normalize_tag_map(raw_tags)
 
-    phenotype_tags = ["ALL"] + sorted(set(schema_tags) | observed_tags)
+    phenotype_tags = ["ALL"] + sorted(set(schema_tags) | set(observed_tags))
 
-    # Task resolution
     task = _resolve_task(cfg, gold_examples)
 
-    # Shared metadata
     dataset_name = getattr(cfg.dataset, "name", "") or _safe_str(run.manifest.get("dataset"))
     model_name = getattr(cfg.model, "name", "") or _safe_str(run.manifest.get("model"))
     perturbation = _safe_str(run.manifest.get("perturbation")) or _safe_str(getattr(cfg, "perturbation", ""))
+
     seed = getattr(cfg, "seed", None)
     if seed is None:
         seed = run.manifest.get("seed")
@@ -239,24 +234,24 @@ def compute_rows_for_run(run: RunInfo) -> List[Dict[str, Any]]:
     if not runtime_name:
         runtime_name = _infer_runtime_from_name(run.run_id)
 
-    n_changed_vs_clean = run.manifest.get("n_changed_vs_clean") or run.manifest.get("n_changed_vs_clean".replace("_vs_", "_vs_"))  # no-op, defensive
-    if n_changed_vs_clean is None:
-        n_changed_vs_clean = run.manifest.get("n_changed_vs_clean")  # keep for readability
-
     rows: List[Dict[str, Any]] = []
+    all_ids = list(gold_by_id.keys())
 
-    # Precompute ALL ids from gold (stable reference set)
-    all_ids = [qid for qid in gold_by_id.keys()]
+    # Build an index: phenotype -> set(ids) where True (fast slicing)
+    ids_for_tag: Dict[str, set[str]] = {t: set() for t in phenotype_tags if t != "ALL"}
+    for qid, flags in tag_map.items():
+        if qid not in gold_by_id:
+            continue
+        for t, b in flags.items():
+            if b and t in ids_for_tag:
+                ids_for_tag[t].add(qid)
 
     for pheno in phenotype_tags:
         if pheno == "ALL":
             ids = all_ids
         else:
-            ids = [qid for qid, tags in tag_map.items() if isinstance(tags, list) and (pheno in tags)]
-            # Only keep ids that exist in gold (avoid drift from synthetic ids)
-            ids = [qid for qid in ids if qid in gold_by_id]
+            ids = [qid for qid in all_ids if qid in ids_for_tag.get(pheno, set())]
 
-        # Build subset lists in a stable order (gold order)
         sub_gold: List[Dict[str, Any]] = []
         sub_preds: List[Dict[str, Any]] = []
         for qid in ids:
@@ -268,11 +263,9 @@ def compute_rows_for_run(run: RunInfo) -> List[Dict[str, Any]]:
             if p is not None:
                 sub_preds.append(p)
 
-        # Skip empty slices (but keep ALL even if empty just in case)
         if pheno != "ALL" and len(sub_gold) == 0:
             continue
 
-        # Evaluate
         metrics = evaluate_predictions(predictions=sub_preds, gold=sub_gold, task=task)
         flat = _flatten_metrics(metrics)
 
@@ -302,9 +295,7 @@ def write_csv(path: Path, rows: List[Dict[str, Any]]) -> None:
             f.write("")
         return
 
-    # Stable header: union of all keys
     keys = sorted(set().union(*[set(r.keys()) for r in rows]))
-    # Prefer a more human-friendly ordering for the common fields
     preferred = [
         "run_id", "dataset", "runtime", "model", "perturbation", "seed", "task",
         "phenotype", "n_gold", "n_pred", "pred_coverage", "n_changed_vs_clean",
@@ -321,11 +312,6 @@ def write_csv(path: Path, rows: List[Dict[str, Any]]) -> None:
 
 
 def compute_deltas_vs_clean(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """
-    For each non-clean row, find matching clean baseline:
-      match on (dataset, runtime, model, seed, phenotype)
-    and compute deltas for key metrics.
-    """
     def is_clean(r: Dict[str, Any]) -> bool:
         return _safe_str(r.get("perturbation")).lower().strip() == "clean"
 

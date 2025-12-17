@@ -1,0 +1,1075 @@
+{
+  "n_input_rows": 39,
+  "n_used_rows": 26,
+  "n_buckets": 14,
+  "metrics": [
+    "delta__macro_avg",
+    "delta__yesno_acc",
+    "delta__factoid_f1",
+    "delta__factoid_em",
+    "delta__list_f1",
+    "delta__summary_rougeL"
+  ],
+  "per_bucket": [
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "long_context",
+      "perturbation": "contradiction",
+      "n_rows": 3,
+      "seeds": [
+        13,
+        42,
+        97
+      ],
+      "delta__macro_avg": 0.0,
+      "std__macro_avg": 0.0,
+      "n__macro_avg": 3,
+      "delta__yesno_acc": 0.0,
+      "std__yesno_acc": 0.0,
+      "n__yesno_acc": 3,
+      "delta__factoid_f1": 0.0,
+      "std__factoid_f1": 0.0,
+      "n__factoid_f1": 3,
+      "delta__factoid_em": 0.0,
+      "std__factoid_em": 0.0,
+      "n__factoid_em": 3,
+      "delta__list_f1": 0.0,
+      "std__list_f1": 0.0,
+      "n__list_f1": 3,
+      "delta__summary_rougeL": 0.0,
+      "std__summary_rougeL": 0.0,
+      "n__summary_rougeL": 3
+    },
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "long_context",
+      "perturbation": "irrelevant_noise",
+      "n_rows": 1,
+      "seeds": [
+        42
+      ],
+      "delta__macro_avg": 0.01428571428571429,
+      "std__macro_avg": 0.0,
+      "n__macro_avg": 1,
+      "delta__yesno_acc": 0.0,
+      "std__yesno_acc": 0.0,
+      "n__yesno_acc": 1,
+      "delta__factoid_f1": 0.0,
+      "std__factoid_f1": 0.0,
+      "n__factoid_f1": 1,
+      "delta__factoid_em": 0.0,
+      "std__factoid_em": 0.0,
+      "n__factoid_em": 1,
+      "delta__list_f1": 0.05714285714285715,
+      "std__list_f1": 0.0,
+      "n__list_f1": 1,
+      "delta__summary_rougeL": 0.0,
+      "std__summary_rougeL": 0.0,
+      "n__summary_rougeL": 1
+    },
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "long_context",
+      "perturbation": "irrelevant_noise_heavy",
+      "n_rows": 3,
+      "seeds": [
+        13,
+        42,
+        97
+      ],
+      "delta__macro_avg": 0.008027459191674871,
+      "std__macro_avg": 0.009087491287829194,
+      "n__macro_avg": 3,
+      "delta__yesno_acc": 0.0,
+      "std__yesno_acc": 0.0,
+      "n__yesno_acc": 3,
+      "delta__factoid_f1": 0.0,
+      "std__factoid_f1": 0.0,
+      "n__factoid_f1": 3,
+      "delta__factoid_em": 0.0,
+      "std__factoid_em": 0.0,
+      "n__factoid_em": 3,
+      "delta__list_f1": 0.05555555555555556,
+      "std__list_f1": 0.05991932091484722,
+      "n__list_f1": 3,
+      "delta__summary_rougeL": -0.023445718788856058,
+      "std__summary_rougeL": 0.02356982522285856,
+      "n__summary_rougeL": 3
+    },
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "long_context",
+      "perturbation": "lexical_noise",
+      "n_rows": 1,
+      "seeds": [
+        42
+      ],
+      "delta__macro_avg": 0.0,
+      "std__macro_avg": 0.0,
+      "n__macro_avg": 1,
+      "delta__yesno_acc": 0.0,
+      "std__yesno_acc": 0.0,
+      "n__yesno_acc": 1,
+      "delta__factoid_f1": 0.0,
+      "std__factoid_f1": 0.0,
+      "n__factoid_f1": 1,
+      "delta__factoid_em": 0.0,
+      "std__factoid_em": 0.0,
+      "n__factoid_em": 1,
+      "delta__list_f1": 0.0,
+      "std__list_f1": 0.0,
+      "n__list_f1": 1,
+      "delta__summary_rougeL": 0.0,
+      "std__summary_rougeL": 0.0,
+      "n__summary_rougeL": 1
+    },
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "long_context",
+      "perturbation": "lexical_noise_heavy",
+      "n_rows": 3,
+      "seeds": [
+        13,
+        42,
+        97
+      ],
+      "delta__macro_avg": 0.0059523809523809494,
+      "std__macro_avg": 0.010309826235529028,
+      "n__macro_avg": 3,
+      "delta__yesno_acc": 0.0,
+      "std__yesno_acc": 0.0,
+      "n__yesno_acc": 3,
+      "delta__factoid_f1": 0.0,
+      "std__factoid_f1": 0.0,
+      "n__factoid_f1": 3,
+      "delta__factoid_em": 0.0,
+      "std__factoid_em": 0.0,
+      "n__factoid_em": 3,
+      "delta__list_f1": 0.02380952380952381,
+      "std__list_f1": 0.04123930494211613,
+      "n__list_f1": 3,
+      "delta__summary_rougeL": 0.0,
+      "std__summary_rougeL": 0.0,
+      "n__summary_rougeL": 3
+    },
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "long_context",
+      "perturbation": "lexical_noise_medium",
+      "n_rows": 1,
+      "seeds": [
+        42
+      ],
+      "delta__macro_avg": 0.0,
+      "std__macro_avg": 0.0,
+      "n__macro_avg": 1,
+      "delta__yesno_acc": 0.0,
+      "std__yesno_acc": 0.0,
+      "n__yesno_acc": 1,
+      "delta__factoid_f1": 0.0,
+      "std__factoid_f1": 0.0,
+      "n__factoid_f1": 1,
+      "delta__factoid_em": 0.0,
+      "std__factoid_em": 0.0,
+      "n__factoid_em": 1,
+      "delta__list_f1": 0.0,
+      "std__list_f1": 0.0,
+      "n__list_f1": 1,
+      "delta__summary_rougeL": 0.0,
+      "std__summary_rougeL": 0.0,
+      "n__summary_rougeL": 1
+    },
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "long_context",
+      "perturbation": "shuffle_snippets",
+      "n_rows": 1,
+      "seeds": [
+        42
+      ],
+      "delta__macro_avg": -0.01416929983570775,
+      "std__macro_avg": 0.0,
+      "n__macro_avg": 1,
+      "delta__yesno_acc": 0.0,
+      "std__yesno_acc": 0.0,
+      "n__yesno_acc": 1,
+      "delta__factoid_f1": -0.0036606989996820494,
+      "std__factoid_f1": 0.0,
+      "n__factoid_f1": 1,
+      "delta__factoid_em": 0.0,
+      "std__factoid_em": 0.0,
+      "n__factoid_em": 1,
+      "delta__list_f1": 0.0,
+      "std__list_f1": 0.0,
+      "n__list_f1": 1,
+      "delta__summary_rougeL": -0.053016500343148976,
+      "std__summary_rougeL": 0.0,
+      "n__summary_rougeL": 1
+    },
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "multi_answer_list",
+      "perturbation": "contradiction",
+      "n_rows": 3,
+      "seeds": [
+        13,
+        42,
+        97
+      ],
+      "delta__macro_avg": 0.0,
+      "std__macro_avg": 0.0,
+      "n__macro_avg": 3,
+      "delta__yesno_acc": 0.0,
+      "std__yesno_acc": 0.0,
+      "n__yesno_acc": 3,
+      "delta__factoid_f1": 0.0,
+      "std__factoid_f1": 0.0,
+      "n__factoid_f1": 3,
+      "delta__factoid_em": 0.0,
+      "std__factoid_em": 0.0,
+      "n__factoid_em": 3,
+      "delta__list_f1": 0.0,
+      "std__list_f1": 0.0,
+      "n__list_f1": 3,
+      "delta__summary_rougeL": 0.0,
+      "std__summary_rougeL": 0.0,
+      "n__summary_rougeL": 3
+    },
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "multi_answer_list",
+      "perturbation": "irrelevant_noise",
+      "n_rows": 1,
+      "seeds": [
+        42
+      ],
+      "delta__macro_avg": -0.07738095238095238,
+      "std__macro_avg": 0.0,
+      "n__macro_avg": 1,
+      "delta__yesno_acc": 0.0,
+      "std__yesno_acc": 0.0,
+      "n__yesno_acc": 1,
+      "delta__factoid_f1": 0.0,
+      "std__factoid_f1": 0.0,
+      "n__factoid_f1": 1,
+      "delta__factoid_em": 0.0,
+      "std__factoid_em": 0.0,
+      "n__factoid_em": 1,
+      "delta__list_f1": -0.07738095238095238,
+      "std__list_f1": 0.0,
+      "n__list_f1": 1,
+      "delta__summary_rougeL": 0.0,
+      "std__summary_rougeL": 0.0,
+      "n__summary_rougeL": 1
+    },
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "multi_answer_list",
+      "perturbation": "irrelevant_noise_heavy",
+      "n_rows": 3,
+      "seeds": [
+        13,
+        42,
+        97
+      ],
+      "delta__macro_avg": -0.06944444444444443,
+      "std__macro_avg": 0.059919320914847224,
+      "n__macro_avg": 3,
+      "delta__yesno_acc": 0.0,
+      "std__yesno_acc": 0.0,
+      "n__yesno_acc": 3,
+      "delta__factoid_f1": 0.0,
+      "std__factoid_f1": 0.0,
+      "n__factoid_f1": 3,
+      "delta__factoid_em": 0.0,
+      "std__factoid_em": 0.0,
+      "n__factoid_em": 3,
+      "delta__list_f1": -0.06944444444444443,
+      "std__list_f1": 0.059919320914847224,
+      "n__list_f1": 3,
+      "delta__summary_rougeL": 0.0,
+      "std__summary_rougeL": 0.0,
+      "n__summary_rougeL": 3
+    },
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "multi_answer_list",
+      "perturbation": "lexical_noise",
+      "n_rows": 1,
+      "seeds": [
+        42
+      ],
+      "delta__macro_avg": 0.008333333333333331,
+      "std__macro_avg": 0.0,
+      "n__macro_avg": 1,
+      "delta__yesno_acc": 0.0,
+      "std__yesno_acc": 0.0,
+      "n__yesno_acc": 1,
+      "delta__factoid_f1": 0.0,
+      "std__factoid_f1": 0.0,
+      "n__factoid_f1": 1,
+      "delta__factoid_em": 0.0,
+      "std__factoid_em": 0.0,
+      "n__factoid_em": 1,
+      "delta__list_f1": 0.008333333333333331,
+      "std__list_f1": 0.0,
+      "n__list_f1": 1,
+      "delta__summary_rougeL": 0.0,
+      "std__summary_rougeL": 0.0,
+      "n__summary_rougeL": 1
+    },
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "multi_answer_list",
+      "perturbation": "lexical_noise_heavy",
+      "n_rows": 3,
+      "seeds": [
+        13,
+        42,
+        97
+      ],
+      "delta__macro_avg": 0.021428571428571425,
+      "std__macro_avg": 0.03018743412644278,
+      "n__macro_avg": 3,
+      "delta__yesno_acc": 0.0,
+      "std__yesno_acc": 0.0,
+      "n__yesno_acc": 3,
+      "delta__factoid_f1": 0.0,
+      "std__factoid_f1": 0.0,
+      "n__factoid_f1": 3,
+      "delta__factoid_em": 0.0,
+      "std__factoid_em": 0.0,
+      "n__factoid_em": 3,
+      "delta__list_f1": 0.021428571428571425,
+      "std__list_f1": 0.03018743412644278,
+      "n__list_f1": 3,
+      "delta__summary_rougeL": 0.0,
+      "std__summary_rougeL": 0.0,
+      "n__summary_rougeL": 3
+    },
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "multi_answer_list",
+      "perturbation": "lexical_noise_medium",
+      "n_rows": 1,
+      "seeds": [
+        42
+      ],
+      "delta__macro_avg": 0.008333333333333331,
+      "std__macro_avg": 0.0,
+      "n__macro_avg": 1,
+      "delta__yesno_acc": 0.0,
+      "std__yesno_acc": 0.0,
+      "n__yesno_acc": 1,
+      "delta__factoid_f1": 0.0,
+      "std__factoid_f1": 0.0,
+      "n__factoid_f1": 1,
+      "delta__factoid_em": 0.0,
+      "std__factoid_em": 0.0,
+      "n__factoid_em": 1,
+      "delta__list_f1": 0.008333333333333331,
+      "std__list_f1": 0.0,
+      "n__list_f1": 1,
+      "delta__summary_rougeL": 0.0,
+      "std__summary_rougeL": 0.0,
+      "n__summary_rougeL": 1
+    },
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "multi_answer_list",
+      "perturbation": "shuffle_snippets",
+      "n_rows": 1,
+      "seeds": [
+        42
+      ],
+      "delta__macro_avg": 0.0,
+      "std__macro_avg": 0.0,
+      "n__macro_avg": 1,
+      "delta__yesno_acc": 0.0,
+      "std__yesno_acc": 0.0,
+      "n__yesno_acc": 1,
+      "delta__factoid_f1": 0.0,
+      "std__factoid_f1": 0.0,
+      "n__factoid_f1": 1,
+      "delta__factoid_em": 0.0,
+      "std__factoid_em": 0.0,
+      "n__factoid_em": 1,
+      "delta__list_f1": 0.0,
+      "std__list_f1": 0.0,
+      "n__list_f1": 1,
+      "delta__summary_rougeL": 0.0,
+      "std__summary_rougeL": 0.0,
+      "n__summary_rougeL": 1
+    }
+  ],
+  "phenotype_rankings": [
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "long_context",
+      "worst_by_metric": {
+        "delta__macro_avg": [
+          {
+            "perturbation": "shuffle_snippets",
+            "mean": -0.01416929983570775,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "contradiction",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "lexical_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "lexical_noise_medium",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "lexical_noise_heavy",
+            "mean": 0.0059523809523809494,
+            "std": 0.010309826235529028,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          }
+        ],
+        "delta__yesno_acc": [
+          {
+            "perturbation": "contradiction",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise_heavy",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "lexical_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "lexical_noise_heavy",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          }
+        ],
+        "delta__factoid_f1": [
+          {
+            "perturbation": "shuffle_snippets",
+            "mean": -0.0036606989996820494,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "contradiction",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise_heavy",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "lexical_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          }
+        ],
+        "delta__factoid_em": [
+          {
+            "perturbation": "contradiction",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise_heavy",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "lexical_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "lexical_noise_heavy",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          }
+        ],
+        "delta__list_f1": [
+          {
+            "perturbation": "contradiction",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "lexical_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "lexical_noise_medium",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "shuffle_snippets",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "lexical_noise_heavy",
+            "mean": 0.02380952380952381,
+            "std": 0.04123930494211613,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          }
+        ],
+        "delta__summary_rougeL": [
+          {
+            "perturbation": "shuffle_snippets",
+            "mean": -0.053016500343148976,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise_heavy",
+            "mean": -0.023445718788856058,
+            "std": 0.02356982522285856,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "contradiction",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "lexical_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "dataset": "bioasq_TINY",
+      "runtime": "mps_fp32",
+      "model": "tinyllama-1.1b-chat",
+      "phenotype": "multi_answer_list",
+      "worst_by_metric": {
+        "delta__macro_avg": [
+          {
+            "perturbation": "irrelevant_noise",
+            "mean": -0.07738095238095238,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise_heavy",
+            "mean": -0.06944444444444443,
+            "std": 0.059919320914847224,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "contradiction",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "shuffle_snippets",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "lexical_noise",
+            "mean": 0.008333333333333331,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          }
+        ],
+        "delta__yesno_acc": [
+          {
+            "perturbation": "contradiction",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise_heavy",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "lexical_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "lexical_noise_heavy",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          }
+        ],
+        "delta__factoid_f1": [
+          {
+            "perturbation": "contradiction",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise_heavy",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "lexical_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "lexical_noise_heavy",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          }
+        ],
+        "delta__factoid_em": [
+          {
+            "perturbation": "contradiction",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise_heavy",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "lexical_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "lexical_noise_heavy",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          }
+        ],
+        "delta__list_f1": [
+          {
+            "perturbation": "irrelevant_noise",
+            "mean": -0.07738095238095238,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise_heavy",
+            "mean": -0.06944444444444443,
+            "std": 0.059919320914847224,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "contradiction",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "shuffle_snippets",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "lexical_noise",
+            "mean": 0.008333333333333331,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          }
+        ],
+        "delta__summary_rougeL": [
+          {
+            "perturbation": "contradiction",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "irrelevant_noise_heavy",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          },
+          {
+            "perturbation": "lexical_noise",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 1,
+            "seeds": [
+              42
+            ]
+          },
+          {
+            "perturbation": "lexical_noise_heavy",
+            "mean": 0.0,
+            "std": 0.0,
+            "n": 3,
+            "seeds": [
+              13,
+              42,
+              97
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

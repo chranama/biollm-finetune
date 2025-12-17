@@ -1,0 +1,13 @@
+{
+  "experiments_csv": "results/phase4/experiments.csv",
+  "n_rows": 16,
+  "n_long_rows": 80,
+  "missing_baselines": 0,
+  "metrics": [
+    "macro_avg",
+    "yesno_acc",
+    "factoid_f1",
+    "list_f1",
+    "summary_rougeL"
+  ]
+}

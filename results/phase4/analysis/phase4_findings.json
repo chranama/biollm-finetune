@@ -1,0 +1,390 @@
+{
+  "n_runs": 16,
+  "n_clean": 3,
+  "n_non_clean": 13,
+  "missing_baselines": 0,
+  "per_perturbation": {
+    "contradiction": {
+      "n": 3,
+      "mean_delta": {
+        "macro_avg": 0.0,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": 0.0,
+        "summary_rougeL": 0.0
+      },
+      "min_delta": {
+        "macro_avg": 0.0,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": 0.0,
+        "summary_rougeL": 0.0
+      },
+      "max_delta": {
+        "macro_avg": 0.0,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": 0.0,
+        "summary_rougeL": 0.0
+      }
+    },
+    "irrelevant_noise_heavy": {
+      "n": 3,
+      "mean_delta": {
+        "macro_avg": -0.007870397033388843,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.008547008547008544,
+        "list_f1": -0.06944444444444443,
+        "summary_rougeL": 0.02941584776388051
+      },
+      "min_delta": {
+        "macro_avg": -0.033330284948473884,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": -0.125,
+        "summary_rougeL": -0.008321139793895593
+      },
+      "max_delta": {
+        "macro_avg": 0.014047118611725362,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.025641025641025633,
+        "list_f1": -0.005952380952380945,
+        "summary_rougeL": 0.06006885332728035
+      }
+    },
+    "irrelevant_noise": {
+      "n": 1,
+      "mean_delta": {
+        "macro_avg": 0.002658507223113976,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": -0.07738095238095238,
+        "summary_rougeL": 0.08801498127340829
+      },
+      "min_delta": {
+        "macro_avg": 0.002658507223113976,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": -0.07738095238095238,
+        "summary_rougeL": 0.08801498127340829
+      },
+      "max_delta": {
+        "macro_avg": 0.002658507223113976,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": -0.07738095238095238,
+        "summary_rougeL": 0.08801498127340829
+      }
+    },
+    "lexical_noise_heavy": {
+      "n": 3,
+      "mean_delta": {
+        "macro_avg": 0.00773442084031617,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.011784511784511778,
+        "list_f1": 0.021428571428571425,
+        "summary_rougeL": -0.0022753998518185714
+      },
+      "min_delta": {
+        "macro_avg": -0.010569835315573373,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": 0.0,
+        "summary_rougeL": -0.05566317964613193
+      },
+      "max_delta": {
+        "macro_avg": 0.029579502894109655,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.03030303030303029,
+        "list_f1": 0.05595238095238095,
+        "summary_rougeL": 0.08801498127340829
+      }
+    },
+    "lexical_noise_medium": {
+      "n": 1,
+      "mean_delta": {
+        "macro_avg": 0.008035714285714285,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.023809523809523794,
+        "list_f1": 0.008333333333333331,
+        "summary_rougeL": 0.0
+      },
+      "min_delta": {
+        "macro_avg": 0.008035714285714285,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.023809523809523794,
+        "list_f1": 0.008333333333333331,
+        "summary_rougeL": 0.0
+      },
+      "max_delta": {
+        "macro_avg": 0.008035714285714285,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.023809523809523794,
+        "list_f1": 0.008333333333333331,
+        "summary_rougeL": 0.0
+      }
+    },
+    "lexical_noise": {
+      "n": 1,
+      "mean_delta": {
+        "macro_avg": 0.008493589743589741,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.025641025641025633,
+        "list_f1": 0.008333333333333331,
+        "summary_rougeL": 0.0
+      },
+      "min_delta": {
+        "macro_avg": 0.008493589743589741,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.025641025641025633,
+        "list_f1": 0.008333333333333331,
+        "summary_rougeL": 0.0
+      },
+      "max_delta": {
+        "macro_avg": 0.008493589743589741,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.025641025641025633,
+        "list_f1": 0.008333333333333331,
+        "summary_rougeL": 0.0
+      }
+    },
+    "shuffle_snippets": {
+      "n": 1,
+      "mean_delta": {
+        "macro_avg": -0.009598729015458551,
+        "yesno_acc": 0.0,
+        "factoid_f1": -0.003050582499735041,
+        "list_f1": 0.0,
+        "summary_rougeL": -0.03534433356209926
+      },
+      "min_delta": {
+        "macro_avg": -0.009598729015458551,
+        "yesno_acc": 0.0,
+        "factoid_f1": -0.003050582499735041,
+        "list_f1": 0.0,
+        "summary_rougeL": -0.03534433356209926
+      },
+      "max_delta": {
+        "macro_avg": -0.009598729015458551,
+        "yesno_acc": 0.0,
+        "factoid_f1": -0.003050582499735041,
+        "list_f1": 0.0,
+        "summary_rougeL": -0.03534433356209926
+      }
+    }
+  },
+  "ranked_by_macro_drop": [
+    [
+      "shuffle_snippets",
+      -0.009598729015458551
+    ],
+    [
+      "irrelevant_noise_heavy",
+      -0.007870397033388843
+    ],
+    [
+      "contradiction",
+      0.0
+    ],
+    [
+      "irrelevant_noise",
+      0.002658507223113976
+    ],
+    [
+      "lexical_noise_heavy",
+      0.00773442084031617
+    ],
+    [
+      "lexical_noise_medium",
+      0.008035714285714285
+    ],
+    [
+      "lexical_noise",
+      0.008493589743589741
+    ]
+  ],
+  "raw_deltas": [
+    {
+      "experiment": "bioasq_TINY_mps_fp32_contradiction_seed13",
+      "dataset": "bioasq_TINY",
+      "model": "tinyllama-1.1b-chat",
+      "seed": 13,
+      "perturbation": "contradiction",
+      "deltas": {
+        "macro_avg": 0.0,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": 0.0,
+        "summary_rougeL": 0.0
+      }
+    },
+    {
+      "experiment": "bioasq_TINY_mps_fp32_contradiction_seed42",
+      "dataset": "bioasq_TINY",
+      "model": "tinyllama-1.1b-chat",
+      "seed": 42,
+      "perturbation": "contradiction",
+      "deltas": {
+        "macro_avg": 0.0,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": 0.0,
+        "summary_rougeL": 0.0
+      }
+    },
+    {
+      "experiment": "bioasq_TINY_mps_fp32_contradiction_seed97",
+      "dataset": "bioasq_TINY",
+      "model": "tinyllama-1.1b-chat",
+      "seed": 97,
+      "perturbation": "contradiction",
+      "deltas": {
+        "macro_avg": 0.0,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": 0.0,
+        "summary_rougeL": 0.0
+      }
+    },
+    {
+      "experiment": "bioasq_TINY_mps_fp32_irrelevant_noise_heavy_seed13",
+      "dataset": "bioasq_TINY",
+      "model": "tinyllama-1.1b-chat",
+      "seed": 13,
+      "perturbation": "irrelevant_noise_heavy",
+      "deltas": {
+        "macro_avg": -0.033330284948473884,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": -0.125,
+        "summary_rougeL": -0.008321139793895593
+      }
+    },
+    {
+      "experiment": "bioasq_TINY_mps_fp32_irrelevant_noise_heavy_seed42",
+      "dataset": "bioasq_TINY",
+      "model": "tinyllama-1.1b-chat",
+      "seed": 42,
+      "perturbation": "irrelevant_noise_heavy",
+      "deltas": {
+        "macro_avg": -0.004328024763418009,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": -0.07738095238095238,
+        "summary_rougeL": 0.06006885332728035
+      }
+    },
+    {
+      "experiment": "bioasq_TINY_mps_fp32_irrelevant_noise_heavy_seed97",
+      "dataset": "bioasq_TINY",
+      "model": "tinyllama-1.1b-chat",
+      "seed": 97,
+      "perturbation": "irrelevant_noise_heavy",
+      "deltas": {
+        "macro_avg": 0.014047118611725362,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.025641025641025633,
+        "list_f1": -0.005952380952380945,
+        "summary_rougeL": 0.036499829758256774
+      }
+    },
+    {
+      "experiment": "bioasq_TINY_mps_fp32_irrelevant_noise_seed42",
+      "dataset": "bioasq_TINY",
+      "model": "tinyllama-1.1b-chat",
+      "seed": 42,
+      "perturbation": "irrelevant_noise",
+      "deltas": {
+        "macro_avg": 0.002658507223113976,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": -0.07738095238095238,
+        "summary_rougeL": 0.08801498127340829
+      }
+    },
+    {
+      "experiment": "bioasq_TINY_mps_fp32_lexical_noise_heavy_seed13",
+      "dataset": "bioasq_TINY",
+      "model": "tinyllama-1.1b-chat",
+      "seed": 13,
+      "perturbation": "lexical_noise_heavy",
+      "deltas": {
+        "macro_avg": -0.010569835315573373,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.005050505050505041,
+        "list_f1": 0.008333333333333331,
+        "summary_rougeL": -0.05566317964613193
+      }
+    },
+    {
+      "experiment": "bioasq_TINY_mps_fp32_lexical_noise_heavy_seed42",
+      "dataset": "bioasq_TINY",
+      "model": "tinyllama-1.1b-chat",
+      "seed": 42,
+      "perturbation": "lexical_noise_heavy",
+      "deltas": {
+        "macro_avg": 0.0041935949424122265,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.0,
+        "list_f1": 0.05595238095238095,
+        "summary_rougeL": -0.03917800118273207
+      }
+    },
+    {
+      "experiment": "bioasq_TINY_mps_fp32_lexical_noise_heavy_seed97",
+      "dataset": "bioasq_TINY",
+      "model": "tinyllama-1.1b-chat",
+      "seed": 97,
+      "perturbation": "lexical_noise_heavy",
+      "deltas": {
+        "macro_avg": 0.029579502894109655,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.03030303030303029,
+        "list_f1": 0.0,
+        "summary_rougeL": 0.08801498127340829
+      }
+    },
+    {
+      "experiment": "bioasq_TINY_mps_fp32_lexical_noise_medium_seed42",
+      "dataset": "bioasq_TINY",
+      "model": "tinyllama-1.1b-chat",
+      "seed": 42,
+      "perturbation": "lexical_noise_medium",
+      "deltas": {
+        "macro_avg": 0.008035714285714285,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.023809523809523794,
+        "list_f1": 0.008333333333333331,
+        "summary_rougeL": 0.0
+      }
+    },
+    {
+      "experiment": "bioasq_TINY_mps_fp32_lexical_noise_seed42",
+      "dataset": "bioasq_TINY",
+      "model": "tinyllama-1.1b-chat",
+      "seed": 42,
+      "perturbation": "lexical_noise",
+      "deltas": {
+        "macro_avg": 0.008493589743589741,
+        "yesno_acc": 0.0,
+        "factoid_f1": 0.025641025641025633,
+        "list_f1": 0.008333333333333331,
+        "summary_rougeL": 0.0
+      }
+    },
+    {
+      "experiment": "bioasq_TINY_mps_fp32_shuffle_snippets_seed42",
+      "dataset": "bioasq_TINY",
+      "model": "tinyllama-1.1b-chat",
+      "seed": 42,
+      "perturbation": "shuffle_snippets",
+      "deltas": {
+        "macro_avg": -0.009598729015458551,
+        "yesno_acc": 0.0,
+        "factoid_f1": -0.003050582499735041,
+        "list_f1": 0.0,
+        "summary_rougeL": -0.03534433356209926
+      }
+    }
+  ]
+}

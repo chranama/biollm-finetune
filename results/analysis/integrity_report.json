@@ -1,0 +1,9 @@
+{
+  "status": "ok",
+  "results_root": "results/experiments",
+  "configs_root": "configs/experiments",
+  "n_runs_found": 16,
+  "n_errors": 0,
+  "n_warnings": 0,
+  "issues": []
+}

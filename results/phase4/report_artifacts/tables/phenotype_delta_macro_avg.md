@@ -1,0 +1,23 @@
+| phenotype         | perturbation           |   mean_delta_macro_avg |   std_delta_macro_avg |   n_runs |
+|:------------------|:-----------------------|-----------------------:|----------------------:|---------:|
+| ALL               | shuffle_snippets       |            -0.00959873 |          nan          |        1 |
+| ALL               | irrelevant_noise_heavy |            -0.0078704  |            0.0238865  |        3 |
+| ALL               | contradiction          |             0          |            0          |        3 |
+| ALL               | irrelevant_noise       |             0.00265851 |          nan          |        1 |
+| ALL               | lexical_noise_heavy    |             0.00773442 |            0.0203075  |        3 |
+| ALL               | lexical_noise_medium   |             0.00803571 |          nan          |        1 |
+| ALL               | lexical_noise          |             0.00849359 |          nan          |        1 |
+| long_context      | shuffle_snippets       |            -0.0141693  |          nan          |        1 |
+| long_context      | contradiction          |             0          |            0          |        3 |
+| long_context      | lexical_noise          |             0          |          nan          |        1 |
+| long_context      | lexical_noise_medium   |             0          |          nan          |        1 |
+| long_context      | lexical_noise_heavy    |             0.00595238 |            0.0103098  |        3 |
+| long_context      | irrelevant_noise_heavy |             0.00802746 |            0.00908749 |        3 |
+| long_context      | irrelevant_noise       |             0.0142857  |          nan          |        1 |
+| multi_answer_list | irrelevant_noise       |            -0.077381   |          nan          |        1 |
+| multi_answer_list | irrelevant_noise_heavy |            -0.0694444  |            0.0599193  |        3 |
+| multi_answer_list | contradiction          |             0          |            0          |        3 |
+| multi_answer_list | shuffle_snippets       |             0          |          nan          |        1 |
+| multi_answer_list | lexical_noise          |             0.00833333 |          nan          |        1 |
+| multi_answer_list | lexical_noise_medium   |             0.00833333 |          nan          |        1 |
+| multi_answer_list | lexical_noise_heavy    |             0.0214286  |            0.0301874  |        3 |

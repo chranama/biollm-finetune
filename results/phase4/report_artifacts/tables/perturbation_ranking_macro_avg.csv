@@ -1,0 +1,9 @@
+perturbation,n_runs,mean__macro_avg,std__macro_avg
+shuffle_snippets,1,-0.0095987290154585,
+irrelevant_noise_heavy,3,-0.007870397033388835,0.023886521157355362
+clean,3,0.0,0.0
+contradiction,3,0.0,0.0
+irrelevant_noise,1,0.0026585072231139,
+lexical_noise_heavy,3,0.007734420840316166,0.020307521407063107
+lexical_noise_medium,1,0.0080357142857142,
+lexical_noise,1,0.0084935897435897,
