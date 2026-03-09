@@ -8,6 +8,38 @@ In addition to the thesis experiments, this repository documents and implements 
 
 ---
 
+## What This Proves For Hiring
+
+For AI backend/platform and applied AI roles, this repository demonstrates:
+- Building deterministic, config-driven evaluation systems rather than one-off scripts
+- Producing auditable artifacts that support model behavior decisions
+- Operating reproducible experiment pipelines with integrity checks and report generation
+
+---
+
+## 5-Minute Reviewer Path
+
+1. Read this repository overview and capability summary.
+2. Open the robustness outputs:
+   - `results/phase4/summary.json`
+   - `results/phase4/analysis/phase4_findings.md`
+   - `results/phase4/report_artifacts/tables/perturbation_ranking_macro_avg.md`
+3. Skim methodology context in:
+   - `docs/experiment_design.md`
+   - `docs/results_and_discussion.md`
+
+---
+
+## Evidence Artifacts / Outputs
+
+- Phase summary: `results/phase4/summary.json`
+- Robustness findings: `results/phase4/analysis/phase4_findings.md`
+- Phenotype findings: `results/phase4/analysis/phenotype_findings.md`
+- Ranking outputs: `results/phase4/analysis/perturbation_ranking.md`
+- Report artifacts: `results/phase4/report_artifacts/tables/`
+
+---
+
 ## Overview
 
 This project is intentionally designed as an **experiment-first research system**, not just a collection of training scripts.
