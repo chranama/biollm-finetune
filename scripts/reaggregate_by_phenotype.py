@@ -20,10 +20,10 @@ from biollm_finetune.data.loaders import load_jsonl
 from biollm_finetune.eval.metrics import evaluate_predictions
 from biollm_finetune.utils.config import load_config
 
-
 # ----------------------------
 # Helpers
 # ----------------------------
+
 
 def _read_json(path: Path) -> Dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
@@ -83,7 +83,11 @@ def _infer_runtime_from_name(run_id: str) -> str:
     if len(parts) < 4:
         return ""
     # common runtime tags are 2 tokens: mps_fp32, cuda_bf16, cpu_fp32
-    if len(parts) >= 5 and parts[-4] in {"mps", "cpu", "cuda"} and parts[-3] in {"fp32", "fp16", "bf16"}:
+    if (
+        len(parts) >= 5
+        and parts[-4] in {"mps", "cpu", "cuda"}
+        and parts[-3] in {"fp32", "fp16", "bf16"}
+    ):
         return f"{parts[-4]}_{parts[-3]}"
     # fallback
     return parts[2] if len(parts) > 2 else ""
@@ -152,6 +156,7 @@ def _normalize_tag_map(raw_tags: Any) -> Tuple[Dict[str, Dict[str, bool]], List[
 # Core
 # ----------------------------
 
+
 @dataclass
 class RunInfo:
     run_id: str
@@ -190,7 +195,11 @@ def discover_runs(experiments_root: Path) -> List[RunInfo]:
             else:
                 continue
 
-        runs.append(RunInfo(run_id=run_dir.name, run_dir=run_dir, manifest=manifest, config_path=config_path))
+        runs.append(
+            RunInfo(
+                run_id=run_dir.name, run_dir=run_dir, manifest=manifest, config_path=config_path
+            )
+        )
 
     return runs
 
@@ -220,17 +229,23 @@ def compute_rows_for_run(run: RunInfo) -> List[Dict[str, Any]]:
 
     dataset_name = getattr(cfg.dataset, "name", "") or _safe_str(run.manifest.get("dataset"))
     model_name = getattr(cfg.model, "name", "") or _safe_str(run.manifest.get("model"))
-    perturbation = _safe_str(run.manifest.get("perturbation")) or _safe_str(getattr(cfg, "perturbation", ""))
+    perturbation = _safe_str(run.manifest.get("perturbation")) or _safe_str(
+        getattr(cfg, "perturbation", "")
+    )
 
     seed = getattr(cfg, "seed", None)
     if seed is None:
         seed = run.manifest.get("seed")
-    seed = int(seed) if isinstance(seed, int) or (isinstance(seed, str) and seed.isdigit()) else seed
+    seed = (
+        int(seed) if isinstance(seed, int) or (isinstance(seed, str) and seed.isdigit()) else seed
+    )
 
     runtime_name = ""
     runtime = getattr(cfg, "runtime", None)
     if runtime is not None:
-        runtime_name = _safe_str(getattr(runtime, "name", "")) or _safe_str(getattr(runtime, "device", ""))
+        runtime_name = _safe_str(getattr(runtime, "name", "")) or _safe_str(
+            getattr(runtime, "device", "")
+        )
     if not runtime_name:
         runtime_name = _infer_runtime_from_name(run.run_id)
 
@@ -269,21 +284,23 @@ def compute_rows_for_run(run: RunInfo) -> List[Dict[str, Any]]:
         metrics = evaluate_predictions(predictions=sub_preds, gold=sub_gold, task=task)
         flat = _flatten_metrics(metrics)
 
-        rows.append({
-            "run_id": run.run_id,
-            "dataset": dataset_name,
-            "runtime": runtime_name,
-            "model": model_name,
-            "perturbation": perturbation,
-            "seed": seed,
-            "task": task,
-            "phenotype": pheno,
-            "n_gold": len(sub_gold),
-            "n_pred": len(sub_preds),
-            "pred_coverage": (len(sub_preds) / len(sub_gold)) if len(sub_gold) else 0.0,
-            "n_changed_vs_clean": run.manifest.get("n_changed_vs_clean", None),
-            **flat,
-        })
+        rows.append(
+            {
+                "run_id": run.run_id,
+                "dataset": dataset_name,
+                "runtime": runtime_name,
+                "model": model_name,
+                "perturbation": perturbation,
+                "seed": seed,
+                "task": task,
+                "phenotype": pheno,
+                "n_gold": len(sub_gold),
+                "n_pred": len(sub_preds),
+                "pred_coverage": (len(sub_preds) / len(sub_gold)) if len(sub_gold) else 0.0,
+                "n_changed_vs_clean": run.manifest.get("n_changed_vs_clean", None),
+                **flat,
+            }
+        )
 
     return rows
 
@@ -297,10 +314,26 @@ def write_csv(path: Path, rows: List[Dict[str, Any]]) -> None:
 
     keys = sorted(set().union(*[set(r.keys()) for r in rows]))
     preferred = [
-        "run_id", "dataset", "runtime", "model", "perturbation", "seed", "task",
-        "phenotype", "n_gold", "n_pred", "pred_coverage", "n_changed_vs_clean",
-        "macro_avg", "yesno_acc", "factoid_em", "factoid_f1", "list_f1", "summary_rougeL",
-        "list_precision", "list_recall",
+        "run_id",
+        "dataset",
+        "runtime",
+        "model",
+        "perturbation",
+        "seed",
+        "task",
+        "phenotype",
+        "n_gold",
+        "n_pred",
+        "pred_coverage",
+        "n_changed_vs_clean",
+        "macro_avg",
+        "yesno_acc",
+        "factoid_em",
+        "factoid_f1",
+        "list_f1",
+        "summary_rougeL",
+        "list_precision",
+        "list_recall",
     ]
     header = preferred + [k for k in keys if k not in preferred]
 
@@ -319,19 +352,37 @@ def compute_deltas_vs_clean(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     for r in rows:
         if not is_clean(r):
             continue
-        key = (r.get("dataset", ""), r.get("runtime", ""), r.get("model", ""), r.get("seed"), r.get("phenotype", ""))
+        key = (
+            r.get("dataset", ""),
+            r.get("runtime", ""),
+            r.get("model", ""),
+            r.get("seed"),
+            r.get("phenotype", ""),
+        )
         idx_clean[key] = r
 
     metric_cols = [
-        "macro_avg", "yesno_acc", "factoid_em", "factoid_f1",
-        "list_f1", "list_precision", "list_recall", "summary_rougeL",
+        "macro_avg",
+        "yesno_acc",
+        "factoid_em",
+        "factoid_f1",
+        "list_f1",
+        "list_precision",
+        "list_recall",
+        "summary_rougeL",
     ]
 
     deltas: List[Dict[str, Any]] = []
     for r in rows:
         if is_clean(r):
             continue
-        key = (r.get("dataset", ""), r.get("runtime", ""), r.get("model", ""), r.get("seed"), r.get("phenotype", ""))
+        key = (
+            r.get("dataset", ""),
+            r.get("runtime", ""),
+            r.get("model", ""),
+            r.get("seed"),
+            r.get("phenotype", ""),
+        )
         base = idx_clean.get(key)
         if base is None:
             continue
@@ -359,10 +410,19 @@ def compute_deltas_vs_clean(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 # CLI
 # ----------------------------
 
+
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--experiments-root", default="results/experiments", help="Root dir containing experiment run folders")
-    ap.add_argument("--outdir", default="results/aggregates_re", help="Output directory for reaggregated artifacts")
+    ap.add_argument(
+        "--experiments-root",
+        default="results/experiments",
+        help="Root dir containing experiment run folders",
+    )
+    ap.add_argument(
+        "--outdir",
+        default="results/aggregates_re",
+        help="Output directory for reaggregated artifacts",
+    )
     ap.add_argument("--overwrite", action="store_true", help="Overwrite output CSVs if they exist")
     ap.add_argument("--limit", type=int, default=None, help="Only process first N runs (debug)")
     return ap.parse_args()

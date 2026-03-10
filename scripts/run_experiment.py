@@ -37,7 +37,6 @@ from biollm_finetune.eval.metrics import evaluate_predictions
 from biollm_finetune.utils.config import RuntimeConfig, load_config
 from biollm_finetune.utils.repro import set_seed
 
-
 # ---------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------
@@ -249,7 +248,9 @@ def main() -> None:
     # -------------------------
     preds_path = exp_dir / "predictions.jsonl"
     adapter_str = getattr(exp_cfg.model, "adapter", None)
-    adapter_path = Path(adapter_str) if isinstance(adapter_str, str) and adapter_str.strip() else None
+    adapter_path = (
+        Path(adapter_str) if isinstance(adapter_str, str) and adapter_str.strip() else None
+    )
 
     _run_inference(
         runtime=exp_cfg.runtime,

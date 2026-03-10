@@ -36,10 +36,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-
 # ----------------------------
 # Small helpers
 # ----------------------------
+
 
 def _read_csv(path: Path) -> Tuple[List[str], List[Dict[str, Any]]]:
     with path.open("r", encoding="utf-8", newline="") as f:
@@ -99,7 +99,7 @@ def _std(xs: List[float]) -> Optional[float]:
         return 0.0 if xs else None
     mu = sum(xs) / len(xs)
     var = sum((x - mu) ** 2 for x in xs) / (len(xs) - 1)
-    return var ** 0.5
+    return var**0.5
 
 
 # ----------------------------
@@ -125,7 +125,9 @@ class SliceKey:
     perturbation: str
 
 
-def analyze(rows: List[Dict[str, Any]], metrics: List[str], include_all: bool, min_n: int) -> Dict[str, Any]:
+def analyze(
+    rows: List[Dict[str, Any]], metrics: List[str], include_all: bool, min_n: int
+) -> Dict[str, Any]:
     # Normalize + filter
     normed: List[Dict[str, Any]] = []
     for r in rows:
@@ -240,7 +242,9 @@ def render_markdown(report: Dict[str, Any]) -> str:
     metrics = report.get("metrics", [])
     for ph in report.get("phenotype_rankings", []):
         lines.append(f"### {ph['phenotype']}")
-        lines.append(f"- dataset: `{ph['dataset']}` | runtime: `{ph['runtime']}` | model: `{ph['model']}`")
+        lines.append(
+            f"- dataset: `{ph['dataset']}` | runtime: `{ph['runtime']}` | model: `{ph['model']}`"
+        )
         lines.append("")
         for m in metrics:
             worst = ph["worst_by_metric"].get(m, [])
@@ -261,13 +265,18 @@ def render_markdown(report: Dict[str, Any]) -> str:
 # CLI
 # ----------------------------
 
+
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
     ap.add_argument("--phenotype-deltas", required=True, help="phenotype_deltas_vs_clean.csv")
     ap.add_argument("--outdir", default="results/aggregates_re/findings")
-    ap.add_argument("--include-all", action="store_true", help="Include phenotype='ALL' in rankings")
+    ap.add_argument(
+        "--include-all", action="store_true", help="Include phenotype='ALL' in rankings"
+    )
     ap.add_argument("--min-n", type=int, default=1, help="Minimum n_gold slice size to include")
-    ap.add_argument("--metrics", nargs="*", default=None, help="Override metric columns (delta__...)")
+    ap.add_argument(
+        "--metrics", nargs="*", default=None, help="Override metric columns (delta__...)"
+    )
     return ap.parse_args()
 
 
@@ -301,7 +310,9 @@ def main() -> None:
     _write_json(out_json, report)
     _write_text(out_md, render_markdown(report))
 
-    print(f"[phenotype-effects] rows_in={report['n_input_rows']} rows_used={report['n_used_rows']} buckets={report['n_buckets']}")
+    print(
+        f"[phenotype-effects] rows_in={report['n_input_rows']} rows_used={report['n_used_rows']} buckets={report['n_buckets']}"
+    )
     print(f"  - {out_json}")
     print(f"  - {out_md}")
 

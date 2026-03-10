@@ -1,5 +1,6 @@
 # src/bioasq_llm/utils/repro.py
 from __future__ import annotations
+
 import json
 import os
 import platform
@@ -41,6 +42,7 @@ def set_seed(seed: int = 42, deterministic: bool = True) -> Dict[str, Any]:
                 pass
             try:
                 import torch.backends.cudnn as cudnn
+
                 cudnn.deterministic = True
                 cudnn.benchmark = False
             except Exception:
@@ -50,16 +52,18 @@ def set_seed(seed: int = 42, deterministic: bool = True) -> Dict[str, Any]:
 
 def _git_commit() -> Optional[str]:
     try:
-        return subprocess.check_output(
-            ["git", "rev-parse", "HEAD"], stderr=subprocess.DEVNULL
-        ).decode("utf-8").strip()
+        return (
+            subprocess.check_output(["git", "rev-parse", "HEAD"], stderr=subprocess.DEVNULL)
+            .decode("utf-8")
+            .strip()
+        )
     except Exception:
         return None
 
 
 @dataclass
 class RunManifest:
-    entrypoint: str                     # "inference.generate" or "training.finetune"
+    entrypoint: str  # "inference.generate" or "training.finetune"
     config_path: str
     started_at_utc: str
     python: str

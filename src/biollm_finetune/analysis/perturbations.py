@@ -38,9 +38,21 @@ _WS_RE = re.compile(r"\s+")
 
 # Tokens we consider "safe to drop" for token-deletion noise
 SAFE_DROP_TOKENS = {
-    "a", "an", "the",
-    "of", "in", "on", "at", "to", "for", "with", "from", "by",
-    "and", "or", "but",
+    "a",
+    "an",
+    "the",
+    "of",
+    "in",
+    "on",
+    "at",
+    "to",
+    "for",
+    "with",
+    "from",
+    "by",
+    "and",
+    "or",
+    "but",
 }
 
 # Simple vowel substitution map (very conservative)
@@ -81,7 +93,10 @@ KEY_NEIGHBORS = {
 # Public API (single perturbation)
 # ---------------------------------------------------------------------
 
-def apply_perturbation(example: Example, perturbation: str, config: Optional[Dict[str, Any]] = None) -> Example:
+
+def apply_perturbation(
+    example: Example, perturbation: str, config: Optional[Dict[str, Any]] = None
+) -> Example:
     """
     Apply a single perturbation by name.
 
@@ -130,13 +145,16 @@ def apply_perturbation(example: Example, perturbation: str, config: Optional[Dic
     return example
 
 
-def apply_to_dataset(examples: Iterable[Example], perturbation: str, config: Optional[Dict[str, Any]] = None) -> List[Example]:
+def apply_to_dataset(
+    examples: Iterable[Example], perturbation: str, config: Optional[Dict[str, Any]] = None
+) -> List[Example]:
     return [apply_perturbation(ex, perturbation, config=config) for ex in examples]
 
 
 # ---------------------------------------------------------------------
 # Helpers: question/snippets access
 # ---------------------------------------------------------------------
+
 
 def _normalize_snippets(ex: Example) -> List[Any]:
     s = ex.get("snippets")
@@ -196,6 +214,7 @@ def _flatten_exact_answer(ans: Any) -> List[str]:
 # Shuffle snippets
 # ---------------------------------------------------------------------
 
+
 def _perturb_shuffle_snippets(example: Example) -> Example:
     ex = copy.deepcopy(example)
     snippets = _normalize_snippets(ex)
@@ -208,6 +227,7 @@ def _perturb_shuffle_snippets(example: Example) -> Example:
 # ---------------------------------------------------------------------
 # Irrelevant noise (balanced corpus)
 # ---------------------------------------------------------------------
+
 
 def _load_noise_pool(path: Optional[Path] = None) -> List[Dict[str, Any]]:
     """
@@ -318,6 +338,7 @@ def _perturb_irrelevant_noise(example: Example, cfg: Dict[str, Any], heavy: bool
 # Lexical noise (taxonomy-driven)
 # ---------------------------------------------------------------------
 
+
 def _is_protected_token(tok: str) -> bool:
     """
     Protect tokens that are likely biomedical identifiers or numeric forms:
@@ -359,7 +380,11 @@ def _detokenize(tokens: List[str]) -> str:
 
 def _op_case_flip(tokens: List[str]) -> List[str]:
     # Flip case of a random character in a random non-protected word token
-    idxs = [i for i, t in enumerate(tokens) if re.fullmatch(r"\w+", t) and not _is_protected_token(t) and any(ch.isalpha() for ch in t)]
+    idxs = [
+        i
+        for i, t in enumerate(tokens)
+        if re.fullmatch(r"\w+", t) and not _is_protected_token(t) and any(ch.isalpha() for ch in t)
+    ]
     if not idxs:
         return tokens
     i = random.choice(idxs)
@@ -374,7 +399,11 @@ def _op_case_flip(tokens: List[str]) -> List[str]:
 
 
 def _op_char_delete(tokens: List[str]) -> List[str]:
-    idxs = [i for i, t in enumerate(tokens) if re.fullmatch(r"\w+", t) and not _is_protected_token(t) and len(t) >= 5]
+    idxs = [
+        i
+        for i, t in enumerate(tokens)
+        if re.fullmatch(r"\w+", t) and not _is_protected_token(t) and len(t) >= 5
+    ]
     if not idxs:
         return tokens
     i = random.choice(idxs)
@@ -386,7 +415,11 @@ def _op_char_delete(tokens: List[str]) -> List[str]:
 
 
 def _op_char_duplicate(tokens: List[str]) -> List[str]:
-    idxs = [i for i, t in enumerate(tokens) if re.fullmatch(r"\w+", t) and not _is_protected_token(t) and len(t) >= 4]
+    idxs = [
+        i
+        for i, t in enumerate(tokens)
+        if re.fullmatch(r"\w+", t) and not _is_protected_token(t) and len(t) >= 4
+    ]
     if not idxs:
         return tokens
     i = random.choice(idxs)
@@ -397,7 +430,11 @@ def _op_char_duplicate(tokens: List[str]) -> List[str]:
 
 
 def _op_char_substitute(tokens: List[str]) -> List[str]:
-    idxs = [i for i, t in enumerate(tokens) if re.fullmatch(r"\w+", t) and not _is_protected_token(t) and any(ch.isalpha() for ch in t)]
+    idxs = [
+        i
+        for i, t in enumerate(tokens)
+        if re.fullmatch(r"\w+", t) and not _is_protected_token(t) and any(ch.isalpha() for ch in t)
+    ]
     if not idxs:
         return tokens
     i = random.choice(idxs)
@@ -423,7 +460,11 @@ def _op_char_substitute(tokens: List[str]) -> List[str]:
 
 
 def _op_token_duplicate(tokens: List[str]) -> List[str]:
-    idxs = [i for i, t in enumerate(tokens) if re.fullmatch(r"\w+", t) and not _is_protected_token(t) and len(t) >= 3]
+    idxs = [
+        i
+        for i, t in enumerate(tokens)
+        if re.fullmatch(r"\w+", t) and not _is_protected_token(t) and len(t) >= 3
+    ]
     if not idxs:
         return tokens
     i = random.choice(idxs)
@@ -445,7 +486,12 @@ def _op_token_swap(tokens: List[str]) -> List[str]:
     candidates = []
     for i in range(len(tokens) - 1):
         a, b = tokens[i], tokens[i + 1]
-        if re.fullmatch(r"\w+", a) and re.fullmatch(r"\w+", b) and not _is_protected_token(a) and not _is_protected_token(b):
+        if (
+            re.fullmatch(r"\w+", a)
+            and re.fullmatch(r"\w+", b)
+            and not _is_protected_token(a)
+            and not _is_protected_token(b)
+        ):
             candidates.append(i)
     if not candidates:
         return tokens
@@ -467,7 +513,7 @@ def _op_whitespace_noise(text: str) -> str:
     if not space_positions:
         return text
     idx = random.choice(space_positions)
-    return text[:idx] + text[idx + 1:]
+    return text[:idx] + text[idx + 1 :]
 
 
 def _op_punct_noise(tokens: List[str]) -> List[str]:
@@ -645,13 +691,24 @@ YESNO_TRUE = {"yes", "true"}
 YESNO_FALSE = {"no", "false"}
 
 ASSOCIATION_TRIGGERS = [
-    "associated with", "correlated with", "linked to", "related to",
+    "associated with",
+    "correlated with",
+    "linked to",
+    "related to",
 ]
 CAUSAL_TRIGGERS = [
-    "causes", "cause", "leads to", "results in", "induces", "triggers",
+    "causes",
+    "cause",
+    "leads to",
+    "results in",
+    "induces",
+    "triggers",
 ]
 TREATMENT_TRIGGERS = [
-    "used to treat", "treats", "effective for", "recommended for",
+    "used to treat",
+    "treats",
+    "effective for",
+    "recommended for",
 ]
 
 
@@ -679,7 +736,11 @@ def _generate_contradiction_yesno(
     # flip stance
     flip = "neg" if gold_polarity == "pos" else "pos"
 
-    core = f"between {subject} and {obj}" if subject and obj else "with respect to the relationship under investigation"
+    core = (
+        f"between {subject} and {obj}"
+        if subject and obj
+        else "with respect to the relationship under investigation"
+    )
 
     strength = (strength or "medium").lower()
     style = (style or "paper").lower()
@@ -689,7 +750,9 @@ def _generate_contradiction_yesno(
         if flip == "neg":
             base = f"Current guidance does not support a consistent association {core}."
         else:
-            base = f"Current guidance suggests an association {core} may be considered in some cases."
+            base = (
+                f"Current guidance suggests an association {core} may be considered in some cases."
+            )
         return base
 
     if strength == "strong":
@@ -702,11 +765,17 @@ def _generate_contradiction_yesno(
 
     # medium
     if flip == "neg":
-        return f"Several studies indicate that the association {core} is not consistently supported."
-    return f"Several studies indicate that an association {core} has been observed in some settings."
+        return (
+            f"Several studies indicate that the association {core} is not consistently supported."
+        )
+    return (
+        f"Several studies indicate that an association {core} has been observed in some settings."
+    )
 
 
-def _perturb_contradiction(example: Example, cfg: Dict[str, Any], position: str = "append") -> Example:
+def _perturb_contradiction(
+    example: Example, cfg: Dict[str, Any], position: str = "append"
+) -> Example:
     """
     Inject a contradictory snippet; Phase 3 scope: yes/no questions.
 

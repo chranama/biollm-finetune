@@ -27,7 +27,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-
 METRICS = ["macro_avg", "yesno_acc", "factoid_f1", "list_f1", "summary_rougeL"]
 
 
@@ -168,13 +167,17 @@ def render_markdown(summary: Dict[str, Any]) -> str:
     lines.append("")
     lines.append("## Mean Δ vs Clean by Metric (per perturbation)")
     lines.append("")
-    lines.append("| Perturbation | macro_avg | yesno_acc | factoid_f1 | list_f1 | summary_rougeL | n |")
+    lines.append(
+        "| Perturbation | macro_avg | yesno_acc | factoid_f1 | list_f1 | summary_rougeL | n |"
+    )
     lines.append("|---|---:|---:|---:|---:|---:|---:|")
     for p, agg in sorted(summary["per_perturbation"].items()):
         md = agg.get("mean_delta", {})
+
         def g(k: str) -> str:
             v = md.get(k)
             return f"{v:.4f}" if isinstance(v, (int, float)) else ""
+
         lines.append(
             f"| `{p}` | {g('macro_avg')} | {g('yesno_acc')} | {g('factoid_f1')} | {g('list_f1')} | {g('summary_rougeL')} | {agg.get('n',0)} |"
         )

@@ -69,6 +69,7 @@ MULTI_ANSWER_MIN: int = 3
 # Internal helpers
 # -------------------------
 
+
 def get_example_id(ex: Example, idx: int) -> str:
     """
     Return a stable id for an example.
@@ -201,6 +202,7 @@ def _get_question_type(ex: Example) -> str:
 # Core phenotype logic
 # -------------------------
 
+
 def _is_long_question(ex: Example) -> bool:
     text = _get_question_text(ex)
     tokens = text.split()
@@ -225,6 +227,7 @@ def _is_multi_answer_list(ex: Example) -> bool:
 # -------------------------
 # Public APIs
 # -------------------------
+
 
 def tag_example(example: Example) -> PhenotypeTags:
     """

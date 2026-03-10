@@ -1,6 +1,8 @@
 import sys
 from pathlib import Path
+
 import pytest
+
 from biollm_finetune.inference.generate import main as gen_main
 
 CFG = """
@@ -15,10 +17,11 @@ inference:
   max_new_tokens: 4
 """
 
+
 def test_adapter_missing_path_fails_cleanly(tmp_path, monkeypatch):
     cfg = tmp_path / "cfg.yaml"
     # point to a non-existent adapter dir
-    cfg.write_text(CFG.format(adapter=tmp_path/"no_adapter"), encoding="utf-8")
+    cfg.write_text(CFG.format(adapter=tmp_path / "no_adapter"), encoding="utf-8")
     inp = tmp_path / "q.jsonl"
     inp.write_text('{"id": "1", "body": "What is insulin?", "snippets": []}\n', encoding="utf-8")
     out = tmp_path / "pred.jsonl"

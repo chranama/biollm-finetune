@@ -23,7 +23,6 @@ from pathlib import Path
 
 import pandas as pd
 
-
 DELTA_COLS = [
     "delta__macro_avg",
     "delta__yesno_acc",
@@ -86,7 +85,9 @@ def main() -> None:
     out = pd.concat(agg_parts, ignore_index=True)
 
     # Helpful ordering
-    out = out.sort_values(["phenotype", "metric", "perturbation"], kind="stable").reset_index(drop=True)
+    out = out.sort_values(["phenotype", "metric", "perturbation"], kind="stable").reset_index(
+        drop=True
+    )
 
     out_csv = out_dir / "seed_agg_deltas.csv"
     out_json = out_dir / "seed_agg_deltas.json"

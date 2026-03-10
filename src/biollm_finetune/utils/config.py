@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List, Optional, Literal, Dict, Any
+from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
@@ -27,7 +27,9 @@ class ModelConfig(BaseModel):
     dtype: Optional[Literal["float32", "float16", "bfloat16"]] = None
     torch_dtype: Optional[Literal["float32", "float16", "bfloat16"]] = None
     # Optional adapter (PEFT)
-    adapter: Optional[str] = Field(None, description="Path to a PEFT adapter directory for inference")
+    adapter: Optional[str] = Field(
+        None, description="Path to a PEFT adapter directory for inference"
+    )
     adapter_output_dir: Optional[str] = None
 
     @model_validator(mode="after")
@@ -35,7 +37,7 @@ class ModelConfig(BaseModel):
         if self.bf16 and self.fp16:
             raise ValueError("Set at most one of bf16/fp16.")
         return self
-    
+
     @model_validator(mode="after")
     def _default_name(self) -> "ModelConfig":
         # If name not provided, default to path or base_model for readability
@@ -47,20 +49,21 @@ class ModelConfig(BaseModel):
             else:
                 self.name = "unknown_model"
         return self
-    
+
     @field_validator("adapter")
     @classmethod
     def _adapter_exists_if_set(cls, v: Optional[str]) -> Optional[str]:
         if v is not None and not Path(v).exists():
             raise ValueError(f"Adapter path not found: {v}")
         return v
-    
+
     @model_validator(mode="after")
     def _dtype_alias(self) -> "ModelConfig":
         # If dtype isn't set, fall back to torch_dtype (legacy)
         if self.dtype is None and self.torch_dtype is not None:
             self.dtype = self.torch_dtype
         return self
+
 
 class DatasetConfig(BaseModel):
     """
@@ -70,7 +73,7 @@ class DatasetConfig(BaseModel):
     name: str
     path: str
     gold_file: Optional[str] = None
-    task: str = "bioasq" 
+    task: str = "bioasq"
 
     @field_validator("path")
     @classmethod
@@ -85,7 +88,8 @@ class DatasetConfig(BaseModel):
         if v is not None and not Path(v).exists():
             raise ValueError(f"Gold file not found: {v}")
         return v
-    
+
+
 class RuntimeConfig(BaseModel):
     """
     Runtime identity for experiment tracking and manifests.
@@ -174,7 +178,7 @@ class FullConfig(BaseModel):
 
     # --- Identity blocks ---
     dataset: DatasetConfig
-    runtime: RuntimeConfig 
+    runtime: RuntimeConfig
 
     # --- Core sections ---
     model: ModelConfig
@@ -231,6 +235,7 @@ def load_config(path: str) -> FullConfig:
     if "model" not in raw or "data" not in raw:
         raise ValueError("Config must contain at least 'model' and 'data' sections.")
     return FullConfig(**raw)
+
 
 class InferenceOnlyConfig(BaseModel):
     model: ModelConfig

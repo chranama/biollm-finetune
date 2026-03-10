@@ -12,7 +12,11 @@ MANIFEST = ROOT / "proof" / "evidence_manifest.latest.json"
 
 def git_commit() -> str:
     try:
-        return subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT).decode().strip()
+        return (
+            subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT)
+            .decode()
+            .strip()
+        )
     except Exception:
         return "UNKNOWN"
 

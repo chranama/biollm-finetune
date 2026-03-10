@@ -2,7 +2,7 @@
 Utilities for sampling and structuring error cases for qualitative analysis.
 """
 
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 
 def select_error_samples(

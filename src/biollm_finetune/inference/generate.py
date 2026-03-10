@@ -16,12 +16,12 @@ import json
 import subprocess
 import sys
 from pathlib import Path
-from typing import Dict, Any, Iterable, Optional, List
+from typing import Any, Dict, Iterable, List, Optional
 
-from rich.console import Console
-from transformers import AutoTokenizer, AutoModelForCausalLM
-from transformers import LogitsProcessor, LogitsProcessorList
 import torch
+import yaml
+from rich.console import Console
+from transformers import AutoModelForCausalLM, AutoTokenizer, LogitsProcessor, LogitsProcessorList
 
 from biollm_finetune.utils.config import load_inference_config
 from biollm_finetune.utils.device import resolve_device
@@ -30,8 +30,29 @@ from biollm_finetune.utils.repro import set_seed, start_manifest, write_manifest
 
 console = Console()
 
+DEFAULT_TEMPLATES = {
+    "with_context": (
+        "You are a biomedical domain expert. Answer using ONLY the provided context.\n\n"
+        "### Context:\n{context}\n\n"
+        "### Question:\n{question}\n\n"
+        "### Answer:"
+    ),
+    "no_context": (
+        "You are a biomedical domain expert. Answer concisely.\n\n"
+        "### Question:\n{question}\n\n"
+        "### Answer:"
+    ),
+}
+
 
 # ---------- Helpers ----------
+
+
+def read_yaml(path: str | Path) -> Dict[str, Any]:
+    """Backward-compatible helper used by legacy tests."""
+    with Path(path).open("r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
 
 def _read_jsonl(path: str | Path) -> Iterable[Dict[str, Any]]:
     p = Path(path)
@@ -69,21 +90,22 @@ def _extract_context(sample: Dict[str, Any]) -> str:
     return "\n".join(context_lines).strip()
 
 
-def _build_prompt(sample: Dict[str, Any], include_snippets: bool = True) -> str:
+def build_prompt(
+    sample: Dict[str, Any],
+    templates: Dict[str, str] | None = None,
+    include_snippets: bool = True,
+) -> str:
+    """Backward-compatible prompt builder used by legacy tests."""
+    t = templates or DEFAULT_TEMPLATES
     question = sample.get("body") or sample.get("question") or ""
     ctx = _extract_context(sample) if include_snippets else ""
     if ctx:
-        return (
-            "You are a biomedical domain expert. Answer the question using ONLY the provided context.\n"
-            "If the answer cannot be determined from the context, say 'Unknown'.\n\n"
-            f"Context:\n{ctx}\n\n"
-            f"Question: {question}\nAnswer:"
-        )
-    else:
-        return (
-            "You are a biomedical domain expert. Answer the question concisely.\n\n"
-            f"Question: {question}\nAnswer:"
-        )
+        return t["with_context"].format(context=ctx, question=question)
+    return t["no_context"].format(question=question)
+
+
+def _build_prompt(sample: Dict[str, Any], include_snippets: bool = True) -> str:
+    return build_prompt(sample, templates=DEFAULT_TEMPLATES, include_snippets=include_snippets)
 
 
 def _postcut(generated: str) -> str:
@@ -135,6 +157,7 @@ def _load_causal_lm(model_id: str, dtype: torch.dtype):
 
 # ---------- Main ----------
 
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="Generate answers for BioASQ-style questions.")
     ap.add_argument("--config", required=True, help="YAML config (inference_tiny.yaml, etc.)")
@@ -150,13 +173,19 @@ def main() -> None:
     except Exception as e:
         raise SystemExit(f"[ConfigError] {e}")
 
+    input_path = Path(args.input)
+    if not input_path.exists():
+        raise SystemExit(f"Input file not found: {input_path}")
+
     # 2) Resolve device + dtype
     device, resolved_dtype = resolve_device(
         requested=(cfg.system.device_map if cfg.system else "auto"),
         prefer_bf16=bool(getattr(cfg.model, "bf16", False)),
         prefer_fp16=bool(getattr(cfg.model, "fp16", False)),
     )
-    console.print(f"[bold green]Device:[/bold green] {device} | [bold]dtype:[/bold] {resolved_dtype}")
+    console.print(
+        f"[bold green]Device:[/bold green] {device} | [bold]dtype:[/bold] {resolved_dtype}"
+    )
 
     log = get_logger("biollm_finetune.generate")
 
@@ -168,13 +197,21 @@ def main() -> None:
     # 3) Resolve model id before creating manifest
     model_id = getattr(cfg.model, "path", None) or getattr(cfg.model, "base_model", None)
     if not model_id:
-        raise SystemExit("Model id/path missing: set model.path (inference) or model.base_model (training).")
+        raise SystemExit(
+            "Model id/path missing: set model.path (inference) or model.base_model (training)."
+        )
 
     # Adapter path (optional)
-    adapter_path = args.adapter or getattr(cfg.model, "adapter_output_dir", None) or getattr(cfg.model, "adapter", None)
+    adapter_path = (
+        args.adapter
+        or getattr(cfg.model, "adapter_output_dir", None)
+        or getattr(cfg.model, "adapter", None)
+    )
 
     # Guard quantization on non-CUDA
-    if (getattr(cfg.model, "load_4bit", False) or getattr(cfg.model, "load_8bit", False)) and device != "cuda":
+    if (
+        getattr(cfg.model, "load_4bit", False) or getattr(cfg.model, "load_8bit", False)
+    ) and device != "cuda":
         raise SystemExit("4/8-bit quantization requires CUDA. Disable these on macOS/CPU/MPS.")
 
     # 4) Write manifest *after* we know model_id and adapter_path
@@ -202,6 +239,7 @@ def main() -> None:
     if adapter_path:
         try:
             from peft import PeftModel
+
             model = PeftModel.from_pretrained(model, adapter_path)
             console.print(f"[bold cyan]Loaded adapter:[/bold cyan] {adapter_path}")
         except Exception as e:
@@ -255,11 +293,20 @@ def main() -> None:
                 logits_processor=processors if len(processors) > 0 else None,
             )
 
-        completion_ids = output_ids[0][toks["input_ids"].shape[1]:]
+        completion_ids = output_ids[0][toks["input_ids"].shape[1] :]
         text = tokenizer.decode(completion_ids, skip_special_tokens=True)
         text = _postcut(text)
 
-        results.append({"id": qid, "prompt": prompt, "prediction": text})
+        results.append(
+            {
+                "id": qid,
+                "type": sample.get("type"),
+                "question": sample.get("body") or sample.get("question"),
+                "prompt": prompt,
+                "prediction": text,
+                "predicted": text,
+            }
+        )
 
     outp = _write_jsonl(args.out, results)
     console.print(f"[bold green]Wrote predictions →[/bold green] {outp.resolve()}")

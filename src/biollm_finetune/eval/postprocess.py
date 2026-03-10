@@ -11,16 +11,17 @@ Faithful to the original postprocessing.py with necessary improvements:
 """
 
 from __future__ import annotations
+
 import argparse
 import hashlib
 import json
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Optional, Tuple
 
-
 # ---------------------------
 # I/O helpers
 # ---------------------------
+
 
 def load_data(file_path: str | Path) -> List[Dict[str, Any]]:
     """
@@ -80,6 +81,7 @@ def write_jsonl(path: str | Path, rows: Iterable[Mapping[str, Any]]) -> None:
 # Merge & categorize
 # ---------------------------
 
+
 def _canonical_id(rec: Mapping[str, Any], id_key: str = "id") -> str:
     """
     Prefer a provided id; otherwise build one from question-type+body hash so we can de-dup.
@@ -93,7 +95,9 @@ def _canonical_id(rec: Mapping[str, Any], id_key: str = "id") -> str:
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
 
 
-def merge_data(files: List[str | Path], id_key: str = "id", prefer: str = "last") -> Dict[str, Dict[str, Any]]:
+def merge_data(
+    files: List[str | Path], id_key: str = "id", prefer: str = "last"
+) -> Dict[str, Dict[str, Any]]:
     """
     Merge multiple input files into a dict keyed by canonical id.
 
@@ -134,8 +138,16 @@ def normalize_type(t: Optional[str]) -> str:
     return t
 
 
-def categorize_data(merged: Mapping[str, Mapping[str, Any]], type_key: str = "type") -> Dict[str, List[Dict[str, Any]]]:
-    buckets: Dict[str, List[Dict[str, Any]]] = {"yesno": [], "factoid": [], "list": [], "summary": [], "unknown": []}
+def categorize_data(
+    merged: Mapping[str, Mapping[str, Any]], type_key: str = "type"
+) -> Dict[str, List[Dict[str, Any]]]:
+    buckets: Dict[str, List[Dict[str, Any]]] = {
+        "yesno": [],
+        "factoid": [],
+        "list": [],
+        "summary": [],
+        "unknown": [],
+    }
     for _cid, rec in merged.items():
         t = normalize_type(rec.get(type_key))
         if t not in buckets:
@@ -147,6 +159,7 @@ def categorize_data(merged: Mapping[str, Mapping[str, Any]], type_key: str = "ty
 # ---------------------------
 # Saving
 # ---------------------------
+
 
 def save_data_by_category(
     categorized: Mapping[str, List[Mapping[str, Any]]],
@@ -178,8 +191,11 @@ def save_data_by_category(
 # CLI
 # ---------------------------
 
+
 def parse_args() -> argparse.Namespace:
-    ap = argparse.ArgumentParser(description="Merge, categorize, and save generated BioASQ answers.")
+    ap = argparse.ArgumentParser(
+        description="Merge, categorize, and save generated BioASQ answers."
+    )
     ap.add_argument(
         "--inputs",
         nargs="+",
@@ -192,9 +208,15 @@ def parse_args() -> argparse.Namespace:
         ],
         help="Input files (JSON/JSONL). Defaults match the original script’s filenames.",
     )
-    ap.add_argument("--outdir", default="results/processed", help="Directory to write per-type outputs.")
-    ap.add_argument("--format", choices=["jsonl", "json"], default="jsonl", help="Output format per category.")
-    ap.add_argument("--id_key", default="id", help="Key to use as unique id (fallback: hashed question).")
+    ap.add_argument(
+        "--outdir", default="results/processed", help="Directory to write per-type outputs."
+    )
+    ap.add_argument(
+        "--format", choices=["jsonl", "json"], default="jsonl", help="Output format per category."
+    )
+    ap.add_argument(
+        "--id_key", default="id", help="Key to use as unique id (fallback: hashed question)."
+    )
     ap.add_argument(
         "--prefer",
         choices=["last", "first"],
@@ -214,8 +236,7 @@ def main() -> None:
     categorized = categorize_data(merged)
     total = sum(len(v) for v in categorized.values())
     print(
-        "🗂️  Buckets:" +
-        "".join([f"  {k}={len(v)}" for k, v in categorized.items() if len(v) > 0])
+        "🗂️  Buckets:" + "".join([f"  {k}={len(v)}" for k, v in categorized.items() if len(v) > 0])
     )
 
     paths = save_data_by_category(categorized, out_dir=args.outdir, fmt=args.format)

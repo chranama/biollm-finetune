@@ -47,7 +47,9 @@ def main() -> None:
     min_count = min(counts.values()) if counts else 0
     cap = args.cap if args.cap > 0 else min_count
 
-    print(f"[rebalance] topics={len(buckets)} min_count={min_count} cap={cap} upsample={args.upsample}")
+    print(
+        f"[rebalance] topics={len(buckets)} min_count={min_count} cap={cap} upsample={args.upsample}"
+    )
 
     selected: List[Dict[str, Any]] = []
     for topic, items in buckets.items():

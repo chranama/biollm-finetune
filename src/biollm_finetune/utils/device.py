@@ -1,10 +1,13 @@
 # src/bioasq_llm/utils/device.py
 from __future__ import annotations
+
 import platform
+from typing import Literal, Optional, Tuple
+
 import torch
-from typing import Literal, Tuple, Optional
 
 ResolvedDevice = Tuple[str, torch.dtype]
+
 
 def resolve_device(
     requested: Literal["auto", "cuda", "mps", "cpu"] = "auto",
@@ -43,7 +46,9 @@ def resolve_device(
 
     # Resolve dtype
     if device == "cuda":
-        bf16_ok = torch.cuda.is_bf16_supported() if hasattr(torch.cuda, "is_bf16_supported") else False
+        bf16_ok = (
+            torch.cuda.is_bf16_supported() if hasattr(torch.cuda, "is_bf16_supported") else False
+        )
         if prefer_bf16 and bf16_ok:
             return device, torch.bfloat16
         if prefer_fp16:

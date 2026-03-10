@@ -47,6 +47,7 @@ except Exception:
 # I/O helpers
 # ---------------------------
 
+
 def _read_json_any(path: str | Path) -> List[Dict[str, Any]]:
     p = Path(path)
     if not p.exists():
@@ -80,6 +81,7 @@ def _read_json_any(path: str | Path) -> List[Dict[str, Any]]:
 # Canonicalization & matching
 # ---------------------------
 
+
 def _canonical_id(rec: Mapping[str, Any]) -> str:
     if "id" in rec and rec["id"] is not None:
         return str(rec["id"])
@@ -103,7 +105,7 @@ def _norm_text(s: str) -> str:
     # collapse whitespace
     s = re.sub(r"\s+", " ", s)
     # strip trivial surrounding quotes
-    s = s.strip(' "\'')
+    s = s.strip(" \"'")
     # remove trailing punctuation like periods/commas
     s = re.sub(r"[.,;:]+$", "", s)
     return s
@@ -157,6 +159,7 @@ def _gold_text_for_summary(ideal_answer: Any) -> str:
 # Primitive metrics
 # ---------------------------
 
+
 def _token_f1(pred: str, gold: str) -> Tuple[float, float, float]:
     """
     Token-level precision, recall, F1 (SQuAD-style).
@@ -206,6 +209,7 @@ def _set_f1(pred_items: Iterable[str], gold_items: Iterable[str]) -> Tuple[float
 # ---------------------------
 # Per-type scoring
 # ---------------------------
+
 
 def score_yesno(pred: str, gold: str) -> float:
     p = _norm_text(pred)
@@ -259,6 +263,7 @@ def score_summary(pred: str, gold_text: str) -> float:
 # ---------------------------
 # Orchestration (existing)
 # ---------------------------
+
 
 def build_gold_index(rows: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
     return {_canonical_id(r): r for r in rows}
@@ -355,6 +360,7 @@ def evaluate(preds: List[Dict[str, Any]], gold_index: Dict[str, Dict[str, Any]])
 # Phase 4: unified entrypoint for run_experiment.py
 # ---------------------------------------------------------------------
 
+
 def evaluate_predictions(
     predictions: List[Dict[str, Any]],
     gold: List[Dict[str, Any]],
@@ -396,11 +402,16 @@ def evaluate_predictions(
 # CLI
 # ---------------------------
 
+
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser(description="Score BioASQ-style predictions against gold.")
     ap.add_argument("--pred", required=True, help="Predictions JSON/JSONL")
-    ap.add_argument("--gold", required=True, help="Gold JSON/JSONL (or BioASQ JSON with {'questions':[...]})")
-    ap.add_argument("--out", default="results/metrics/metrics.json", help="Where to write the metrics JSON")
+    ap.add_argument(
+        "--gold", required=True, help="Gold JSON/JSONL (or BioASQ JSON with {'questions':[...]})"
+    )
+    ap.add_argument(
+        "--out", default="results/metrics/metrics.json", help="Where to write the metrics JSON"
+    )
     return ap.parse_args()
 
 

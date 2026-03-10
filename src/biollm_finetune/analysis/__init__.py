@@ -8,4 +8,5 @@ This package provides:
 - experiment registry helpers
 - error sampling and browsing helpers
 """
-from . import phenotypes, perturbations, robustness, run_registry, error_analysis
+
+from . import error_analysis, perturbations, phenotypes, robustness, run_registry

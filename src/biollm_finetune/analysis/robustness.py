@@ -13,15 +13,15 @@ No plotting. No experiment execution.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, asdict
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Iterable, Any
 from collections import defaultdict
-
+from dataclasses import asdict, dataclass
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 # ---------------------------------------------------------------------
 # Data structures
 # ---------------------------------------------------------------------
+
 
 @dataclass
 class RobustnessRecord:
@@ -67,6 +67,7 @@ class PhenotypeRobustnessRecord:
 # Perturbation parsing
 # ---------------------------------------------------------------------
 
+
 def parse_perturbation(name: str) -> Tuple[str, Optional[str]]:
     """
     Splits perturbation name into (base_type, intensity).
@@ -88,6 +89,7 @@ def parse_perturbation(name: str) -> Tuple[str, Optional[str]]:
 # ---------------------------------------------------------------------
 # Metric robustness (run-level)
 # ---------------------------------------------------------------------
+
 
 def compute_robustness_records(
     runs: Iterable[Dict[str, Any]],
@@ -159,6 +161,7 @@ def compute_robustness_records(
 # Prediction stability & flips (example-level)
 # ---------------------------------------------------------------------
 
+
 def compute_stability(
     clean_preds: List[Any],
     perturbed_preds: List[Any],
@@ -201,6 +204,7 @@ def compute_stability(
 # Phenotype-conditioned robustness
 # ---------------------------------------------------------------------
 
+
 def compute_phenotype_robustness(
     clean_scores: Dict[str, Dict[str, float]],
     pert_scores: Dict[str, Dict[str, float]],
@@ -224,10 +228,9 @@ def compute_phenotype_robustness(
     for phenotype in phenotypes:
         # restrict to examples with phenotype == True
         ids = [
-            qid for qid, tags in phenotype_map.items()
-            if tags.get(phenotype, False)
-            and qid in clean_scores
-            and qid in pert_scores
+            qid
+            for qid, tags in phenotype_map.items()
+            if tags.get(phenotype, False) and qid in clean_scores and qid in pert_scores
         ]
 
         if not ids:
@@ -263,6 +266,7 @@ def compute_phenotype_robustness(
 # Aggregation helpers
 # ---------------------------------------------------------------------
 
+
 def aggregate_by_perturbation(
     records: List[RobustnessRecord],
 ) -> Dict[str, List[RobustnessRecord]]:
@@ -284,6 +288,7 @@ def aggregate_by_type_and_intensity(
 # ---------------------------------------------------------------------
 # Export utilities
 # ---------------------------------------------------------------------
+
 
 def save_json(records: List[Any], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)

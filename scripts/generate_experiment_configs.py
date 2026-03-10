@@ -18,13 +18,13 @@ from typing import List
 import yaml
 
 from biollm_finetune.utils.config import (
-    FullConfig,
-    ModelConfig,
     DataArgs,
-    InferenceArgs,
-    SystemArgs,
     DatasetConfig,
+    FullConfig,
+    InferenceArgs,
+    ModelConfig,
     RuntimeConfig,
+    SystemArgs,
 )
 
 # ---------------------------------------------------------------------
@@ -69,6 +69,7 @@ BLOCK2_PERTURBATIONS = [
 # ---------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------
+
 
 def canonical_name(dataset: str, runtime: str, perturbation: str, seed: int) -> str:
     return f"{dataset}_{runtime}_{perturbation}_seed{seed}"
@@ -120,6 +121,7 @@ def write_yaml(path: Path, cfg: FullConfig) -> None:
 # ---------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------
+
 
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()

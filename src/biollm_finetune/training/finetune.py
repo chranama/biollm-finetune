@@ -9,17 +9,18 @@ Tiny, faithful fine-tune script for BioASQ-style QA using HF Trainer.
 """
 
 from __future__ import annotations
+
 import argparse
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Any, Dict, List
 
 import torch
 from rich.console import Console
 from transformers import (
-    AutoTokenizer,
     AutoModelForCausalLM,
+    AutoTokenizer,
     Trainer,
     TrainingArguments,
 )
@@ -30,12 +31,14 @@ from biollm_finetune.utils.device import resolve_device
 # >>> Minimal additions for logging + reproducibility manifest
 from biollm_finetune.utils.logging import get_logger
 from biollm_finetune.utils.repro import set_seed, start_manifest, write_manifest
+
 # <<<
 
 console = Console()
 
 
 # ---------- Data helpers ----------
+
 
 def _read_jsonl(path: str | Path) -> List[Dict[str, Any]]:
     p = Path(path)
@@ -64,7 +67,9 @@ def _extract_context(item: Dict[str, Any]) -> str:
     return "\n".join(lines).strip()
 
 
-def _build_prompt(item: Dict[str, Any], include_snippets: bool = True, q_field: str = "body") -> str:
+def _build_prompt(
+    item: Dict[str, Any], include_snippets: bool = True, q_field: str = "body"
+) -> str:
     q = item.get(q_field) or item.get("question") or ""
     ctx = _extract_context(item) if include_snippets else ""
     if ctx:
@@ -100,6 +105,7 @@ def _extract_answer(item: Dict[str, Any], a_field: str = "ideal_answer") -> str:
 
 # ---------- Dataset ----------
 
+
 @dataclass
 class SupervisedExample:
     prompt: str
@@ -107,7 +113,9 @@ class SupervisedExample:
 
 
 class SupervisedDataset(torch.utils.data.Dataset):
-    def __init__(self, rows: List[Dict[str, Any]], include_snippets: bool, q_field: str, a_field: str):
+    def __init__(
+        self, rows: List[Dict[str, Any]], include_snippets: bool, q_field: str, a_field: str
+    ):
         self.samples: List[SupervisedExample] = []
         for r in rows:
             prompt = _build_prompt(r, include_snippets=include_snippets, q_field=q_field)
@@ -139,7 +147,10 @@ class DataCollatorSFT:
                 ex.prompt, add_special_tokens=False, truncation=True, max_length=self.max_length
             )
             tok_answer = self.tok(
-                " " + ex.answer.strip(), add_special_tokens=False, truncation=True, max_length=self.max_length
+                " " + ex.answer.strip(),
+                add_special_tokens=False,
+                truncation=True,
+                max_length=self.max_length,
             )
 
             ids = tok_prompt["input_ids"] + tok_answer["input_ids"]
@@ -163,7 +174,9 @@ class DataCollatorSFT:
         def pad(seq, pad_id, to_len):
             return seq + [pad_id] * (to_len - len(seq))
 
-        padded_ids = [pad(x, self.tok.pad_token_id or self.tok.eos_token_id, maxlen) for x in input_ids_list]
+        padded_ids = [
+            pad(x, self.tok.pad_token_id or self.tok.eos_token_id, maxlen) for x in input_ids_list
+        ]
         padded_attn = [pad(x, 0, maxlen) for x in attention_list]
         padded_lbls = [pad(x, -100, maxlen) for x in labels_list]
 
@@ -176,13 +189,17 @@ class DataCollatorSFT:
 
 # ---------- Main ----------
 
+
 def main() -> None:
     import argparse
-    from pathlib import Path
     import inspect
+    from pathlib import Path
+
     import torch  # ensure torch is in local scope for device/mps guards
 
-    ap = argparse.ArgumentParser(description="Fine-tune a causal LM on BioASQ-style QA (LoRA optional).")
+    ap = argparse.ArgumentParser(
+        description="Fine-tune a causal LM on BioASQ-style QA (LoRA optional)."
+    )
     ap.add_argument("--config", required=True, help="YAML config (finetune_tiny.yaml, etc.)")
     args = ap.parse_args()
 
@@ -210,12 +227,16 @@ def main() -> None:
 
     # Guard quantization on non-CUDA
     if (cfg.model.load_4bit or cfg.model.load_8bit) and device != "cuda":
-        raise SystemExit("4/8-bit quantization requires CUDA. On macOS/CPU/MPS, set load_4bit=false and load_8bit=false.")
+        raise SystemExit(
+            "4/8-bit quantization requires CUDA. On macOS/CPU/MPS, set load_4bit=false and load_8bit=false."
+        )
 
     # 3) Model + tokenizer
     model_id = cfg.model.base_model or cfg.model.path
     if not model_id:
-        raise SystemExit("Model id/path missing: set model.base_model (training) or model.path (inference).")
+        raise SystemExit(
+            "Model id/path missing: set model.base_model (training) or model.path (inference)."
+        )
 
     tok = AutoTokenizer.from_pretrained(model_id, use_fast=True)
     if tok.pad_token_id is None:
@@ -227,9 +248,9 @@ def main() -> None:
     )
 
     # Make training stable on smaller devices
-    tok.padding_side = "right"                # avoid odd attention masks
+    tok.padding_side = "right"  # avoid odd attention masks
     if hasattr(model.config, "use_cache"):
-        model.config.use_cache = False        # must be False for training (esp. with PEFT)
+        model.config.use_cache = False  # must be False for training (esp. with PEFT)
     if hasattr(model.config, "attn_implementation"):
         model.config.attn_implementation = "eager"  # avoid fused kernels on MPS
 
@@ -238,7 +259,9 @@ def main() -> None:
         try:
             from peft import LoraConfig, get_peft_model
         except Exception as e:
-            raise SystemExit(f"PEFT is requested (model.use_peft=true) but peft is not installed: {e}")
+            raise SystemExit(
+                f"PEFT is requested (model.use_peft=true) but peft is not installed: {e}"
+            )
 
         target_modules = cfg.model.target_modules or ["q_proj", "v_proj"]
         lconf = LoraConfig(
@@ -274,8 +297,16 @@ def main() -> None:
     val_rows = rows[:n_val] if n_val > 0 else []
     train_rows = rows[n_val:] if n_val > 0 else rows
 
-    train_ds = SupervisedDataset(train_rows, include_snippets=include_snippets, q_field=q_field, a_field=a_field)
-    eval_ds = SupervisedDataset(val_rows, include_snippets=include_snippets, q_field=q_field, a_field=a_field) if val_rows else None
+    train_ds = SupervisedDataset(
+        train_rows, include_snippets=include_snippets, q_field=q_field, a_field=a_field
+    )
+    eval_ds = (
+        SupervisedDataset(
+            val_rows, include_snippets=include_snippets, q_field=q_field, a_field=a_field
+        )
+        if val_rows
+        else None
+    )
 
     max_len = cfg.data.max_length or 384
     collator = DataCollatorSFT(tokenizer=tok, max_length=max_len)
@@ -349,6 +380,7 @@ def main() -> None:
 
     # Skip updates on non-finite loss (defensive)
     _orig_compute_loss = trainer.compute_loss
+
     def _safe_compute_loss(model, inputs, num_items_in_batch=None):
         loss = _orig_compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
         base = loss[0] if isinstance(loss, tuple) else loss
@@ -356,15 +388,20 @@ def main() -> None:
             model.zero_grad(set_to_none=True)
             return base * 0.0 if isinstance(loss, torch.Tensor) else (base * 0.0, {})
         return loss
+
     trainer.compute_loss = _safe_compute_loss
     # ---- end guards ----
 
-    console.print(f"[bold]Train examples:[/bold] {len(train_ds)} | [bold]Val examples:[/bold] {len(eval_ds) if eval_ds else 0}")
+    console.print(
+        f"[bold]Train examples:[/bold] {len(train_ds)} | [bold]Val examples:[/bold] {len(eval_ds) if eval_ds else 0}"
+    )
     trainer.train()
     trainer.save_model(t.output_dir)  # saves adapter weights if PEFT, otherwise full model head
     tok.save_pretrained(t.output_dir)
 
-    console.print(f"[bold green]Saved model/tokenizer →[/bold green] {Path(t.output_dir).resolve()}")
+    console.print(
+        f"[bold green]Saved model/tokenizer →[/bold green] {Path(t.output_dir).resolve()}"
+    )
 
 
 if __name__ == "__main__":

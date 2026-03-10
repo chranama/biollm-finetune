@@ -20,6 +20,7 @@ python -m biollm_finetune.data.data_sampling \
 """
 
 from __future__ import annotations
+
 import argparse
 import json
 import math
@@ -28,8 +29,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 
-from .loaders import load_questions_any, canonical_id
-
+from .loaders import canonical_id, load_questions_any
 
 TYPES_DEFAULT = ("yesno", "factoid", "list", "summary")
 
@@ -79,14 +79,18 @@ def _compute_counts_for_total(
         return {t: 0 for t in types_order}
 
     # proportional floors
-    counts = {t: min(len(buckets.get(t, ())), math.floor(total * (sizes[t] / avail))) for t in types_order}
+    counts = {
+        t: min(len(buckets.get(t, ())), math.floor(total * (sizes[t] / avail))) for t in types_order
+    }
 
     # distribute remainder by round-robin over types with remaining availability
     assigned = sum(counts.values())
     remainder = max(0, total - assigned)
     if remainder:
         # order by (remaining capacity desc) then name for determinism
-        def rem_cap(t): return len(buckets.get(t, ())) - counts[t]
+        def rem_cap(t):
+            return len(buckets.get(t, ())) - counts[t]
+
         round_robin = [t for t in types_order if rem_cap(t) > 0]
         i = 0
         while remainder > 0 and round_robin:
@@ -203,15 +207,25 @@ def run_sampling(
 # CLI
 # ---------------------------
 
+
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser(description="Sample a balanced subset of BioASQ-style data.")
-    ap.add_argument("--inputs", nargs="+", required=True, help="Input files (JSON, {'questions':[...]}, or JSONL).")
+    ap.add_argument(
+        "--inputs",
+        nargs="+",
+        required=True,
+        help="Input files (JSON, {'questions':[...]}, or JSONL).",
+    )
     ap.add_argument("--out-questions", required=True, help="Output path for questions JSONL.")
     ap.add_argument("--out-gold", help="Optional output path for a matching gold JSON.")
     group = ap.add_mutually_exclusive_group(required=False)
-    group.add_argument("--per-type", type=int, default=5, help="Number of items per type (default: 5).")
+    group.add_argument(
+        "--per-type", type=int, default=5, help="Number of items per type (default: 5)."
+    )
     group.add_argument("--total", type=int, help="Total items across all types (auto-balanced).")
-    ap.add_argument("--types", nargs="+", default=list(TYPES_DEFAULT), help="Types to include (default: all).")
+    ap.add_argument(
+        "--types", nargs="+", default=list(TYPES_DEFAULT), help="Types to include (default: all)."
+    )
     ap.add_argument("--seed", type=int, default=42, help="Random seed (default: 42).")
     return ap.parse_args()
 

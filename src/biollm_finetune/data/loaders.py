@@ -14,17 +14,18 @@ Only necessary alterations:
 """
 
 from __future__ import annotations
+
 import argparse
-import json
 import hashlib
+import json
 from collections import Counter
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional
 
-
 # ---------------------------
 # I/O helpers
 # ---------------------------
+
 
 def load_json(path: str | Path) -> Any:
     p = Path(path)
@@ -76,6 +77,7 @@ def load_questions_any(path: str | Path) -> List[Dict[str, Any]]:
 # ---------------------------
 # Normalization / flattening
 # ---------------------------
+
 
 def canonical_id(rec: Mapping[str, Any]) -> str:
     """Prefer existing 'id'; otherwise stable hash of (type, body/question)."""
@@ -140,12 +142,17 @@ def flatten_bioasq(rows: Iterable[Mapping[str, Any]]) -> List[Dict[str, Any]]:
 # Tiny stats (like dataset_stats.py)
 # ---------------------------
 
+
 def basic_stats(rows: Iterable[Mapping[str, Any]]) -> Dict[str, Any]:
     rows = list(rows)
     n = len(rows)
     by_type = Counter((r.get("type") or "").lower().strip() for r in rows)
     missing_body = sum(1 for r in rows if not (r.get("body") or r.get("question")))
-    missing_answers = sum(1 for r in rows if (r.get("exact_answer") is None and r.get("ideal_answer") in (None, "", [])))
+    missing_answers = sum(
+        1
+        for r in rows
+        if (r.get("exact_answer") is None and r.get("ideal_answer") in (None, "", []))
+    )
     with_snips = sum(1 for r in rows if (r.get("snippets") or r.get("snippets_text")))
     return {
         "count": n,
@@ -160,6 +167,7 @@ def basic_stats(rows: Iterable[Mapping[str, Any]]) -> Dict[str, Any]:
 # CLI (optional quick inspection)
 # ---------------------------
 
+
 def _write_json(path: str | Path, obj: Any) -> None:
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -169,7 +177,9 @@ def _write_json(path: str | Path, obj: Any) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Inspect/flatten BioASQ-style data")
-    ap.add_argument("--input", required=True, help="JSON/JSONL or BioASQ JSON with {'questions':[...]}")
+    ap.add_argument(
+        "--input", required=True, help="JSON/JSONL or BioASQ JSON with {'questions':[...]}"
+    )
     ap.add_argument("--flatten_out", help="Optional path to write flattened JSON")
     ap.add_argument("--stats_out", help="Optional path to write basic stats JSON")
     args = ap.parse_args()

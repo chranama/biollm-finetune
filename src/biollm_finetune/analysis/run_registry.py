@@ -35,7 +35,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, Iterator, List, Optional
 
-
 DEFAULT_EXPERIMENTS_ROOT = Path("results/experiments")
 
 
@@ -60,6 +59,7 @@ class ExperimentRun:
 # -------------------------
 # Internal helpers
 # -------------------------
+
 
 def _load_run_metadata(run_dir: Path) -> Dict[str, Any]:
     """
@@ -92,6 +92,7 @@ def _is_experiment_dir(path: Path) -> bool:
 # -------------------------
 # Public API
 # -------------------------
+
 
 def iter_experiments(
     root: Path | str = DEFAULT_EXPERIMENTS_ROOT,
@@ -193,9 +194,11 @@ def load_experiment(
     meta = _load_run_metadata(run_dir)
     return ExperimentRun(path=run_dir, metadata=meta)
 
+
 # -------------------------
 # Run registration (writer)
 # -------------------------
+
 
 def register_run(
     run_record: Dict[str, Any],

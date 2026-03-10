@@ -14,17 +14,18 @@ Only necessary alterations:
 """
 
 from __future__ import annotations
+
 import argparse
 import json
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional
 
-from .loaders import load_questions_any, flatten_bioasq, canonical_id
-
+from .loaders import canonical_id, flatten_bioasq, load_questions_any
 
 # ---------------------------
 # Merge / deduplicate
 # ---------------------------
+
 
 def merge_sources(
     inputs: List[str | Path],
@@ -56,6 +57,7 @@ def merge_sources(
 # ---------------------------
 # Optional cleaning / filtering
 # ---------------------------
+
 
 def filter_not_usable(rows: Iterable[Mapping[str, Any]]) -> List[Dict[str, Any]]:
     """
@@ -106,6 +108,7 @@ def add_snippet_text_field(rows: Iterable[Mapping[str, Any]]) -> List[Dict[str, 
 # Write helpers
 # ---------------------------
 
+
 def write_json(path: str | Path, obj: Any) -> None:
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -124,6 +127,7 @@ def write_jsonl(path: str | Path, rows: Iterable[Mapping[str, Any]]) -> None:
 # ---------------------------
 # Pipeline
 # ---------------------------
+
 
 def preprocess(
     inputs: List[str | Path],
@@ -159,14 +163,26 @@ def preprocess(
 # CLI
 # ---------------------------
 
+
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser(description="Preprocess BioASQ-style sources into a unified file.")
-    ap.add_argument("--inputs", nargs="+", required=True, help="Input files (JSON/JSONL or BioASQ JSONs).")
+    ap.add_argument(
+        "--inputs", nargs="+", required=True, help="Input files (JSON/JSONL or BioASQ JSONs)."
+    )
     ap.add_argument("--out", required=True, help="Output file path.")
-    ap.add_argument("--format", choices=["jsonl", "json"], default="jsonl", help="Output format (default: jsonl).")
-    ap.add_argument("--keep-unlabeled", action="store_true", help="Keep items with no exact/ideal answer.")
+    ap.add_argument(
+        "--format",
+        choices=["jsonl", "json"],
+        default="jsonl",
+        help="Output format (default: jsonl).",
+    )
+    ap.add_argument(
+        "--keep-unlabeled", action="store_true", help="Keep items with no exact/ideal answer."
+    )
     ap.add_argument("--no-flatten", action="store_true", help="Do not flatten to compact schema.")
-    ap.add_argument("--prefer", choices=["last", "first"], default="last", help="Duplicate id policy.")
+    ap.add_argument(
+        "--prefer", choices=["last", "first"], default="last", help="Duplicate id policy."
+    )
     return ap.parse_args()
 
 

@@ -28,10 +28,10 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import pandas as pd
 
-
 # -------------------------
 # IO helpers
 # -------------------------
+
 
 def read_json(path: Path) -> Dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
@@ -77,6 +77,7 @@ def count_phenotype_tags(phenotypes_json: Dict[str, Any]) -> Dict[str, int]:
 # Run discovery
 # -------------------------
 
+
 @dataclass
 class RunPaths:
     run_dir: Path
@@ -113,6 +114,7 @@ def find_run_files(run_dir: Path) -> Optional[RunPaths]:
 # Canonical keys / matching
 # -------------------------
 
+
 def baseline_key(row: Dict[str, Any]) -> Tuple[str, str, str, int]:
     """
     Key used to match non-clean runs to the correct clean baseline.
@@ -129,6 +131,7 @@ def baseline_key(row: Dict[str, Any]) -> Tuple[str, str, str, int]:
 # -------------------------
 # Extraction
 # -------------------------
+
 
 def extract_row(paths: RunPaths) -> Dict[str, Any]:
     man = read_json(paths.manifest)
@@ -248,21 +251,17 @@ def summarize_by_perturbation(df_all: pd.DataFrame, df_deltas: pd.DataFrame) -> 
     group_keys = ["dataset", "runtime", "model", "perturbation"]
 
     # raw metrics (includes clean + perturbed)
-    raw = (
-        df_all.groupby(group_keys)[METRIC_COLS]
-        .agg(["mean", "std", "count"])
-        .reset_index()
-    )
+    raw = df_all.groupby(group_keys)[METRIC_COLS].agg(["mean", "std", "count"]).reset_index()
     raw.columns = ["__".join([c for c in col if c]) for col in raw.columns.to_flat_index()]
 
     # deltas (perturbations only)
     if len(df_deltas) > 0:
         deltas = (
-            df_deltas.groupby(group_keys)[DELTA_COLS]
-            .agg(["mean", "std", "count"])
-            .reset_index()
+            df_deltas.groupby(group_keys)[DELTA_COLS].agg(["mean", "std", "count"]).reset_index()
         )
-        deltas.columns = ["__".join([c for c in col if c]) for col in deltas.columns.to_flat_index()]
+        deltas.columns = [
+            "__".join([c for c in col if c]) for col in deltas.columns.to_flat_index()
+        ]
         # outer merge so clean rows exist even if no deltas
         out = pd.merge(raw, deltas, how="left", on=group_keys)
     else:
@@ -275,11 +274,18 @@ def summarize_by_perturbation(df_all: pd.DataFrame, df_deltas: pd.DataFrame) -> 
 # CLI
 # -------------------------
 
+
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--experiments-root", default="results/experiments", help="Root directory of experiment runs")
+    ap.add_argument(
+        "--experiments-root",
+        default="results/experiments",
+        help="Root directory of experiment runs",
+    )
     ap.add_argument("--outdir", default="results/aggregates_re", help="Output directory")
-    ap.add_argument("--strict", action="store_true", help="Fail if any run is missing required files")
+    ap.add_argument(
+        "--strict", action="store_true", help="Fail if any run is missing required files"
+    )
     return ap.parse_args()
 
 
@@ -309,19 +315,29 @@ def main() -> None:
 
     # Write run-level table
     runs_path = outdir / "runs_reaggregated.csv"
-    df.sort_values(["dataset", "runtime", "model", "seed", "perturbation", "run_id"], inplace=True, na_position="last")
+    df.sort_values(
+        ["dataset", "runtime", "model", "seed", "perturbation", "run_id"],
+        inplace=True,
+        na_position="last",
+    )
     df.to_csv(runs_path, index=False)
 
     # Deltas vs clean
     df_deltas = compute_deltas_vs_clean(df)
     deltas_path = outdir / "deltas_vs_clean.csv"
-    df_deltas.sort_values(["dataset", "runtime", "model", "seed", "perturbation", "run_id"], inplace=True, na_position="last")
+    df_deltas.sort_values(
+        ["dataset", "runtime", "model", "seed", "perturbation", "run_id"],
+        inplace=True,
+        na_position="last",
+    )
     df_deltas.to_csv(deltas_path, index=False)
 
     # Summary by perturbation
     df_summary = summarize_by_perturbation(df, df_deltas)
     summary_path = outdir / "summary_by_perturbation.csv"
-    df_summary.sort_values(["dataset", "runtime", "model", "perturbation"], inplace=True, na_position="last")
+    df_summary.sort_values(
+        ["dataset", "runtime", "model", "perturbation"], inplace=True, na_position="last"
+    )
     df_summary.to_csv(summary_path, index=False)
 
     # Tiny json “index” for convenience
@@ -339,7 +355,9 @@ def main() -> None:
     with (outdir / "reaggregate_index.json").open("w", encoding="utf-8") as f:
         json.dump(index, f, indent=2)
 
-    print(f"[done] wrote:\n  - {runs_path}\n  - {deltas_path}\n  - {summary_path}\n  - {outdir / 'reaggregate_index.json'}")
+    print(
+        f"[done] wrote:\n  - {runs_path}\n  - {deltas_path}\n  - {summary_path}\n  - {outdir / 'reaggregate_index.json'}"
+    )
 
 
 if __name__ == "__main__":

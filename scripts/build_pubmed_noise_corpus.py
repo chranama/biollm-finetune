@@ -13,12 +13,12 @@ from typing import Dict, Iterable, List, Optional, Sequence, Set
 # Optional dotenv support
 try:
     from dotenv import load_dotenv  # type: ignore
+
     load_dotenv()
 except Exception:
     pass
 
 from Bio import Entrez  # biopython
-
 
 _SENT_SPLIT_RE = re.compile(r"(?<=[.!?])\s+")
 
@@ -49,15 +49,21 @@ DEFAULT_TOPICS = [
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="Build a PubMed-derived irrelevant noise snippet corpus (JSONL).")
-    p.add_argument("--out", type=str, default="data/noise/irrelevant_snippets.jsonl", help="Output JSONL path.")
+    p = argparse.ArgumentParser(
+        description="Build a PubMed-derived irrelevant noise snippet corpus (JSONL)."
+    )
+    p.add_argument(
+        "--out", type=str, default="data/noise/irrelevant_snippets.jsonl", help="Output JSONL path."
+    )
     p.add_argument("--topics", type=str, default="", help="Optional comma-separated topic queries.")
     p.add_argument("--pmids-per-topic", type=int, default=2000, help="Max PMIDs to pull per topic.")
     p.add_argument("--retmax", type=int, default=200, help="PMIDs per esearch page.")
     p.add_argument("--fetch-batch", type=int, default=200, help="PMIDs per efetch batch.")
     p.add_argument("--min-chars", type=int, default=60, help="Minimum sentence length.")
     p.add_argument("--max-chars", type=int, default=260, help="Maximum sentence length.")
-    p.add_argument("--target-snippets", type=int, default=20000, help="Stop after writing this many snippets.")
+    p.add_argument(
+        "--target-snippets", type=int, default=20000, help="Stop after writing this many snippets."
+    )
     p.add_argument(
         "--balanced",
         action="store_true",
@@ -75,7 +81,9 @@ def parse_args() -> argparse.Namespace:
         default=6,
         help="Drop a topic if it yields no new sentences for this many batches.",
     )
-    p.add_argument("--seed", type=int, default=42, help="Random seed for topic/selection randomness.")
+    p.add_argument(
+        "--seed", type=int, default=42, help="Random seed for topic/selection randomness."
+    )
     p.add_argument("--sleep", type=float, default=0.12, help="Sleep between NCBI calls (seconds).")
     return p.parse_args()
 
@@ -186,7 +194,9 @@ def split_sentences(text: str) -> List[str]:
         if not s:
             continue
         # remove some common abstract headings that leak into text
-        s = re.sub(r"^(BACKGROUND|METHODS|RESULTS|CONCLUSION|CONCLUSIONS)\s*:\s*", "", s, flags=re.I)
+        s = re.sub(
+            r"^(BACKGROUND|METHODS|RESULTS|CONCLUSION|CONCLUSIONS)\s*:\s*", "", s, flags=re.I
+        )
         out.append(s)
     return out
 
@@ -271,8 +281,14 @@ def main() -> None:
                         print(f"[progress] wrote {written} snippets (latest topic={topic})")
         else:
             # Balanced: round-robin topics with per-topic quotas + stall detection + spillover fill
-            quota = args.per_topic_snippets if args.per_topic_snippets > 0 else max(1, args.target_snippets // len(topics))
-            print(f"[balanced] topics={len(topics)} target={args.target_snippets} per_topic_quota={quota}")
+            quota = (
+                args.per_topic_snippets
+                if args.per_topic_snippets > 0
+                else max(1, args.target_snippets // len(topics))
+            )
+            print(
+                f"[balanced] topics={len(topics)} target={args.target_snippets} per_topic_quota={quota}"
+            )
 
             written_by_topic: Dict[str, int] = {t: 0 for t in topics}
             stall_rounds: Dict[str, int] = {t: 0 for t in topics}
@@ -350,8 +366,12 @@ def main() -> None:
 
             # Pass 2: spillover to hit global target (if any topics underfilled)
             if written < args.target_snippets:
-                spill_topics = [t for t in topics if cursor_by_topic.get(t, 0) < len(ensure_pmids(t))]
-                print(f"[spillover] written={written} remaining_target={args.target_snippets - written} spill_topics={len(spill_topics)}")
+                spill_topics = [
+                    t for t in topics if cursor_by_topic.get(t, 0) < len(ensure_pmids(t))
+                ]
+                print(
+                    f"[spillover] written={written} remaining_target={args.target_snippets - written} spill_topics={len(spill_topics)}"
+                )
 
                 while spill_topics and written < args.target_snippets:
                     next_spill: List[str] = []
@@ -390,7 +410,9 @@ def main() -> None:
                         else:
                             stall_rounds[topic] = 0
 
-                        if stall_rounds[topic] < args.max_stall_rounds and cursor_by_topic[topic] < len(pmids):
+                        if stall_rounds[topic] < args.max_stall_rounds and cursor_by_topic[
+                            topic
+                        ] < len(pmids):
                             next_spill.append(topic)
 
                         if written and written % 2000 == 0:

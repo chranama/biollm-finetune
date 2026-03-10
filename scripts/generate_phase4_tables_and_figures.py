@@ -35,10 +35,9 @@ import argparse
 from pathlib import Path
 from typing import Iterable, Optional
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-
 
 # ----------------------------
 # Helpers
@@ -94,6 +93,7 @@ def safe_col(df: pd.DataFrame, col: str, default=None):
 # Core aggregations
 # ----------------------------
 
+
 def perturbation_ranking(deltas_wide: pd.DataFrame) -> pd.DataFrame:
     # Detect delta naming convention
     if any(c.startswith("delta__") for c in deltas_wide.columns):
@@ -105,7 +105,9 @@ def perturbation_ranking(deltas_wide: pd.DataFrame) -> pd.DataFrame:
         metrics = [c[: -len("_delta")] for c in delta_cols]
         col_for = lambda m: f"{m}_delta"
     else:
-        raise ValueError("No delta columns found. Expected either delta__<metric> or <metric>_delta columns.")
+        raise ValueError(
+            "No delta columns found. Expected either delta__<metric> or <metric>_delta columns."
+        )
 
     if "perturbation" not in deltas_wide.columns:
         raise ValueError("deltas_wide.csv must contain a 'perturbation' column.")
@@ -142,7 +144,13 @@ def phenotype_macro_table(phenotype_deltas: pd.DataFrame) -> pd.DataFrame:
         df.groupby(["phenotype", "perturbation"], dropna=False)["delta__macro_avg"]
         .agg(["mean", "std", "count"])
         .reset_index()
-        .rename(columns={"mean": "mean_delta_macro_avg", "std": "std_delta_macro_avg", "count": "n_runs"})
+        .rename(
+            columns={
+                "mean": "mean_delta_macro_avg",
+                "std": "std_delta_macro_avg",
+                "count": "n_runs",
+            }
+        )
     )
 
     # Sort: largest degradation first within phenotype
@@ -154,7 +162,10 @@ def phenotype_macro_table(phenotype_deltas: pd.DataFrame) -> pd.DataFrame:
 # Plotting
 # ----------------------------
 
-def plot_macro_by_perturbation(ranking: pd.DataFrame, outpath: Path, topk: Optional[int] = None) -> None:
+
+def plot_macro_by_perturbation(
+    ranking: pd.DataFrame, outpath: Path, topk: Optional[int] = None
+) -> None:
     df = ranking.copy()
     if "mean__macro_avg" not in df.columns:
         raise ValueError("ranking table missing mean__macro_avg")
@@ -246,12 +257,17 @@ def plot_phenotype_heatmap(phenotype_deltas: pd.DataFrame, outpath: Path) -> Non
 # CLI
 # ----------------------------
 
+
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
     ap.add_argument("--deltas-wide", default="results/phase4/deltas/deltas_wide.csv")
-    ap.add_argument("--phenotype-deltas", default="results/aggregates_re/phenotype_deltas_vs_clean.csv")
+    ap.add_argument(
+        "--phenotype-deltas", default="results/aggregates_re/phenotype_deltas_vs_clean.csv"
+    )
     ap.add_argument("--outdir", default="results/phase4/report_artifacts")
-    ap.add_argument("--topk", type=int, default=10, help="Top-k perturbations to display in some outputs.")
+    ap.add_argument(
+        "--topk", type=int, default=10, help="Top-k perturbations to display in some outputs."
+    )
     return ap.parse_args()
 
 
@@ -277,7 +293,9 @@ def main() -> None:
     # Coerce delta columns
     delta_cols = [c for c in deltas_wide.columns if c.startswith(DELTA_PREFIX)]
     deltas_wide = coerce_numeric(deltas_wide, delta_cols)
-    phenotype_deltas = coerce_numeric(phenotype_deltas, [c for c in phenotype_deltas.columns if c.startswith(DELTA_PREFIX)])
+    phenotype_deltas = coerce_numeric(
+        phenotype_deltas, [c for c in phenotype_deltas.columns if c.startswith(DELTA_PREFIX)]
+    )
 
     # ----------------------------
     # Tables: perturbation ranking

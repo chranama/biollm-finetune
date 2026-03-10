@@ -1,5 +1,7 @@
 import json
-from biollm_finetune.eval.metrics import evaluate, build_gold_index
+
+from biollm_finetune.eval.metrics import build_gold_index, evaluate
+
 
 def test_metrics_end_to_end(sample_questions_path, sample_gold_path, tmp_path):
     # Build fake preds aligned to gold types

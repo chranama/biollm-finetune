@@ -2,13 +2,15 @@
 from __future__ import annotations
 
 import argparse
+import re
 import subprocess
 import sys
-import re
 from pathlib import Path
+
 import yaml
 
 # ------------------------------------------------------------
+
 
 def parse_args():
     p = argparse.ArgumentParser()
@@ -17,7 +19,9 @@ def parse_args():
     p.add_argument("--force", action="store_true")
     return p.parse_args()
 
+
 # ------------------------------------------------------------
+
 
 def get_field(cfg: dict, field: str):
     cur = cfg
@@ -26,6 +30,7 @@ def get_field(cfg: dict, field: str):
         if cur is None:
             return None
     return cur
+
 
 def match_selector(cfg: dict, sel: str) -> bool:
     if "!=" in sel:
@@ -44,7 +49,9 @@ def match_selector(cfg: dict, sel: str) -> bool:
 
     raise ValueError(f"Invalid selector: {sel}")
 
+
 # ------------------------------------------------------------
+
 
 def main():
     args = parse_args()
@@ -74,6 +81,7 @@ def main():
             str(y),
         ]
         subprocess.check_call(cmd)
+
 
 # ------------------------------------------------------------
 

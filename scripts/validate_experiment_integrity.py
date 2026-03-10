@@ -31,10 +31,10 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
 
-
 # ----------------------------
 # Small helpers
 # ----------------------------
+
 
 def read_json(path: Path) -> Dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
@@ -95,7 +95,10 @@ KNOWN_RUNTIMES = {
     "cuda_fp32",
 }
 
-def parse_from_config_expected(run_name: str, cfg: Dict[str, Any]) -> Tuple[Optional[str], Optional[str], Optional[str], Optional[int]]:
+
+def parse_from_config_expected(
+    run_name: str, cfg: Dict[str, Any]
+) -> Tuple[Optional[str], Optional[str], Optional[str], Optional[int]]:
     """
     Use schema-enforced config as the source of truth.
 
@@ -120,10 +123,17 @@ def parse_from_config_expected(run_name: str, cfg: Dict[str, Any]) -> Tuple[Opti
     # dataset prefix in the directory name (can be != cfg dataset name in old dirs)
     dataset_from_name = run_name[: -len(suffix)]
     dataset_from_name = dataset_from_name.strip("_") or None
-    return (dataset_from_name or (dataset if isinstance(dataset, str) else None), runtime, pert, seed)
+    return (
+        dataset_from_name or (dataset if isinstance(dataset, str) else None),
+        runtime,
+        pert,
+        seed,
+    )
 
 
-def parse_from_name_smart(run_name: str) -> Tuple[Optional[str], Optional[str], Optional[str], Optional[int]]:
+def parse_from_name_smart(
+    run_name: str,
+) -> Tuple[Optional[str], Optional[str], Optional[str], Optional[int]]:
     """
     Parse: <dataset>_<runtime>_<perturbation>_seed<seed>
     but allow perturbation to contain underscores (e.g., irrelevant_noise_heavy).
@@ -180,7 +190,9 @@ def parse_from_name_smart(run_name: str) -> Tuple[Optional[str], Optional[str], 
     return (dataset, runtime_found, perturbation, seed)
 
 
-def best_parse_run_id(run_name: str, cfg_by_name: Dict[str, Dict[str, Any]]) -> Tuple[Optional[str], Optional[str], Optional[str], Optional[int], str]:
+def best_parse_run_id(
+    run_name: str, cfg_by_name: Dict[str, Dict[str, Any]]
+) -> Tuple[Optional[str], Optional[str], Optional[str], Optional[int], str]:
     """
     Returns (dataset, runtime, perturbation, seed, source)
     where source is "config" or "name".
@@ -199,9 +211,10 @@ def best_parse_run_id(run_name: str, cfg_by_name: Dict[str, Dict[str, Any]]) -> 
 # Data structures
 # ----------------------------
 
+
 @dataclass
 class Issue:
-    level: str   # "ERROR" | "WARN"
+    level: str  # "ERROR" | "WARN"
     run: str
     msg: str
 
@@ -219,7 +232,9 @@ REQUIRED_FILES = (
 )
 
 WEAK_CHANGE_PERTS = {
-    "lexical_noise", "lexical_noise_medium", "lexical_noise_heavy",
+    "lexical_noise",
+    "lexical_noise_medium",
+    "lexical_noise_heavy",
     "contradiction",
     "shuffle_snippets",
 }
@@ -251,15 +266,33 @@ def validate_run_dir(
     if seed is not None and man_seed is not None:
         try:
             if int(man_seed) != int(seed):
-                issues.append(Issue("ERROR", name, f"Seed mismatch: {src} seed={seed} vs manifest seed={man_seed}"))
+                issues.append(
+                    Issue(
+                        "ERROR",
+                        name,
+                        f"Seed mismatch: {src} seed={seed} vs manifest seed={man_seed}",
+                    )
+                )
         except Exception:
-            issues.append(Issue("WARN", name, f"Seed not comparable: {src} seed={seed} vs manifest seed={man_seed}"))
+            issues.append(
+                Issue(
+                    "WARN",
+                    name,
+                    f"Seed not comparable: {src} seed={seed} vs manifest seed={man_seed}",
+                )
+            )
 
     # Perturbation check
     man_pert = manifest.get("perturbation")
     if isinstance(man_pert, str) and isinstance(pert, str):
         if norm_str(man_pert) != norm_str(pert):
-            issues.append(Issue("ERROR", name, f"Perturbation mismatch: {src} pert={pert} vs manifest pert={man_pert}"))
+            issues.append(
+                Issue(
+                    "ERROR",
+                    name,
+                    f"Perturbation mismatch: {src} pert={pert} vs manifest pert={man_pert}",
+                )
+            )
 
     # Config cross-check (seed/pert/runtime) if config exists
     cfg = cfg_by_name.get(name)
@@ -277,15 +310,39 @@ def validate_run_dir(
 
         if isinstance(cfg_seed, int) and man_seed is not None:
             if int(cfg_seed) != int(man_seed):
-                issues.append(Issue("ERROR", name, f"Seed mismatch: config seed={cfg_seed} vs manifest seed={man_seed}"))
+                issues.append(
+                    Issue(
+                        "ERROR",
+                        name,
+                        f"Seed mismatch: config seed={cfg_seed} vs manifest seed={man_seed}",
+                    )
+                )
         if isinstance(cfg_pert, str) and isinstance(man_pert, str):
             if norm_str(cfg_pert) != norm_str(man_pert):
-                issues.append(Issue("ERROR", name, f"Perturbation mismatch: config pert={cfg_pert} vs manifest pert={man_pert}"))
+                issues.append(
+                    Issue(
+                        "ERROR",
+                        name,
+                        f"Perturbation mismatch: config pert={cfg_pert} vs manifest pert={man_pert}",
+                    )
+                )
         # Runtime isn’t always in manifest; so just validate the directory name parse vs config
         if isinstance(cfg_rt, str) and rt is not None and norm_str(cfg_rt) != norm_str(rt):
-            issues.append(Issue("WARN", name, f"Runtime mismatch: parsed runtime={rt} vs config runtime={cfg_rt} (name convention may differ)."))
+            issues.append(
+                Issue(
+                    "WARN",
+                    name,
+                    f"Runtime mismatch: parsed runtime={rt} vs config runtime={cfg_rt} (name convention may differ).",
+                )
+            )
     else:
-        issues.append(Issue("WARN", name, "No matching config YAML found; name/manifest checks may be less reliable for older runs."))
+        issues.append(
+            Issue(
+                "WARN",
+                name,
+                "No matching config YAML found; name/manifest checks may be less reliable for older runs.",
+            )
+        )
 
     # Inputs/preds length consistency
     inputs_path = run_dir / "inputs.jsonl"
@@ -298,7 +355,9 @@ def validate_run_dir(
         if len(preds) == 0:
             issues.append(Issue("ERROR", name, "predictions.jsonl is empty"))
         if len(inputs) != len(preds):
-            issues.append(Issue("ERROR", name, f"Length mismatch: inputs={len(inputs)} preds={len(preds)}"))
+            issues.append(
+                Issue("ERROR", name, f"Length mismatch: inputs={len(inputs)} preds={len(preds)}")
+            )
 
     # changed_vs_clean sanity
     n_changed = manifest.get("n_changed_vs_clean")
@@ -307,16 +366,34 @@ def validate_run_dir(
 
     if man_pert_norm == "clean":
         if isinstance(n_changed, int) and n_changed != 0:
-            issues.append(Issue("WARN", name, f"Clean run has n_changed_vs_clean={n_changed} (expected 0)."))
+            issues.append(
+                Issue("WARN", name, f"Clean run has n_changed_vs_clean={n_changed} (expected 0).")
+            )
     else:
         if isinstance(n_examples, int) and n_examples > 0 and isinstance(n_changed, int):
             if n_changed == 0:
-                issues.append(Issue("ERROR", name, "Perturbed run reports n_changed_vs_clean=0 (perturbation may not be applied)."))
+                issues.append(
+                    Issue(
+                        "ERROR",
+                        name,
+                        "Perturbed run reports n_changed_vs_clean=0 (perturbation may not be applied).",
+                    )
+                )
             elif man_pert_norm not in WEAK_CHANGE_PERTS and n_changed < max(1, n_examples // 10):
-                issues.append(Issue("WARN", name, f"Perturbed run has low change rate: {n_changed}/{n_examples}"))
+                issues.append(
+                    Issue(
+                        "WARN", name, f"Perturbed run has low change rate: {n_changed}/{n_examples}"
+                    )
+                )
 
     # Attach parsed meta for downstream cross-run checks
-    manifest["_parsed"] = {"dataset": ds, "runtime": rt, "perturbation": pert, "seed": seed, "source": src}
+    manifest["_parsed"] = {
+        "dataset": ds,
+        "runtime": rt,
+        "perturbation": pert,
+        "seed": seed,
+        "source": src,
+    }
 
     return (manifest, issues)
 
@@ -353,12 +430,24 @@ def validate_clean_baselines(
         seed = p.get("seed", m.get("seed", None))
 
         if not (isinstance(seed, int) and ds and rt):
-            issues.append(Issue("WARN", run_id, "Cannot reliably match to a clean baseline (missing dataset/runtime/seed)."))
+            issues.append(
+                Issue(
+                    "WARN",
+                    run_id,
+                    "Cannot reliably match to a clean baseline (missing dataset/runtime/seed).",
+                )
+            )
             continue
 
         key = (ds, rt, int(seed))
         if key not in clean_index:
-            issues.append(Issue("ERROR", run_id, f"Missing clean baseline for (dataset={ds}, runtime={rt}, seed={seed})"))
+            issues.append(
+                Issue(
+                    "ERROR",
+                    run_id,
+                    f"Missing clean baseline for (dataset={ds}, runtime={rt}, seed={seed})",
+                )
+            )
 
     return issues
 
@@ -426,14 +515,36 @@ def spotcheck_diffs(
 # CLI
 # ----------------------------
 
+
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--results-root", default="results/experiments", help="Root directory containing experiment run dirs.")
-    ap.add_argument("--configs-root", default="configs/experiments", help="Directory containing generated experiment YAMLs.")
-    ap.add_argument("--strict", action="store_true", help="Treat WARN as ERROR (exit non-zero on warnings).")
-    ap.add_argument("--spotcheck", type=int, default=0, help="If >0, spotcheck k examples at head+tail vs clean.")
-    ap.add_argument("--out", default="results/analysis/integrity_report.json", help="Write a JSON report here.")
-    ap.add_argument("--only-configured", action="store_true", help="Only validate run dirs that have a matching config YAML.")
+    ap.add_argument(
+        "--results-root",
+        default="results/experiments",
+        help="Root directory containing experiment run dirs.",
+    )
+    ap.add_argument(
+        "--configs-root",
+        default="configs/experiments",
+        help="Directory containing generated experiment YAMLs.",
+    )
+    ap.add_argument(
+        "--strict", action="store_true", help="Treat WARN as ERROR (exit non-zero on warnings)."
+    )
+    ap.add_argument(
+        "--spotcheck",
+        type=int,
+        default=0,
+        help="If >0, spotcheck k examples at head+tail vs clean.",
+    )
+    ap.add_argument(
+        "--out", default="results/analysis/integrity_report.json", help="Write a JSON report here."
+    )
+    ap.add_argument(
+        "--only-configured",
+        action="store_true",
+        help="Only validate run dirs that have a matching config YAML.",
+    )
     return ap.parse_args()
 
 

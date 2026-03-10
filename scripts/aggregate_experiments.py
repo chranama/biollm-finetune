@@ -9,10 +9,10 @@ for statistical analysis, plotting, or paper tables.
 
 from __future__ import annotations
 
+import csv
 import json
 from pathlib import Path
-from typing import Dict, Any, List
-import csv
+from typing import Any, Dict, List
 
 EXPERIMENT_ROOT = Path("results/experiments")
 OUT_DIR = Path("results/phase4")
@@ -40,13 +40,15 @@ def extract_row(exp_dir: Path) -> Dict[str, Any]:
     }
 
     # Core metrics (safe defaults)
-    row.update({
-        "macro_avg": metrics.get("macro_avg"),
-        "yesno_acc": metrics.get("yesno", {}).get("accuracy"),
-        "factoid_f1": metrics.get("factoid", {}).get("f1"),
-        "list_f1": metrics.get("list", {}).get("f1"),
-        "summary_rougeL": metrics.get("summary", {}).get("rougeL"),
-    })
+    row.update(
+        {
+            "macro_avg": metrics.get("macro_avg"),
+            "yesno_acc": metrics.get("yesno", {}).get("accuracy"),
+            "factoid_f1": metrics.get("factoid", {}).get("f1"),
+            "list_f1": metrics.get("list", {}).get("f1"),
+            "summary_rougeL": metrics.get("summary", {}).get("rougeL"),
+        }
+    )
 
     counts = metrics.get("counts", {})
     for k, v in counts.items():

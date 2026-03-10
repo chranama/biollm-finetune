@@ -8,7 +8,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "proof" / "evidence_manifest.latest.json"
 
-REQUIRED_TOP = ["proof_id", "run_id", "generated_at", "repo_commit", "status", "claims", "diagnostics"]
+REQUIRED_TOP = [
+    "proof_id",
+    "run_id",
+    "generated_at",
+    "repo_commit",
+    "status",
+    "claims",
+    "diagnostics",
+]
 REQUIRED_CLAIM = ["claim_text", "verification_command", "artifact_paths", "expected_signal"]
 EXPECTED_SEEDS = {42, 97, 13}
 

@@ -23,10 +23,10 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
-
 # ----------------------------
 # I/O
 # ----------------------------
+
 
 def read_csv_rows(path: Path) -> Tuple[List[str], List[Dict[str, str]]]:
     with path.open("r", encoding="utf-8", newline="") as f:
@@ -54,6 +54,7 @@ def write_json(path: Path, obj: Any) -> None:
 # ----------------------------
 # Helpers
 # ----------------------------
+
 
 def _to_int(x: Any, default: int = 0) -> int:
     try:
@@ -220,9 +221,18 @@ def main() -> None:
     write_csv(out_dir / "deltas_wide.csv", out_wide, header=wide_header)
 
     long_header = [
-        "experiment", "dataset", "runtime", "model", "seed", "perturbation",
-        "metric", "value", "baseline_value", "delta",
-        "baseline_experiment", "baseline_found",
+        "experiment",
+        "dataset",
+        "runtime",
+        "model",
+        "seed",
+        "perturbation",
+        "metric",
+        "value",
+        "baseline_value",
+        "delta",
+        "baseline_experiment",
+        "baseline_found",
     ]
     write_csv(out_dir / "deltas_long.csv", out_long, header=long_header)
 

@@ -50,18 +50,27 @@ def main() -> None:
 
     df = pd.read_csv(in_path)
 
-    required = ["dataset", "runtime", "model", "phenotype", "metric", "perturbation", "delta_mean", "n"]
+    required = [
+        "dataset",
+        "runtime",
+        "model",
+        "phenotype",
+        "metric",
+        "perturbation",
+        "delta_mean",
+        "n",
+    ]
     missing = [c for c in required if c not in df.columns]
     if missing:
         raise SystemExit(f"[error] missing required columns: {missing}")
 
     # Rank: more negative delta_mean = worse
-    df["rank_worst"] = df.groupby(["dataset", "runtime", "model", "phenotype", "metric"])["delta_mean"] \
-        .rank(method="dense", ascending=True)
+    df["rank_worst"] = df.groupby(["dataset", "runtime", "model", "phenotype", "metric"])[
+        "delta_mean"
+    ].rank(method="dense", ascending=True)
 
     df_rank = df.sort_values(
-        ["phenotype", "metric", "rank_worst", "perturbation"],
-        kind="stable"
+        ["phenotype", "metric", "rank_worst", "perturbation"], kind="stable"
     ).reset_index(drop=True)
 
     out_csv = out_dir / "perturbation_ranking.csv"
@@ -72,17 +81,29 @@ def main() -> None:
     md_lines = ["# Perturbation Severity Ranking", ""]
     for (phenotype, metric), sub in df_rank.groupby(["phenotype", "metric"], dropna=False):
         sub_top = sub.nsmallest(top_k, "rank_worst").copy()
-        sub_top["delta_mean"] = sub_top["delta_mean"].map(lambda x: f"{x:.4f}" if pd.notna(x) else "")
-        sub_top["delta_std"] = sub_top.get("delta_std", pd.Series([None]*len(sub_top))).map(
+        sub_top["delta_mean"] = sub_top["delta_mean"].map(
+            lambda x: f"{x:.4f}" if pd.notna(x) else ""
+        )
+        sub_top["delta_std"] = sub_top.get("delta_std", pd.Series([None] * len(sub_top))).map(
             lambda x: f"{x:.4f}" if pd.notna(x) else ""
         )
 
         md_lines.append(f"## phenotype={phenotype} | metric={metric}")
         md_lines.append("")
-        md_lines.append(_to_md_table(
-            sub_top,
-            cols=["rank_worst", "perturbation", "delta_mean", "delta_std", "delta_min", "delta_max", "n"]
-        ))
+        md_lines.append(
+            _to_md_table(
+                sub_top,
+                cols=[
+                    "rank_worst",
+                    "perturbation",
+                    "delta_mean",
+                    "delta_std",
+                    "delta_min",
+                    "delta_max",
+                    "n",
+                ],
+            )
+        )
         md_lines.append("")
 
     out_md = out_dir / "perturbation_ranking.md"
