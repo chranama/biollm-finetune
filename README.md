@@ -17,25 +17,6 @@ For AI backend/platform and applied AI roles, this repository demonstrates:
 
 ---
 
-## Visual Proof
-
-![BioLLM-Finetune: perturbation robustness delta ranking chart](media/robustness-delta.png)
-
-Claim: perturbation impact is ranked reproducibly across canonical runs.  
-Evidence sources: `results/phase4/report_artifacts/tables/perturbation_ranking_macro_avg.csv`, `results/phase4/summary.json`
-
-![BioLLM-Finetune: phenotype sensitivity heatmap by perturbation](media/phenotype-heatmap.png)
-
-Claim: robustness behavior varies by phenotype and must be analyzed beyond global averages.  
-Evidence source: `results/phase4/report_artifacts/tables/phenotype_delta_macro_avg.csv`
-
-![BioLLM-Finetune: config-driven experiment pipeline to integrity-validated proof output](media/experiment-pipeline.png)
-
-Claim: experiment integrity comes from config-driven execution plus explicit integrity validation.  
-Evidence sources: `scripts/run_experiment.py`, `scripts/validate_experiment_integrity.py`, `proof/evidence_manifest.latest.json`
-
----
-
 ## 5-Minute Reviewer Path
 
 1. Read this repository overview and capability summary.
