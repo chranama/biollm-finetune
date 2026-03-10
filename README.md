@@ -40,6 +40,16 @@ For AI backend/platform and applied AI roles, this repository demonstrates:
 
 ---
 
+## Canonical Proof Bundle (Latest)
+
+- Contract: `proof/evidence_contract.schema.json`
+- Manifest: `proof/evidence_manifest.latest.json`
+- Proof points: `proof/proof_points.latest.md`
+- Validation command:
+  - `python proof/validate_evidence_manifest.py`
+
+---
+
 ## Overview
 
 This project is intentionally designed as an **experiment-first research system**, not just a collection of training scripts.

@@ -1,0 +1,48 @@
+{
+  "proof_id": "biollm-phase4-canonical",
+  "run_id": "phase4_latest",
+  "generated_at": "2026-03-10T17:36:08.840716+00:00",
+  "repo_commit": "32aeb48",
+  "status": "pass",
+  "claims": [
+    {
+      "claim_text": "Phase 4 robustness summary artifact is present and reproducible.",
+      "verification_command": "python proof/generate_canonical_manifest.py",
+      "artifact_paths": [
+        "results/phase4/summary.json",
+        "results/phase4/experiments.csv"
+      ],
+      "expected_signal": "summary.json and experiments.csv exist for canonical run output review."
+    },
+    {
+      "claim_text": "Robustness analysis and ranking outputs are persisted for reviewer verification.",
+      "verification_command": "python proof/generate_canonical_manifest.py",
+      "artifact_paths": [
+        "results/phase4/analysis/phase4_findings.md",
+        "results/phase4/report_artifacts/tables/perturbation_ranking_macro_avg.md"
+      ],
+      "expected_signal": "findings and ranking table exist and are human-readable."
+    },
+    {
+      "claim_text": "Experiment integrity report is available for reproducibility confidence.",
+      "verification_command": "python proof/generate_canonical_manifest.py",
+      "artifact_paths": [
+        "results/analysis/integrity_report.json",
+        "results/phase4/deltas/deltas_summary.json"
+      ],
+      "expected_signal": "integrity report and delta summary exist for consistency checks."
+    }
+  ],
+  "diagnostics": {
+    "seed_config": [
+      42,
+      97,
+      13
+    ],
+    "canonical_configs_prefix": "configs/experiments/bioasq_TINY_mps_fp32_",
+    "notes": [
+      "Canonical proof references latest phase4 artifact set.",
+      "Use proof/validate_evidence_manifest.py to enforce proof contract and metadata checks."
+    ]
+  }
+}
