@@ -1,210 +1,129 @@
 # BioLLM-Finetune
 
-**BioLLM-Finetune** is a modular **LLM experimentation and evaluation infrastructure** for **Biomedical Question Answering (QA)**.
+BioLLM-Finetune is a Python evaluation workflow for biomedical question answering.
+It runs config-defined experiments, applies deterministic input perturbations,
+scores BioASQ-style outputs, and writes artifacts for comparing clean and
+perturbed model behavior.
 
-The repository originated as the primary codebase for a Master’s thesis in Data Science and has since evolved into a **general-purpose experimentation suite** supporting fine-tuning, inference, robustness testing, perturbation analysis, and phenotype-aware evaluation of open-weight Large Language Models.
+The project is intended for local research and evaluation workflows. It is not a
+production inference service, a clinical decision system, or a broad benchmark of
+biomedical language models.
 
-In addition to the thesis experiments, this repository documents and implements a **complete robustness study** that demonstrates how the system can be used for controlled, reproducible experimentation beyond training.
+## Workflow
 
----
+```text
+YAML config
+  -> BioASQ-style input data
+  -> optional deterministic perturbation
+  -> Hugging Face model inference or adapter-based fine-tuning
+  -> BioASQ-style metrics
+  -> run artifacts, aggregate tables, and validation metadata
+```
 
-## What This Proves For Hiring
+The current saved artifact set focuses on inference-only robustness evaluation
+for a small BioASQ sample using fixed seeds and deterministic perturbations.
 
-For AI backend/platform and applied AI roles, this repository demonstrates:
-- Building deterministic, config-driven evaluation systems rather than one-off scripts
-- Producing auditable artifacts that support model behavior decisions
-- Operating reproducible experiment pipelines with integrity checks and report generation
+## Responsibilities
 
----
+- Load and preprocess BioASQ-style question data
+- Run local inference with Hugging Face causal language models
+- Support LoRA and QLoRA adapter fine-tuning workflows
+- Apply deterministic perturbations to questions and snippets
+- Score yes/no, factoid, list, and summary answers
+- Aggregate clean-vs-perturbed deltas across seeds
+- Write run manifests, inputs, predictions, metrics, tables, and figures
+- Validate saved artifact references through an evidence manifest
 
-## 5-Minute Reviewer Path
+## Repository Layout
 
-1. Read this repository overview and capability summary.
-2. Open the robustness outputs:
-   - `results/phase4/summary.json`
-   - `results/phase4/analysis/phase4_findings.md`
-   - `results/phase4/report_artifacts/tables/perturbation_ranking_macro_avg.md`
-3. Skim methodology context in:
-   - `docs/experiment_design.md`
-   - `docs/results_and_discussion.md`
+```text
+configs/              Experiment, inference, and fine-tuning YAML files
+data/                 Sample datasets and small reproducible inputs
+src/biollm_finetune/  Package code for data, training, inference, eval, and analysis
+scripts/              Experiment, aggregation, validation, and reporting entry points
+tests/                Behavior-oriented unit and smoke tests
+results/              Saved experiment outputs and Phase 4 analysis artifacts
+proof/                Evidence manifest validation scripts and metadata
+docs/                 Active system documentation
+archive/              Historical research notes and earlier code snapshots
+```
 
----
+## Quick Start
 
-## Evidence Artifacts / Outputs
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+```
 
-- Phase summary: `results/phase4/summary.json`
-- Robustness findings: `results/phase4/analysis/phase4_findings.md`
-- Phenotype findings: `results/phase4/analysis/phenotype_findings.md`
-- Ranking outputs: `results/phase4/analysis/perturbation_ranking.md`
-- Report artifacts: `results/phase4/report_artifacts/tables/`
+Run the test suite:
 
----
+```bash
+pytest -q
+```
 
-## Canonical Proof Bundle (Latest)
+If the package has not been installed in editable mode, use the CI-style import
+path:
 
-- Contract: `proof/evidence_contract.schema.json`
-- Manifest: `proof/evidence_manifest.latest.json`
-- Proof points: `proof/proof_points.latest.md`
-- Validation command:
-  - `python proof/validate_evidence_manifest.py`
+```bash
+PYTHONPATH=src python -m pytest -q
+```
 
----
+Validate the saved evidence manifest:
 
-## Overview
+```bash
+python proof/validate_evidence_manifest.py
+```
 
-This project is intentionally designed as an **experiment-first research system**, not just a collection of training scripts.
+## Run One Experiment
 
-It enables:
-- Config-driven experiments
-- Deterministic execution
-- Clean vs perturbed comparisons
-- Seed-controlled robustness analysis
-- Phenotype-conditioned aggregation
-- Reproducible reporting artifacts
+This command runs a small clean BioASQ experiment. It may download model weights
+from Hugging Face if the model is not already cached.
 
-All experiments are traceable, inspectable, and reproducible from configuration alone.
+```bash
+PYTHONPATH=src python scripts/run_experiment.py \
+  --config configs/experiments/bioasq_TINY_mps_fp32_clean_seed42.yaml
+```
 
----
+Each run writes a self-contained output directory under `results/experiments/`
+with the exact inputs used for inference, predictions, metrics, phenotype tags,
+and run metadata.
 
-## Core Capabilities
+## Current Outputs
 
-- **Fine-tuning**  
-  LoRA and QLoRA fine-tuning for instruction-style biomedical QA
+The current robustness artifact set is saved under `results/phase4/`.
 
-- **Inference**  
-  Deterministic, config-driven generation on CPU, MPS, or GPU
+Useful entry points:
 
-- **Evaluation**  
-  BioASQ-style metrics including accuracy, F1, EM, and ROUGE
+- `results/phase4/summary.json`
+- `results/phase4/experiments.csv`
+- `results/phase4/analysis/phase4_findings.md`
+- `results/phase4/analysis/phenotype_findings.md`
+- `results/phase4/report_artifacts/tables/perturbation_ranking_macro_avg.md`
+- `results/phase4/report_artifacts/figures/`
+- `proof/evidence_manifest.latest.json`
 
-- **Perturbation**  
-  Deterministic input corruption pipelines (lexical, contextual, logical)
+## Documentation
 
-- **Robustness Analysis**  
-  Clean vs perturbed delta computation across seeds
+- [Architecture](docs/architecture.md)
+- [Evaluation Method](docs/evaluation.md)
+- [Artifacts](docs/artifacts.md)
+- [Testing](docs/testing.md)
+- [Runbook](docs/runbook.md)
+- [Scope](docs/scope.md)
+- [Research Notes](docs/research/)
 
-- **Phenotype Analysis**  
-  Linguistic and semantic phenotype tagging and aggregation
-
-- **Integrity Validation**  
-  Automated experiment consistency and sanity checks
-
-- **Reporting**  
-  Scripted generation of tables and figures for results sections
-
----
-
-## Experimentation Infrastructure
-
-Experiments are defined entirely through YAML configuration and executed in a controlled grid.
-
-Each experiment produces a **self-contained artifact directory** containing:
-- Exact inference inputs
-- Model predictions
-- Evaluation metrics
-- Phenotype tags
-- Run manifest and metadata
-
-This design allows experiments to be inspected, validated, and extended long after execution.
-
----
-
-## Repository Layout (Conceptual)
-
-- archive  
-  Historical local and server codebases retained for academic provenance
-
-- configs  
-  YAML configurations for fine-tuning, inference, and experiment grids
-
-- data  
-  Sample datasets and reproducible subsets
-
-- src/biollm_finetune  
-  Core Python package implementing training, inference, evaluation, and analysis
-
-- scripts  
-  Entry points for experiment execution, aggregation, validation, and reporting
-
-- results  
-  Generated experiment artifacts, aggregations, tables, and figures
-
----
-
-## Phase 4: Robustness Experimentation
-
-A full robustness study is implemented and documented in this repository.
-
-Key characteristics:
-- Inference-only (no fine-tuning)
-- Deterministic perturbations
-- Three fixed seeds for stability analysis
-- Clean baselines matched per seed
-- Phenotype-conditioned aggregation
-- Automated integrity validation
-- Scripted tables and figures for reporting
-
-This phase demonstrates how the repository functions as an **LLM experimentation suite**, not just a training pipeline.
-
----
-
-## Installation
-
-Create a virtual environment and install in editable mode:
-
-python -m venv .venv  
-source .venv/bin/activate  
-pip install -e .
-
-Alternatively, install dependencies directly:
-
-pip install -r requirements.txt
-
----
-
-## Local macOS Execution (MPS / CPU)
-
-The repository supports full local execution on Apple Silicon using the MPS backend.
-
-Tiny configurations are provided for:
-- End-to-end validation
-- Smoke testing
-- CI-friendly execution
-
-These configurations are designed for correctness, not benchmarking.
-
----
-
-## Reproducibility
-
-All experiments are:
-- Seed-controlled
-- Deterministic
-- Config-driven
-- Fully logged
-
-Sample datasets used for testing and smoke runs are generated via scripted sampling and stored under the data directory.
-
----
+Research notes from the thesis-oriented documentation set are kept in
+`docs/research/`. Older planning notes are kept in `archive/docs/`.
 
 ## License
 
 Released under the MIT License.
 
----
-
 ## Citation
-
-If you use this code or build upon it, please cite:
 
 Christopher Anaya (2025)  
 LLM Fine-Tuning With Biomedical Open-Source Data  
-Master’s Thesis in Data Science  
+Master's Thesis in Data Science  
 Faculty of Science, University of Lisbon  
 Repository: https://github.com/chranama/biollm-finetune
-
----
-
-## Acknowledgments
-
-This work builds on the BioASQ Challenge and open-source contributions from the biomedical NLP and Hugging Face communities.

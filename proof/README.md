@@ -1,6 +1,7 @@
-# Proof System
+# Evidence Manifest
 
-This directory stores the canonical latest-only evidence bundle.
+This directory stores validation metadata for the latest saved artifact set. The
+directory name remains `proof/` for compatibility with the existing scripts.
 
 ## Files
 - `evidence_contract.schema.json`
@@ -9,7 +10,7 @@ This directory stores the canonical latest-only evidence bundle.
 - `generate_canonical_manifest.py`
 - `validate_evidence_manifest.py`
 
-## Canonical Proof Run (deterministic subset)
+## Deterministic Validation Run
 
 Run from repository root.
 
@@ -22,7 +23,7 @@ python scripts/validate_experiment_integrity.py --strict --only-configured
 python proof/generate_canonical_manifest.py
 ```
 
-## Validate
+## Validate The Saved Manifest
 
 ```bash
 python proof/validate_evidence_manifest.py

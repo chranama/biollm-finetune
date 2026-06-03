@@ -125,7 +125,7 @@ This would move robustness analysis from a static snapshot to a **stability-awar
 
 ## Summary
 
-Phase 4 demonstrates that robustness evaluation can be:
+Phase 4 shows that robustness evaluation can be:
 - deterministic,
 - reproducible,
 - phenotype-aware,

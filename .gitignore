@@ -96,7 +96,10 @@ data/**/*.csv
 # ============================================================
 # Archive / Misc
 # ============================================================
-archive/
+archive/*
+!archive/README.md
+!archive/docs/
+!archive/docs/**
 archive.zip
 
 .DS_Store
