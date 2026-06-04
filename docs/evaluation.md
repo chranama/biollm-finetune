@@ -71,10 +71,11 @@ The Phase 4 artifact set compares perturbed runs against clean baselines matched
 by dataset, runtime, model, and seed. Delta tables are written under
 `results/phase4/deltas/`.
 
-The saved Phase 4 configs use seeds `13`, `42`, and `97` for the main configured
-comparison set.
+The saved Phase 4 configs use seeds `13`, `42`, and `97` for the main
+inference-only comparison set. The local LoRA proof path currently uses seed
+`42` for the adapter and matching base-model controls.
 
-## Phenotype Analysis
+## Optional Phenotype Analysis
 
 The analysis layer tags examples with linguistic and semantic phenotypes, then
 aggregates deltas by phenotype. These outputs are intended to help inspect where
@@ -85,6 +86,10 @@ Primary phenotype outputs:
 - `results/phase4/phenotypes/phenotype_runs.csv`
 - `results/phase4/phenotypes/phenotype_deltas_vs_clean.csv`
 - `results/phase4/analysis/phenotype_findings.md`
+
+These phenotype outputs are optional research context in the current repository
+state. They are not part of the current proof manifest unless refreshed and
+explicitly added back to the evidence set.
 
 ## Interpretation Limits
 

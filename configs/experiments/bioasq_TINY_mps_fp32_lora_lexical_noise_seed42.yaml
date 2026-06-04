@@ -1,6 +1,6 @@
-name: bioasq_TINY_mps_fp32_lora_clean_seed42
+name: bioasq_TINY_mps_fp32_lora_lexical_noise_seed42
 seed: 42
-perturbation: clean
+perturbation: lexical_noise
 output_dir: results/experiments
 dataset:
   name: bioasq_TINY

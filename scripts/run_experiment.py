@@ -63,6 +63,11 @@ def _write_json(path: Path, obj: Any) -> None:
         json.dump(obj, f, indent=2, ensure_ascii=False)
 
 
+def _read_json(path: Path) -> dict[str, Any]:
+    with path.open("r", encoding="utf-8") as f:
+        return json.load(f)
+
+
 def _write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
@@ -74,6 +79,7 @@ def _run_inference(
     runtime: RuntimeConfig,
     inputs_path: Path,
     outputs_path: Path,
+    manifest_path: Path,
     adapter_path: Optional[Path],
     seed: int,
 ) -> None:
@@ -93,6 +99,8 @@ def _run_inference(
         str(inputs_path),
         "--out",
         str(outputs_path),
+        "--manifest-out",
+        str(manifest_path),
     ]
     if adapter_path is not None:
         base_cmd.extend(["--adapter", str(adapter_path)])
@@ -220,6 +228,9 @@ def main() -> None:
         "seed": exp_cfg.seed,
         "start_time_utc": _now_utc(),
         "perturbation": exp_cfg.perturbation,
+        "runtime": exp_cfg.runtime.name,
+        "requested_device": exp_cfg.runtime.device,
+        "requested_dtype": exp_cfg.runtime.dtype,
     }
 
     # -------------------------
@@ -263,15 +274,24 @@ def main() -> None:
     # Inference
     # -------------------------
     preds_path = exp_dir / "predictions.jsonl"
+    inference_manifest_path = exp_dir / "inference_manifest.json"
     adapter_path = _resolve_adapter_path(exp_cfg.model)
 
     _run_inference(
         runtime=exp_cfg.runtime,
         inputs_path=inputs_path,
         outputs_path=preds_path,
+        manifest_path=inference_manifest_path,
         adapter_path=adapter_path,
         seed=exp_cfg.seed,
     )
+    inference_manifest = (
+        _read_json(inference_manifest_path) if inference_manifest_path.exists() else {}
+    )
+    manifest["inference_manifest"] = str(inference_manifest_path)
+    manifest["resolved_device"] = inference_manifest.get("device")
+    manifest["resolved_dtype"] = inference_manifest.get("dtype")
+    manifest["model_id"] = inference_manifest.get("model_id")
 
     # -------------------------
     # Evaluation
@@ -297,12 +317,18 @@ def main() -> None:
         "seed": exp_cfg.seed,
         "perturbation": exp_cfg.perturbation,
         "task": task,
+        "runtime": exp_cfg.runtime.name,
+        "requested_device": exp_cfg.runtime.device,
+        "requested_dtype": exp_cfg.runtime.dtype,
+        "resolved_device": inference_manifest.get("device"),
+        "resolved_dtype": inference_manifest.get("dtype"),
         "metrics": metrics,
         "paths": {
             "inputs": str(inputs_path),
             "predictions": str(preds_path),
             "metrics": str(exp_dir / "metrics.json"),
             "phenotypes": str(exp_dir / "phenotypes.json"),
+            "inference_manifest": str(inference_manifest_path),
         },
     }
     register_run(run_record)

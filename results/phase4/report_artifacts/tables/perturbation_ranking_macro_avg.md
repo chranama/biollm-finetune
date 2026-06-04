@@ -1,10 +1,10 @@
 | perturbation           |   n_runs |   mean__macro_avg |   std__macro_avg |
 |:-----------------------|---------:|------------------:|-----------------:|
-| shuffle_snippets       |        1 |       -0.00959873 |      nan         |
-| irrelevant_noise_heavy |        3 |       -0.0078704  |        0.0238865 |
-| clean                  |        3 |        0          |        0         |
-| contradiction          |        3 |        0          |        0         |
-| irrelevant_noise       |        1 |        0.00265851 |      nan         |
-| lexical_noise_heavy    |        3 |        0.00773442 |        0.0203075 |
-| lexical_noise_medium   |        1 |        0.00803571 |      nan         |
-| lexical_noise          |        1 |        0.00849359 |      nan         |
+| shuffle_snippets       |        2 |       -0.0384678  |       0.0034915  |
+| lexical_noise_medium   |        1 |       -0.0294752  |     nan          |
+| irrelevant_noise_heavy |        3 |       -0.020374   |       0.0301117  |
+| lexical_noise          |        2 |       -0.00813492 |       0.00654729 |
+| lexical_noise_heavy    |        3 |       -0.00476923 |       0.0318471  |
+| irrelevant_noise       |        2 |       -0.00281211 |       0.00384503 |
+| clean                  |        4 |        0          |       0          |
+| contradiction          |        4 |        0          |       0          |

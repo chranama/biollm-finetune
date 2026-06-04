@@ -10,7 +10,10 @@ without rerunning every step.
 - `results/phase4/experiments.csv`: run-level metrics and metadata table.
 - `results/phase4/report_artifacts/tables/perturbation_ranking_macro_avg.md`:
   perturbation ranking by aggregate score delta.
-- `results/phase4/analysis/phenotype_findings.md`: phenotype-conditioned summary.
+- `results/phase4/peft/tiny_adapter_manifest.json`: lightweight PEFT adapter
+  evidence without adapter weights.
+- `results/phase4/runtime/runtime_summary.json`: requested-vs-resolved runtime
+  summary derived from the aggregate experiment table.
 - `proof/evidence_manifest.latest.json`: machine-readable inventory of the
   saved evidence set.
 
@@ -25,6 +28,8 @@ Each run under `results/experiments/` contains files such as:
 - `run_metadata.json`: registry metadata for aggregation and inspection helpers
 - `manifest.json`: run metadata, config path, seed, model, perturbation, and
   timing information
+- `inference_manifest.json`: resolved inference runtime, including actual
+  device, dtype, model id, adapter path, seed, and git commit
 
 These files are the lowest-level artifacts for checking a single run.
 
@@ -42,6 +47,11 @@ The tiny local config uses:
   adapter-aware inference.
 - `results/ckpts/tiny_adapter/run.json`: Manifest copied beside the final
   adapter for inspection.
+- `results/ckpts/tiny_adapter/adapter_manifest.json`: Local generated PEFT
+  manifest with LoRA settings, training data count, runtime, and adapter
+  checksum.
+- `results/phase4/peft/tiny_adapter_manifest.json`: Reviewer-facing copy of the
+  adapter manifest that can be tracked without committing adapter weights.
 
 An adapter-aware experiment then records the adapter path in
 `results/experiments/<experiment-name>/manifest.json` and
@@ -59,9 +69,15 @@ Useful files:
 - `deltas/deltas_wide.csv`: wide-form clean-vs-perturbed deltas
 - `deltas/deltas_summary.json`: aggregate delta summary
 - `analysis/phase4_findings.md`: human-readable robustness findings
-- `analysis/phenotype_findings.md`: human-readable phenotype findings
 - `report_artifacts/tables/`: Markdown and CSV tables
 - `report_artifacts/figures/`: generated figures
+- `peft/tiny_adapter_manifest.json`: lightweight PEFT adapter evidence
+- `runtime/runtime_summary.json`: requested and resolved runtime summary
+
+Phenotype-conditioned outputs may exist under `results/phase4/phenotypes/` and
+`results/phase4/analysis/phenotype_findings.md`, but they are optional research
+context in the current proof set. Refresh them before using them as current
+evidence.
 
 ## Evidence Manifest
 
@@ -84,6 +100,7 @@ The runbook contains the local validation command.
 ## What Artifacts Do Not Show
 
 The saved artifacts do not establish clinical correctness, model safety, or
-production reliability. They show that the repository can run a bounded
-evaluation workflow, persist its intermediate state, and validate references to
-the current saved outputs.
+production reliability. They also do not prove that the tiny LoRA adapter is
+broadly better than the base model. They show that the repository can run a
+bounded evaluation workflow, persist its intermediate state, demonstrate a local
+LoRA adapter path, and validate references to the current saved outputs.

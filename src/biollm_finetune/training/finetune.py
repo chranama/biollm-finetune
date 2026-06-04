@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 import torch
+from biollm_finetune.training.adapter_manifest import write_adapter_manifest
 from biollm_finetune.utils.config import load_training_config
 from biollm_finetune.utils.device import resolve_device
 
@@ -409,6 +410,11 @@ def main() -> None:
     tok.save_pretrained(str(final_model_dir))
     if final_model_dir != trainer_output_dir:
         write_manifest(manifest, out_dir=final_model_dir)
+    if cfg.model.use_peft:
+        write_adapter_manifest(
+            adapter_dir=final_model_dir,
+            config_path=args.config,
+        )
 
     console.print(f"[bold green]Saved model/tokenizer →[/bold green] {final_model_dir.resolve()}")
 

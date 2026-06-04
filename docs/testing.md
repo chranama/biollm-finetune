@@ -25,14 +25,17 @@ Current tests cover:
 - manifest writing
 - missing-input and missing-adapter failure behavior
 - adapter path resolution from experiment configs
+- adapter manifest generation
+- per-experiment inference manifest wiring
 - quantized model loading guardrails
 - generation CLI smoke behavior
 
 ## Fine-Tuning Tests
 
 Fast tests validate that `configs/finetune_tiny.yaml` loads through the
-training-only schema and that the adapter-aware experiment config points to the
-expected generated adapter directory.
+training-only schema, that the adapter-aware experiment config points to the
+expected generated adapter directory, and that lightweight PEFT adapter manifests
+record the expected LoRA state.
 
 The suite does not run full model fine-tuning by default because that path can
 download model weights and write checkpoint artifacts. Use the runbook's tiny

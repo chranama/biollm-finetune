@@ -22,7 +22,89 @@ def git_commit() -> str:
 
 
 def main() -> None:
-    data = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    data = {
+        "proof_id": "biollm-phase4-canonical",
+        "run_id": "phase4_latest",
+        "status": "pass",
+        "claims": [
+            {
+                "claim_text": "Phase 4 robustness summary artifact is present and reproducible.",
+                "verification_command": "python proof/generate_canonical_manifest.py",
+                "artifact_paths": [
+                    "results/phase4/summary.json",
+                    "results/phase4/experiments.csv",
+                ],
+                "expected_signal": "summary.json and experiments.csv exist for canonical run output review.",
+            },
+            {
+                "claim_text": "Robustness analysis and ranking outputs are persisted for reviewer verification.",
+                "verification_command": "python proof/generate_canonical_manifest.py",
+                "artifact_paths": [
+                    "results/phase4/analysis/phase4_findings.md",
+                    "results/phase4/report_artifacts/tables/perturbation_ranking_macro_avg.md",
+                ],
+                "expected_signal": "findings and ranking table exist and are human-readable.",
+            },
+            {
+                "claim_text": "Experiment integrity is checked against the configured current run set.",
+                "verification_command": (
+                    "python scripts/validate_experiment_integrity.py --only-configured "
+                    "--out results/analysis/integrity_report.json"
+                ),
+                "artifact_paths": [
+                    "results/analysis/integrity_report.json",
+                    "results/phase4/deltas/deltas_summary.json",
+                ],
+                "expected_signal": "integrity report and delta summary exist for consistency checks.",
+            },
+            {
+                "claim_text": "Local PEFT LoRA adapter training is represented by a lightweight adapter manifest.",
+                "verification_command": (
+                    "PYTHONPATH=src python scripts/summarize_peft_adapter.py "
+                    "--adapter-dir results/ckpts/tiny_adapter "
+                    "--out results/phase4/peft/tiny_adapter_manifest.json"
+                ),
+                "artifact_paths": [
+                    "results/phase4/peft/tiny_adapter_manifest.json",
+                ],
+                "expected_signal": (
+                    "adapter manifest records base model, LoRA settings, quantization flags, "
+                    "training data count, runtime, and adapter checksum without storing weights."
+                ),
+            },
+            {
+                "claim_text": "Adapter-aware and base inference runs expose resolved runtime state.",
+                "verification_command": (
+                    "PYTHONPATH=src python scripts/summarize_runtime_manifests.py "
+                    "--experiments-csv results/phase4/experiments.csv "
+                    "--out results/phase4/runtime/runtime_summary.json"
+                ),
+                "artifact_paths": [
+                    "results/phase4/runtime/runtime_summary.json",
+                ],
+                "expected_signal": (
+                    "runtime summary shows requested device/dtype, resolved device/dtype, model id, "
+                    "adapter path, and per-run manifest locations."
+                ),
+            },
+        ],
+        "diagnostics": {
+            "seed_config": [42, 97, 13],
+            "canonical_configs_prefix": "configs/experiments/bioasq_TINY_mps_fp32_",
+            "demoted_artifacts": ["results/phase4/phenotypes/"],
+            "capability_status": {
+                "local_lora": "demonstrated",
+                "cuda_qlora": "configured_not_locally_demonstrated",
+                "mps_runtime": "requested_but_runtime_resolved_cpu_in_current_environment",
+                "phenotype_analysis": "optional_not_part_of_current_proof_set",
+            },
+            "notes": [
+                "Canonical proof references the latest phase4 robustness artifact set.",
+                "PEFT proof uses a lightweight adapter manifest because adapter weights are generated and not tracked.",
+                "Use proof/validate_evidence_manifest.py to enforce proof contract and metadata checks.",
+            ],
+        },
+    }
     data["generated_at"] = datetime.now(timezone.utc).isoformat()
     data["repo_commit"] = git_commit()
     MANIFEST.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")

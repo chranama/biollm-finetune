@@ -1,7 +1,7 @@
 # Runbook
 
-This runbook covers local setup, validation, a small experiment run, aggregation,
-and cleanup.
+This runbook covers local setup, validation, fine-tuning, adapter-aware
+evaluation, aggregation, proof artifact generation, and cleanup.
 
 For config, input, and output contracts, see [Workflow Interface](interface.md).
 
@@ -38,6 +38,7 @@ Expected training outputs:
 - `results/ckpts/tiny_run/run.json`
 - `results/ckpts/tiny_adapter/`
 - `results/ckpts/tiny_adapter/run.json`
+- `results/ckpts/tiny_adapter/adapter_manifest.json`
 
 Checkpoint and adapter outputs under `results/ckpts/` are generated artifacts
 and are not tracked by git.
@@ -52,6 +53,63 @@ pip install -e ".[dev,gpu]"
 Then use `configs/finetune.yaml` after providing the private BioASQ-style JSONL
 training file referenced by that config.
 
+## Run The Local LoRA Proof Workflow
+
+This sequence trains the tiny local LoRA adapter, runs the matching adapter and
+base-model perturbation sets, refreshes aggregate outputs, publishes a
+lightweight PEFT manifest, and validates the current proof manifest.
+
+Use offline Hugging Face mode when the TinyLlama model is already cached:
+
+```bash
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONPATH=src python -m biollm_finetune.training.finetune \
+  --config configs/finetune_tiny.yaml
+```
+
+Run the adapter-backed clean and perturbation set:
+
+```bash
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONPATH=src python scripts/run_experiments.py \
+  --configs configs/experiments \
+  --select model.name=tinyllama-1.1b-chat-lora
+```
+
+Run the matching seed-42 base-model controls:
+
+```bash
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONPATH=src python scripts/run_experiments.py \
+  --configs configs/experiments \
+  --select model.name=tinyllama-1.1b-chat \
+  --select seed=42 \
+  --select perturbation=clean,shuffle_snippets,lexical_noise,irrelevant_noise,contradiction
+```
+
+Refresh the current evidence outputs:
+
+```bash
+PYTHONPATH=src python scripts/aggregate_experiments.py
+PYTHONPATH=src python scripts/compute_deltas.py \
+  --experiments-csv results/phase4/experiments.csv \
+  --out-dir results/phase4/deltas
+PYTHONPATH=src python scripts/analyze_phase4_results.py
+PYTHONPATH=src python scripts/generate_phase4_tables_and_figures.py
+PYTHONPATH=src python scripts/summarize_peft_adapter.py \
+  --adapter-dir results/ckpts/tiny_adapter \
+  --out results/phase4/peft/tiny_adapter_manifest.json
+PYTHONPATH=src python scripts/summarize_runtime_manifests.py \
+  --experiments-csv results/phase4/experiments.csv \
+  --out results/phase4/runtime/runtime_summary.json
+python scripts/validate_experiment_integrity.py \
+  --only-configured \
+  --out results/analysis/integrity_report.json
+python proof/generate_canonical_manifest.py
+python proof/validate_evidence_manifest.py
+```
+
+The experiment configs request MPS for local Apple hardware, but the actual
+runtime depends on the installed PyTorch build. Inspect each run's
+`inference_manifest.json` to confirm the resolved device and dtype.
+
 ## Evaluate A Trained Adapter
 
 After `results/ckpts/tiny_adapter/` exists, run the adapter-aware experiment
@@ -64,7 +122,9 @@ PYTHONPATH=src python scripts/run_experiment.py \
 
 The runner passes the adapter path into generation, writes the exact inference
 inputs, scores the predictions, and saves the same per-run artifacts as the
-inference-only experiment path.
+inference-only experiment path. It also writes `inference_manifest.json` into the
+experiment directory so the resolved device, dtype, model id, adapter path, seed,
+and git commit are inspectable.
 
 ## Run A Single Experiment
 
@@ -118,6 +178,15 @@ PYTHONPATH=src python scripts/compute_deltas.py \
   --out-dir results/phase4/deltas
 PYTHONPATH=src python scripts/analyze_phase4_results.py
 PYTHONPATH=src python scripts/generate_phase4_tables_and_figures.py
+PYTHONPATH=src python scripts/summarize_peft_adapter.py \
+  --adapter-dir results/ckpts/tiny_adapter \
+  --out results/phase4/peft/tiny_adapter_manifest.json
+PYTHONPATH=src python scripts/summarize_runtime_manifests.py \
+  --experiments-csv results/phase4/experiments.csv \
+  --out results/phase4/runtime/runtime_summary.json
+python scripts/validate_experiment_integrity.py \
+  --only-configured \
+  --out results/analysis/integrity_report.json
 python proof/generate_canonical_manifest.py
 python proof/validate_evidence_manifest.py
 ```
@@ -128,8 +197,9 @@ Start with:
 
 - `results/phase4/summary.json`
 - `results/phase4/analysis/phase4_findings.md`
-- `results/phase4/analysis/phenotype_findings.md`
 - `results/phase4/report_artifacts/tables/perturbation_ranking_macro_avg.md`
+- `results/phase4/peft/tiny_adapter_manifest.json`
+- `results/phase4/runtime/runtime_summary.json`
 - `proof/evidence_manifest.latest.json`
 
 ## Shutdown

@@ -10,10 +10,10 @@ questions from structured examples. This project focuses on robustness
 evaluation: holding the model and experiment settings fixed while changing
 inputs, then measuring whether answer quality changes.
 
-The current artifact set uses a small BioASQ-style sample, fixed seeds, and
-deterministic perturbations for local research evaluation. The repository also
-includes PEFT adapter fine-tuning support, but the saved public outputs
-emphasize inference-only robustness analysis.
+The current artifact set uses a small BioASQ-style sample, fixed seeds,
+deterministic perturbations, and a local TinyLlama LoRA adapter demonstration.
+CUDA QLoRA support is implemented as a CUDA-oriented configuration path, but it
+is not demonstrated by the local artifacts in this repository.
 
 ## Workflow
 
@@ -33,7 +33,7 @@ metrics, tables, figures, and validation metadata directly.
 
 - Load and preprocess BioASQ-style question data
 - Run local inference with Hugging Face causal language models
-- Fine-tune PEFT adapters with local LoRA and CUDA QLoRA configurations
+- Fine-tune PEFT adapters with local LoRA and CUDA QLoRA configuration support
 - Apply deterministic perturbations to questions and snippets
 - Score yes/no, factoid, list, and summary answers
 - Aggregate clean-vs-perturbed deltas across seeds
@@ -74,10 +74,15 @@ Useful entry points:
 - `results/phase4/summary.json`
 - `results/phase4/experiments.csv`
 - `results/phase4/analysis/phase4_findings.md`
-- `results/phase4/analysis/phenotype_findings.md`
 - `results/phase4/report_artifacts/tables/perturbation_ranking_macro_avg.md`
 - `results/phase4/report_artifacts/figures/`
+- `results/phase4/peft/tiny_adapter_manifest.json`
+- `results/phase4/runtime/runtime_summary.json`
 - `proof/evidence_manifest.latest.json`
+
+The current proof set demotes phenotype-conditioned analysis to optional
+research context. Those files may exist under `results/phase4/phenotypes/`, but
+they are not part of the current evidence manifest unless explicitly refreshed.
 
 ## Documentation
 

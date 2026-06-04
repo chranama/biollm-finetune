@@ -89,6 +89,7 @@ def count_changed_fields(clean: Dict[str, Any], pert: Dict[str, Any]) -> int:
 # Extend freely as you add runtimes.
 KNOWN_RUNTIMES = {
     "mps_fp32",
+    "mps_fp32_lora",
     "cpu_fp32",
     "cuda_fp16",
     "cuda_bf16",

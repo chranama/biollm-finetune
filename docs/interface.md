@@ -116,6 +116,10 @@ After training, set an experiment config's `model.adapter_output_dir` to the
 saved adapter path and run `scripts/run_experiment.py` to evaluate the adapter
 with the same metric and artifact workflow used for inference-only runs.
 
+Local LoRA training writes `results/ckpts/tiny_adapter/adapter_manifest.json`.
+The reviewer-facing PEFT summary is written to
+`results/phase4/peft/tiny_adapter_manifest.json`.
+
 ## Input Data
 
 The active experiment configs use BioASQ-style JSONL. Each line is one question
@@ -189,6 +193,7 @@ Current run files include:
 | `phenotypes.json` | Example-level phenotype tags and phenotype definitions. |
 | `run_metadata.json` | Registry metadata used by aggregation and inspection helpers. |
 | `manifest.json` | Run metadata including config path, dataset, model, seed, perturbation, counts, task, and timestamps. |
+| `inference_manifest.json` | Resolved inference runtime, including actual device, dtype, model id, adapter path, seed, and git commit. |
 | `stability.json` | Optional stability output when robustness settings are enabled. |
 
 ## Phase-Level Outputs
@@ -210,9 +215,13 @@ Useful outputs:
 | `deltas/deltas_wide.csv` | Clean-vs-perturbed deltas in wide format. |
 | `deltas/deltas_summary.json` | Aggregate delta summary. |
 | `analysis/phase4_findings.md` | Human-readable robustness findings. |
-| `analysis/phenotype_findings.md` | Human-readable phenotype findings. |
 | `report_artifacts/tables/` | Markdown and CSV tables for reporting. |
 | `report_artifacts/figures/` | Generated figures for delta and phenotype views. |
+| `peft/tiny_adapter_manifest.json` | Lightweight PEFT adapter evidence without adapter weights. |
+| `runtime/runtime_summary.json` | Requested-vs-resolved runtime summary derived from `experiments.csv`. |
+
+Phenotype-conditioned outputs are optional research context in the current proof
+set. Refresh them before treating them as current evidence.
 
 ## Validation Outputs
 

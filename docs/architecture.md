@@ -12,6 +12,7 @@ configs/finetune*.yaml
       -> BioASQ-style prompt/answer rows
       -> PEFT LoRA adapter or CUDA QLoRA adapter
       -> results/ckpts/<adapter>/
+      -> adapter_manifest.json
 
 configs/experiments/*.yaml
   -> scripts/run_experiment.py
@@ -22,6 +23,7 @@ configs/experiments/*.yaml
       -> biollm_finetune.eval.metrics
       -> biollm_finetune.analysis.phenotypes
       -> results/experiments/<run>/
+          -> inference_manifest.json
   -> aggregation and reporting scripts
       -> results/phase4/
       -> proof/evidence_manifest.latest.json
@@ -30,8 +32,8 @@ configs/experiments/*.yaml
 ## Main Modules
 
 - `biollm_finetune.data`: JSON and JSONL loading, preprocessing, and sampling.
-- `biollm_finetune.training`: PEFT adapter fine-tuning entry point for local
-  LoRA and CUDA QLoRA configurations.
+- `biollm_finetune.training`: PEFT adapter fine-tuning entry point for
+  demonstrated local LoRA and configured CUDA QLoRA workflows.
 - `biollm_finetune.inference`: Hugging Face generation from config and input
   files.
 - `biollm_finetune.eval`: BioASQ-style scoring and postprocessing.
@@ -49,7 +51,9 @@ inputs, outputs, metrics, and metadata to disk.
 Fine-tuning is an upstream step rather than a hidden part of evaluation.
 `biollm_finetune.training.finetune` writes a final adapter directory, and an
 experiment config opts into that adapter through `model.adapter` or
-`model.adapter_output_dir`.
+`model.adapter_output_dir`. Adapter weights stay under generated checkpoint
+directories, while lightweight PEFT metadata can be published under
+`results/phase4/peft/`.
 
 Configuration and runtime setup are handled separately from scoring and
 aggregation:
@@ -63,8 +67,10 @@ aggregation:
 
 The system treats generated files as reviewable experiment state. A run directory
 contains the exact inference inputs, predictions, metrics, phenotype tags, and
-manifest for that run. Phase-level scripts then produce aggregate CSV, JSON,
-Markdown, and figure outputs under `results/phase4/`.
+manifest for that run. Each run also records an inference manifest so requested
+runtime settings can be compared with the actual resolved device and dtype.
+Phase-level scripts then produce aggregate CSV, JSON, Markdown, and figure
+outputs under `results/phase4/`.
 
 ## Design Tradeoffs
 

@@ -39,7 +39,7 @@ def read_csv_rows(path: Path) -> Tuple[List[str], List[Dict[str, str]]]:
 def write_csv(path: Path, rows: List[Dict[str, Any]], header: List[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=header)
+        w = csv.DictWriter(f, fieldnames=header, lineterminator="\n")
         w.writeheader()
         for r in rows:
             w.writerow({k: r.get(k, "") for k in header})
@@ -139,17 +139,19 @@ def main() -> None:
         if k not in header:
             raise SystemExit(f"[error] key col '{k}' not in CSV header. Available: {header}")
 
-    # If runtime is missing, derive it
+    # If runtime is missing or blank on older rows, derive it from run naming.
+    for r in rows:
+        if (r.get("runtime") or "").strip():
+            continue
+        seed = _to_int(r.get("seed", 0))
+        runtime = derive_runtime_from_experiment(
+            experiment=r.get("experiment", ""),
+            dataset=r.get("dataset", ""),
+            perturbation=r.get("perturbation", ""),
+            seed=seed,
+        )
+        r["runtime"] = runtime
     if "runtime" not in header:
-        for r in rows:
-            seed = _to_int(r.get("seed", 0))
-            runtime = derive_runtime_from_experiment(
-                experiment=r.get("experiment", ""),
-                dataset=r.get("dataset", ""),
-                perturbation=r.get("perturbation", ""),
-                seed=seed,
-            )
-            r["runtime"] = runtime
         header = header + ["runtime"]
 
     # Index clean baselines by (dataset, runtime, seed, model)

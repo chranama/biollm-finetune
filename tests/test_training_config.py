@@ -55,3 +55,34 @@ def test_run_experiment_resolves_adapter_output_dir(repo_root):
     model_cfg = SimpleNamespace(adapter=None, adapter_output_dir="results/ckpts/tiny_adapter")
 
     assert str(module._resolve_adapter_path(model_cfg)) == "results/ckpts/tiny_adapter"
+
+
+def test_run_experiment_passes_inference_manifest_path(repo_root, monkeypatch, tmp_path):
+    script_path = repo_root / "scripts" / "run_experiment.py"
+    spec = importlib.util.spec_from_file_location("run_experiment", script_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+
+    calls = []
+
+    def fake_check_call(cmd):
+        calls.append(cmd)
+        return 0
+
+    monkeypatch.setattr(module.subprocess, "check_call", fake_check_call)
+    runtime = SimpleNamespace(inference_config="configs/inference_tiny.yaml")
+    manifest_path = tmp_path / "inference_manifest.json"
+
+    module._run_inference(
+        runtime=runtime,
+        inputs_path=tmp_path / "inputs.jsonl",
+        outputs_path=tmp_path / "predictions.jsonl",
+        manifest_path=manifest_path,
+        adapter_path=None,
+        seed=42,
+    )
+
+    assert calls
+    assert "--manifest-out" in calls[0]
+    assert str(manifest_path) in calls[0]

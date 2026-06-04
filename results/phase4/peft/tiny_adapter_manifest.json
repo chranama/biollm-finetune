@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-06-04T17:57:28.981489+00:00",
+  "adapter_path": "results/ckpts/tiny_adapter",
+  "base_model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+  "training_run": {
+    "entrypoint": "training.finetune",
+    "config_path": "configs/finetune_tiny.yaml",
+    "started_at_utc": "2026-06-04T17:35:13.198473+00:00",
+    "git_commit": "2238e0e5ee7295f51d63b6e253774c82ebd837cc",
+    "python": "3.11.5",
+    "platform": "Darwin 25.5.0",
+    "torch": "2.9.0.dev20250809",
+    "requested_device": "auto",
+    "resolved_device": "cpu",
+    "dtype": "torch.float32",
+    "seed_info": {
+      "seed": 42,
+      "deterministic": true
+    }
+  },
+  "peft": {
+    "enabled": true,
+    "peft_type": "LORA",
+    "task_type": "CAUSAL_LM",
+    "lora_r": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "v_proj"
+    ]
+  },
+  "quantization": {
+    "load_4bit": false,
+    "load_8bit": false,
+    "bnb_4bit_quant_type": null,
+    "bnb_4bit_use_double_quant": null,
+    "locally_demonstrated": true
+  },
+  "data": {
+    "train_file": "data/samples/smoke_train.jsonl",
+    "train_rows": 100,
+    "validation_split": 0.1,
+    "include_snippets": true,
+    "max_length": 384,
+    "question_field": "body",
+    "answer_field": "ideal_answer"
+  },
+  "training": {
+    "output_dir": "results/ckpts/tiny_run",
+    "max_steps": 30,
+    "num_train_epochs": 1,
+    "per_device_train_batch_size": 1,
+    "gradient_accumulation_steps": 2,
+    "learning_rate": "5e-5",
+    "weight_decay": 0.01,
+    "max_grad_norm": 0.5
+  },
+  "artifacts": {
+    "adapter_config": "results/ckpts/tiny_adapter/adapter_config.json",
+    "adapter_model": "results/ckpts/tiny_adapter/adapter_model.safetensors",
+    "adapter_model_sha256": "a50d81d99c494c5b0a4f27176fcfebe1e6c2c47c6c6823b8532832003fefbff3",
+    "adapter_weights_tracked_by_git": false,
+    "tokenizer_present": true,
+    "training_args_present": true
+  },
+  "interpretation": {
+    "local_lora_demonstrated": true,
+    "cuda_qlora_demonstrated": false,
+    "quality_lift_claimed": false
+  }
+}

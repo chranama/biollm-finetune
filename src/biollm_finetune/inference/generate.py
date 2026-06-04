@@ -141,6 +141,11 @@ def main() -> None:
     ap.add_argument("--out", required=True, help="Output JSONL predictions file")
     ap.add_argument("--adapter", help="Optional path to a PEFT adapter (overrides config)")
     ap.add_argument("--seed", type=int, default=None, help="Override inference seed")
+    ap.add_argument(
+        "--manifest-out",
+        default=None,
+        help="Optional path for this inference run manifest.",
+    )
     args = ap.parse_args()
 
     # 1) Parse & validate config
@@ -203,7 +208,16 @@ def main() -> None:
         seed_info=seed_info,
         extra={"input": str(args.input), "out": str(args.out)},
     )
-    manifest_path = write_manifest(manifest, out_dir="results/runs/inference")
+    if args.manifest_out:
+        manifest_out = Path(args.manifest_out)
+        manifest_path = write_manifest(
+            manifest,
+            out_dir=manifest_out.parent,
+            filename=manifest_out.name,
+        )
+        write_manifest(manifest, out_dir="results/runs/inference")
+    else:
+        manifest_path = write_manifest(manifest, out_dir="results/runs/inference")
     log.info(f"[bold green]Run manifest →[/bold green] {manifest_path.resolve()}")
 
     # 5) Load tokenizer and model
