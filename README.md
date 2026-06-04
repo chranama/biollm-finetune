@@ -1,20 +1,19 @@
 # BioLLM-Finetune
 
-BioLLM-Finetune is a Python evaluation workflow for biomedical question answering.
-It runs config-defined experiments, applies deterministic input perturbations,
-scores BioASQ-style outputs, and writes artifacts for comparing clean and
-perturbed model behavior.
+BioLLM-Finetune evaluates how biomedical question-answering models behave when
+question text is changed in controlled ways. It runs config-defined experiments,
+applies deterministic perturbations, scores BioASQ-style answers, and saves
+artifacts that make clean-vs-perturbed behavior inspectable.
 
-Biomedical question answering evaluates whether a model can answer biomedical
-questions from structured examples. Fine-tuning adapts a model with
-task-specific training data, while inference-only evaluation runs a configured
-model without changing its weights. This workflow changes question text in
-controlled ways and compares whether answer quality changes under those
-perturbations.
+Biomedical QA asks a model to answer domain-specific medical or biological
+questions from structured examples. This project focuses on robustness
+evaluation: holding the model and experiment settings fixed while changing
+inputs, then measuring whether answer quality changes.
 
-The project is intended for local research and evaluation workflows. It is not a
-production inference service, a clinical decision system, or a broad benchmark of
-biomedical language models.
+The current artifact set uses a small BioASQ-style sample, fixed seeds, and
+deterministic perturbations for local research evaluation. The repository also
+includes adapter fine-tuning support, but the saved public outputs emphasize
+inference-only robustness analysis.
 
 ## Workflow
 
@@ -27,8 +26,8 @@ YAML config
   -> run artifacts, aggregate tables, and validation metadata
 ```
 
-The current saved artifact set focuses on inference-only robustness evaluation
-for a small BioASQ sample using fixed seeds and deterministic perturbations.
+Saved outputs are listed below so reviewers can inspect the experiment inputs,
+metrics, tables, figures, and validation metadata directly.
 
 ## Responsibilities
 
