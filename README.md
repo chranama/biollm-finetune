@@ -5,6 +5,13 @@ It runs config-defined experiments, applies deterministic input perturbations,
 scores BioASQ-style outputs, and writes artifacts for comparing clean and
 perturbed model behavior.
 
+Biomedical question answering evaluates whether a model can answer biomedical
+questions from structured examples. Fine-tuning adapts a model with
+task-specific training data, while inference-only evaluation runs a configured
+model without changing its weights. This workflow changes question text in
+controlled ways and compares whether answer quality changes under those
+perturbations.
+
 The project is intended for local research and evaluation workflows. It is not a
 production inference service, a clinical decision system, or a broad benchmark of
 biomedical language models.
@@ -48,46 +55,15 @@ docs/                 Active system documentation
 archive/              Historical research notes and earlier code snapshots
 ```
 
-## Quick Start
+## Run Locally
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-```
+The local runbook provides the step-by-step guide for setup, tests, a single
+experiment run, aggregation, evidence validation, output inspection, and cleanup:
 
-Run the test suite:
+- [Runbook](docs/runbook.md)
 
-```bash
-pytest -q
-```
-
-If the package has not been installed in editable mode, use the CI-style import
-path:
-
-```bash
-PYTHONPATH=src python -m pytest -q
-```
-
-Validate the saved evidence manifest:
-
-```bash
-python proof/validate_evidence_manifest.py
-```
-
-## Run One Experiment
-
-This command runs a small clean BioASQ experiment. It may download model weights
-from Hugging Face if the model is not already cached.
-
-```bash
-PYTHONPATH=src python scripts/run_experiment.py \
-  --config configs/experiments/bioasq_TINY_mps_fp32_clean_seed42.yaml
-```
-
-Each run writes a self-contained output directory under `results/experiments/`
-with the exact inputs used for inference, predictions, metrics, phenotype tags,
-and run metadata.
+Some experiment runs can download model weights from Hugging Face if the model
+is not already cached.
 
 ## Current Outputs
 
@@ -106,6 +82,7 @@ Useful entry points:
 ## Documentation
 
 - [Architecture](docs/architecture.md)
+- [Workflow Interface](docs/interface.md)
 - [Evaluation Method](docs/evaluation.md)
 - [Artifacts](docs/artifacts.md)
 - [Testing](docs/testing.md)

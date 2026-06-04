@@ -5,23 +5,11 @@ scoring, and a small generation smoke path.
 
 ## Setup
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-```
+Use the runbook for local environment setup.
 
-## Test Command
+## Local Tests
 
-```bash
-pytest -q
-```
-
-CI runs tests with `PYTHONPATH=src`. The equivalent local command is:
-
-```bash
-PYTHONPATH=src python -m pytest -q
-```
+Use the runbook for local test commands. CI runs tests with `PYTHONPATH=src`.
 
 ## Test Coverage Areas
 
@@ -45,14 +33,11 @@ the configured Hugging Face model.
 Use the other tests and the evidence manifest validation for faster checks when
 model execution is not needed.
 
-## Validation Command
+## Manifest Validation
 
-```bash
-python proof/validate_evidence_manifest.py
-```
-
-This command checks that the latest saved evidence manifest is internally
-consistent and that referenced artifact paths exist.
+Evidence manifest validation checks that the latest saved evidence manifest is
+internally consistent and that referenced artifact paths exist. Use the runbook
+for the local validation command.
 
 ## CI Checks
 

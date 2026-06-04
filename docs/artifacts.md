@@ -3,6 +3,17 @@
 BioLLM-Finetune writes experiment state to disk so results can be inspected
 without rerunning every step.
 
+## What To Inspect First
+
+- `results/phase4/analysis/phase4_findings.md`: human-readable robustness findings.
+- `results/phase4/summary.json`: grouped summary of the current artifact set.
+- `results/phase4/experiments.csv`: run-level metrics and metadata table.
+- `results/phase4/report_artifacts/tables/perturbation_ranking_macro_avg.md`:
+  perturbation ranking by aggregate score delta.
+- `results/phase4/analysis/phenotype_findings.md`: phenotype-conditioned summary.
+- `proof/evidence_manifest.latest.json`: machine-readable inventory of the
+  saved evidence set.
+
 ## Run Artifacts
 
 Each run under `results/experiments/` contains files such as:
@@ -10,7 +21,8 @@ Each run under `results/experiments/` contains files such as:
 - `inputs.jsonl`: exact inputs passed to inference
 - `predictions.jsonl`: model outputs
 - `metrics.json`: BioASQ-style scores
-- `phenotypes.jsonl`: phenotype tags for the run inputs
+- `phenotypes.json`: phenotype tags for the run inputs
+- `run_metadata.json`: registry metadata for aggregation and inspection helpers
 - `manifest.json`: run metadata, config path, seed, model, perturbation, and
   timing information
 
@@ -45,14 +57,10 @@ Primary files:
 - `proof/proof_points.latest.md`
 - `proof/validate_evidence_manifest.py`
 
-Validate the manifest:
-
-```bash
-python proof/validate_evidence_manifest.py
-```
-
 The manifest validation checks that referenced artifacts exist and that expected
 metadata, such as seed configuration, is present.
+
+The runbook contains the local validation command.
 
 ## What Artifacts Do Not Show
 

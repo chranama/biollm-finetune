@@ -34,6 +34,24 @@ Perturbations are deterministic when the run seed is fixed. The experiment runne
 writes the exact inputs used for inference so clean and perturbed examples can be
 inspected after the run.
 
+## Concrete Example
+
+A clean yes/no input can ask:
+
+```text
+Is daridorexant effective for insomnia?
+```
+
+The clean run passes the original question and snippets to inference. A
+perturbed run keeps the same gold answer but changes the input condition, such as
+by shuffling snippets, adding irrelevant biomedical text, applying lexical noise,
+or appending a contradiction-style statement.
+
+The comparison asks whether the model still returns an answer that scores
+correctly against the clean gold label. At the run level, the project compares
+the clean score with the perturbed score for the same dataset, model, runtime,
+and seed.
+
 ## Metrics
 
 Metrics are selected by question type:

@@ -3,6 +3,8 @@
 This runbook covers local setup, validation, a small experiment run, aggregation,
 and cleanup.
 
+For config, input, and output contracts, see [Workflow Interface](interface.md).
+
 ## Setup
 
 ```bash
@@ -42,7 +44,8 @@ Expected run files include:
 - `inputs.jsonl`
 - `predictions.jsonl`
 - `metrics.json`
-- `phenotypes.jsonl`
+- `phenotypes.json`
+- `run_metadata.json`
 - `manifest.json`
 
 ## Run A Selected Experiment Set
