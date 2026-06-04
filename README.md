@@ -19,12 +19,17 @@ is not demonstrated by the local artifacts in this repository.
 ## Workflow
 
 ```text
-Optional training config
-  -> BioASQ-style prompt/answer rows
-  -> LoRA or CUDA QLoRA adapter
-  -> adapter-aware experiment config
-  -> clean or perturbed inference
-  -> BioASQ-style metrics and reviewable artifacts
+Core evaluation:
+  BioASQ-style QA examples
+    -> clean or perturbed inference
+    -> BioASQ-style metrics
+    -> reviewable artifacts
+
+Optional adapter path:
+  BioASQ-style prompt/answer rows
+    -> LoRA adapter training
+    -> adapter-aware experiment config
+    -> same evaluation workflow
 ```
 
 Saved outputs are listed below so reviewers can inspect the experiment inputs,
