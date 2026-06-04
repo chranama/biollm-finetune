@@ -17,20 +17,19 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 import torch
-from rich.console import Console
-from transformers import (
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    Trainer,
-    TrainingArguments,
-)
-
-from biollm_finetune.utils.config import load_config
+from biollm_finetune.utils.config import load_training_config
 from biollm_finetune.utils.device import resolve_device
 
 # >>> Minimal additions for logging + reproducibility manifest
 from biollm_finetune.utils.logging import get_logger
+from biollm_finetune.utils.model_loading import load_causal_lm
 from biollm_finetune.utils.repro import set_seed, start_manifest, write_manifest
+from rich.console import Console
+from transformers import (
+    AutoTokenizer,
+    Trainer,
+    TrainingArguments,
+)
 
 # <<<
 
@@ -205,11 +204,9 @@ def main() -> None:
 
     # 1) Parse & validate config
     try:
-        cfg = load_config(args.config)
+        cfg = load_training_config(args.config)
     except Exception as e:
         raise SystemExit(f"[ConfigError] {e}")
-    if not cfg.training:
-        raise SystemExit("Training section missing in config.")
 
     # 2) Resolve device + dtype
     device, dtype = resolve_device(
@@ -225,12 +222,6 @@ def main() -> None:
     log.info(f"[bold]Seed:[/bold] {seed_info['seed']} (deterministic={seed_info['deterministic']})")
     # -----------------------------
 
-    # Guard quantization on non-CUDA
-    if (cfg.model.load_4bit or cfg.model.load_8bit) and device != "cuda":
-        raise SystemExit(
-            "4/8-bit quantization requires CUDA. On macOS/CPU/MPS, set load_4bit=false and load_8bit=false."
-        )
-
     # 3) Model + tokenizer
     model_id = cfg.model.base_model or cfg.model.path
     if not model_id:
@@ -242,26 +233,32 @@ def main() -> None:
     if tok.pad_token_id is None:
         tok.pad_token_id = tok.eos_token_id
 
-    model = AutoModelForCausalLM.from_pretrained(
-        model_id,
-        torch_dtype=dtype,
-    )
+    try:
+        model = load_causal_lm(model_id, model_cfg=cfg.model, dtype=dtype, device=device)
+    except Exception as e:
+        raise SystemExit(f"Failed to load model {model_id}: {e}")
 
     # Make training stable on smaller devices
     tok.padding_side = "right"  # avoid odd attention masks
     if hasattr(model.config, "use_cache"):
         model.config.use_cache = False  # must be False for training (esp. with PEFT)
-    if hasattr(model.config, "attn_implementation"):
-        model.config.attn_implementation = "eager"  # avoid fused kernels on MPS
+    attn_impl = cfg.model.attn_implementation or ("eager" if device in {"cpu", "mps"} else None)
+    if attn_impl and hasattr(model.config, "attn_implementation"):
+        model.config.attn_implementation = attn_impl
+    if cfg.model.gradient_checkpointing and hasattr(model, "gradient_checkpointing_enable"):
+        model.gradient_checkpointing_enable()
 
     # 4) Optional PEFT/LoRA
     if cfg.model.use_peft:
         try:
-            from peft import LoraConfig, get_peft_model
+            from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
         except Exception as e:
             raise SystemExit(
                 f"PEFT is requested (model.use_peft=true) but peft is not installed: {e}"
             )
+
+        if cfg.model.load_4bit or cfg.model.load_8bit:
+            model = prepare_model_for_kbit_training(model)
 
         target_modules = cfg.model.target_modules or ["q_proj", "v_proj"]
         lconf = LoraConfig(
@@ -313,6 +310,8 @@ def main() -> None:
 
     # 6) TrainingArguments (from cfg.training)
     t = cfg.training
+    trainer_output_dir = Path(t.output_dir)
+    final_model_dir = Path(cfg.model.adapter_output_dir or t.output_dir)
 
     # Some HF versions expect `evaluation_strategy`, some older forks used `eval_strategy`.
     # Choose the right kw name dynamically.
@@ -334,10 +333,14 @@ def main() -> None:
         eval_kw: (t.evaluation_strategy if getattr(t, "evaluation_strategy", None) else "no"),
         "eval_steps": t.eval_steps,
         "save_total_limit": t.save_total_limit,
+        "max_grad_norm": t.max_grad_norm,
         "report_to": (cfg.system.report_to if cfg.system and cfg.system.report_to else "none"),
         "fp16": (dtype == torch.float16),
         "bf16": (dtype == torch.bfloat16),
     }
+    ta_kwargs = {k: v for k, v in ta_kwargs.items() if v is not None}
+    if "torch_compile" in ta_params:
+        ta_kwargs["torch_compile"] = bool(cfg.model.torch_compile)
     targs = TrainingArguments(**ta_kwargs)
 
     # --- Minimal MANIFEST block (after we know all paths) ---
@@ -347,17 +350,21 @@ def main() -> None:
         device=str(device),
         dtype=str(dtype),
         model_id=model_id,
-        adapter_path=getattr(cfg.model, "adapter_output_dir", None),
+        adapter_path=str(final_model_dir),
         seed_info=seed_info,
         extra={
-            "output_dir": t.output_dir,
+            "trainer_output_dir": str(trainer_output_dir),
+            "final_model_dir": str(final_model_dir),
             "train_file": train_file,
             "val_split": cfg.data.validation_split,
             "max_length": max_len,
             "include_snippets": include_snippets,
+            "use_peft": bool(cfg.model.use_peft),
+            "load_4bit": bool(cfg.model.load_4bit),
+            "load_8bit": bool(cfg.model.load_8bit),
         },
     )
-    manifest_path = write_manifest(manifest, out_dir=t.output_dir)
+    manifest_path = write_manifest(manifest, out_dir=trainer_output_dir)
     log.info(f"[bold green]Run manifest →[/bold green] {manifest_path.resolve()}")
     # --------------------------------------------------------
 
@@ -375,7 +382,9 @@ def main() -> None:
     trainer.args.bf16 = False
     trainer.args.dataloader_pin_memory = False
     # stronger clipping helps avoid NaNs on MPS
-    if getattr(trainer.args, "max_grad_norm", None) is None or trainer.args.max_grad_norm > 0.5:
+    if device in {"cpu", "mps"} and (
+        getattr(trainer.args, "max_grad_norm", None) is None or trainer.args.max_grad_norm > 0.5
+    ):
         trainer.args.max_grad_norm = 0.5
 
     # Skip updates on non-finite loss (defensive)
@@ -396,12 +405,12 @@ def main() -> None:
         f"[bold]Train examples:[/bold] {len(train_ds)} | [bold]Val examples:[/bold] {len(eval_ds) if eval_ds else 0}"
     )
     trainer.train()
-    trainer.save_model(t.output_dir)  # saves adapter weights if PEFT, otherwise full model head
-    tok.save_pretrained(t.output_dir)
+    trainer.save_model(str(final_model_dir))  # saves adapter weights if PEFT, otherwise full model
+    tok.save_pretrained(str(final_model_dir))
+    if final_model_dir != trainer_output_dir:
+        write_manifest(manifest, out_dir=final_model_dir)
 
-    console.print(
-        f"[bold green]Saved model/tokenizer →[/bold green] {Path(t.output_dir).resolve()}"
-    )
+    console.print(f"[bold green]Saved model/tokenizer →[/bold green] {final_model_dir.resolve()}")
 
 
 if __name__ == "__main__":

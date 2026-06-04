@@ -2,7 +2,6 @@ import sys
 from pathlib import Path
 
 import pytest
-
 from biollm_finetune.inference.generate import main as gen_main
 
 CFG = """

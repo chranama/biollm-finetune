@@ -12,18 +12,18 @@ inputs, then measuring whether answer quality changes.
 
 The current artifact set uses a small BioASQ-style sample, fixed seeds, and
 deterministic perturbations for local research evaluation. The repository also
-includes adapter fine-tuning support, but the saved public outputs emphasize
-inference-only robustness analysis.
+includes PEFT adapter fine-tuning support, but the saved public outputs
+emphasize inference-only robustness analysis.
 
 ## Workflow
 
 ```text
-YAML config
-  -> BioASQ-style input data
-  -> optional deterministic perturbation
-  -> Hugging Face model inference or adapter-based fine-tuning
-  -> BioASQ-style metrics
-  -> run artifacts, aggregate tables, and validation metadata
+Optional training config
+  -> BioASQ-style prompt/answer rows
+  -> LoRA or CUDA QLoRA adapter
+  -> adapter-aware experiment config
+  -> clean or perturbed inference
+  -> BioASQ-style metrics and reviewable artifacts
 ```
 
 Saved outputs are listed below so reviewers can inspect the experiment inputs,
@@ -33,7 +33,7 @@ metrics, tables, figures, and validation metadata directly.
 
 - Load and preprocess BioASQ-style question data
 - Run local inference with Hugging Face causal language models
-- Support LoRA and QLoRA adapter fine-tuning workflows
+- Fine-tune PEFT adapters with local LoRA and CUDA QLoRA configurations
 - Apply deterministic perturbations to questions and snippets
 - Score yes/no, factoid, list, and summary answers
 - Aggregate clean-vs-perturbed deltas across seeds
@@ -56,8 +56,9 @@ archive/              Historical research notes and earlier code snapshots
 
 ## Run Locally
 
-The local runbook provides the step-by-step guide for setup, tests, a single
-experiment run, aggregation, evidence validation, output inspection, and cleanup:
+The local runbook provides the step-by-step guide for setup, tests, fine-tuning,
+single experiment runs, adapter evaluation, aggregation, evidence validation,
+output inspection, and cleanup:
 
 - [Runbook](docs/runbook.md)
 

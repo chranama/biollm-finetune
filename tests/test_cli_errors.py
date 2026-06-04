@@ -4,7 +4,6 @@ import os
 from pathlib import Path
 
 import pytest
-
 from biollm_finetune.inference.generate import main as gen_main
 from biollm_finetune.training.finetune import main as ft_main
 from biollm_finetune.utils.config import load_config

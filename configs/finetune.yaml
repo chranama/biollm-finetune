@@ -5,6 +5,8 @@ model:
   adapter_output_dir: "results/ckpts/mistral7b_qlora_bioasq"
   load_4bit: true              # requires bitsandbytes (install via extra: pip install '.[gpu]')
   load_8bit: false
+  bnb_4bit_quant_type: "nf4"
+  bnb_4bit_use_double_quant: true
   bf16: true                   # set true if your GPU supports bfloat16
   fp16: false
   gradient_checkpointing: true
@@ -15,7 +17,7 @@ model:
   target_modules: ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
 
 data:
-  train_file: "data/training12b_new.json"   # migrated from train_json
+  train_file: "data/training12b_new.jsonl"   # BioASQ-style JSONL training rows
   validation_split: 0.05
   max_length: 512
   include_snippets: true

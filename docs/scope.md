@@ -6,7 +6,8 @@ BioLLM-Finetune is a local biomedical QA experiment and evaluation workflow.
 
 - BioASQ-style data loading and preprocessing
 - Local Hugging Face model inference
-- LoRA and QLoRA adapter fine-tuning entry points
+- PEFT adapter fine-tuning on BioASQ-style prompt/answer rows
+- Local LoRA training and CUDA QLoRA configuration support
 - Deterministic perturbation of input questions and snippets
 - BioASQ-style answer scoring
 - Clean-vs-perturbed robustness comparison
@@ -24,6 +25,7 @@ BioLLM-Finetune is a local biomedical QA experiment and evaluation workflow.
 - High-availability deployment
 - Full biomedical model benchmarking
 - Claims about clinical safety or medical correctness
+- Claims that a fine-tuned adapter is clinically useful or broadly superior
 
 ## Current Artifact Scope
 

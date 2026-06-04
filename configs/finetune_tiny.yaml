@@ -53,7 +53,7 @@ training:
   logging_steps: 5
   save_steps: 15
   save_total_limit: 1
-  max_grad_norm: 1.0         # <-- crucial to prevent gradient explosion
+  max_grad_norm: 0.5         # clipped conservatively on CPU/MPS
   evaluation_strategy: "no"  # disable eval loop (avoid extra forward passes)
   seed: 42
 

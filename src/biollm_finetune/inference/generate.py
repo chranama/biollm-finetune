@@ -11,7 +11,6 @@ Generate answers for BioASQ-style questions using a HF causal LM.
 from __future__ import annotations
 
 import argparse
-import inspect
 import json
 import subprocess
 import sys
@@ -20,13 +19,13 @@ from typing import Any, Dict, Iterable, List, Optional
 
 import torch
 import yaml
-from rich.console import Console
-from transformers import AutoModelForCausalLM, AutoTokenizer, LogitsProcessor, LogitsProcessorList
-
 from biollm_finetune.utils.config import load_inference_config
 from biollm_finetune.utils.device import resolve_device
 from biollm_finetune.utils.logging import get_logger
+from biollm_finetune.utils.model_loading import load_causal_lm
 from biollm_finetune.utils.repro import set_seed, start_manifest, write_manifest
+from rich.console import Console
+from transformers import AutoTokenizer, LogitsProcessor, LogitsProcessorList
 
 console = Console()
 
@@ -132,29 +131,6 @@ class SanitizeLogitsProcessor(LogitsProcessor):
         return scores
 
 
-def _load_causal_lm(model_id: str, dtype: torch.dtype):
-    """
-    Future-proof dtype handling across Transformers versions.
-
-    Newer Transformers favors `dtype=...`.
-    Older versions use `torch_dtype=...`.
-
-    We detect which parameter is supported and pass only that one.
-    """
-    sig = inspect.signature(AutoModelForCausalLM.from_pretrained)
-    kwargs: Dict[str, Any] = {}
-
-    if "dtype" in sig.parameters:
-        kwargs["dtype"] = dtype
-    elif "torch_dtype" in sig.parameters:
-        kwargs["torch_dtype"] = dtype
-    else:
-        # Very old / unexpected API; fall back to no dtype override
-        kwargs = {}
-
-    return AutoModelForCausalLM.from_pretrained(model_id, **kwargs)
-
-
 # ---------- Main ----------
 
 
@@ -207,6 +183,8 @@ def main() -> None:
         or getattr(cfg.model, "adapter_output_dir", None)
         or getattr(cfg.model, "adapter", None)
     )
+    if adapter_path and not Path(adapter_path).exists():
+        raise SystemExit(f"Adapter path not found: {adapter_path}")
 
     # Guard quantization on non-CUDA
     if (
@@ -233,7 +211,15 @@ def main() -> None:
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token_id = tokenizer.eos_token_id
 
-    model = _load_causal_lm(model_id, dtype=resolved_dtype)
+    try:
+        model = load_causal_lm(
+            model_id,
+            model_cfg=cfg.model,
+            dtype=resolved_dtype,
+            device=device,
+        )
+    except Exception as e:
+        raise SystemExit(f"Failed to load model {model_id}: {e}")
 
     # Optional: PEFT adapter
     if adapter_path:

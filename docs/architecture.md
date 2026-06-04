@@ -7,11 +7,18 @@ seed, perturbation, and output directory for a run.
 ## Component Flow
 
 ```text
-configs/*.yaml
+configs/finetune*.yaml
+  -> biollm_finetune.training.finetune
+      -> BioASQ-style prompt/answer rows
+      -> PEFT LoRA adapter or CUDA QLoRA adapter
+      -> results/ckpts/<adapter>/
+
+configs/experiments/*.yaml
   -> scripts/run_experiment.py
       -> biollm_finetune.data
       -> biollm_finetune.analysis.perturbations
       -> biollm_finetune.inference.generate
+          -> optional adapter from results/ckpts/
       -> biollm_finetune.eval.metrics
       -> biollm_finetune.analysis.phenotypes
       -> results/experiments/<run>/
@@ -23,7 +30,8 @@ configs/*.yaml
 ## Main Modules
 
 - `biollm_finetune.data`: JSON and JSONL loading, preprocessing, and sampling.
-- `biollm_finetune.training`: LoRA and QLoRA fine-tuning entry point.
+- `biollm_finetune.training`: PEFT adapter fine-tuning entry point for local
+  LoRA and CUDA QLoRA configurations.
 - `biollm_finetune.inference`: Hugging Face generation from config and input
   files.
 - `biollm_finetune.eval`: BioASQ-style scoring and postprocessing.
@@ -37,6 +45,11 @@ configs/*.yaml
 Model execution is isolated behind `biollm_finetune.inference.generate`. The
 experiment runner calls inference as a subprocess so each run writes explicit
 inputs, outputs, metrics, and metadata to disk.
+
+Fine-tuning is an upstream step rather than a hidden part of evaluation.
+`biollm_finetune.training.finetune` writes a final adapter directory, and an
+experiment config opts into that adapter through `model.adapter` or
+`model.adapter_output_dir`.
 
 Configuration and runtime setup are handled separately from scoring and
 aggregation:

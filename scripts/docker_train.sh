@@ -3,13 +3,13 @@
 # Usage:
 #   ./scripts/docker_train.sh [-i IMAGE] [-c CONFIG] [-d DATA_DIR] [-r RESULTS_DIR] [-m CACHE_DIR]
 # Example:
-#   ./scripts/docker_train.sh -c configs/finetune_bioasq.yaml
+#   ./scripts/docker_train.sh -c configs/finetune.yaml
 
 set -euo pipefail
 
 # ---- defaults (edit to taste) ----
 IMAGE_DEFAULT="bioasq-llm-qa:cuda11.8"
-CONFIG_DEFAULT="configs/finetune_bioasq.yaml"
+CONFIG_DEFAULT="configs/finetune.yaml"
 DATA_DIR_DEFAULT="$(pwd)/data"
 RESULTS_DIR_DEFAULT="$(pwd)/results"
 CACHE_DIR_DEFAULT="$HOME/.cache/huggingface"      # shared HF cache
@@ -60,4 +60,4 @@ docker run --rm --gpus all --name "$CONTAINER_NAME" \
   -v "$CACHE_DIR":/models_cache \
   -w /app \
   "$IMAGE" \
-  bash -lc "python -m bioasq_llm.training.finetune --config $CONFIG"
+  bash -lc "python -m biollm_finetune.training.finetune --config $CONFIG"

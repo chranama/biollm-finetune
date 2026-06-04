@@ -28,6 +28,25 @@ Each run under `results/experiments/` contains files such as:
 
 These files are the lowest-level artifacts for checking a single run.
 
+## Fine-Tuning Artifacts
+
+Fine-tuning writes generated checkpoint and adapter files under `results/ckpts/`.
+These files are ignored by git because adapter weights can be large and
+environment-specific.
+
+The tiny local config uses:
+
+- `results/ckpts/tiny_run/`: Trainer checkpoint directory and training
+  `run.json`.
+- `results/ckpts/tiny_adapter/`: Final adapter/model directory used by
+  adapter-aware inference.
+- `results/ckpts/tiny_adapter/run.json`: Manifest copied beside the final
+  adapter for inspection.
+
+An adapter-aware experiment then records the adapter path in
+`results/experiments/<experiment-name>/manifest.json` and
+`run_metadata.json`.
+
 ## Phase 4 Artifacts
 
 Phase-level aggregation writes to `results/phase4/`.

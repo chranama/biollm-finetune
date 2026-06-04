@@ -19,23 +19,28 @@ class ModelConfig(BaseModel):
     max_length: Optional[int] = 2048
     adapter_output_dir: Optional[str] = None
     gradient_checkpointing: Optional[bool] = False
+    attn_implementation: Optional[str] = None
+    torch_compile: Optional[bool] = False
     use_peft: Optional[bool] = None
     lora_r: Optional[int] = None
     lora_alpha: Optional[int] = None
     lora_dropout: Optional[float] = None
     target_modules: Optional[List[str]] = None
+    bnb_4bit_quant_type: Optional[str] = "nf4"
+    bnb_4bit_use_double_quant: Optional[bool] = True
     dtype: Optional[Literal["float32", "float16", "bfloat16"]] = None
     torch_dtype: Optional[Literal["float32", "float16", "bfloat16"]] = None
     # Optional adapter (PEFT)
     adapter: Optional[str] = Field(
         None, description="Path to a PEFT adapter directory for inference"
     )
-    adapter_output_dir: Optional[str] = None
 
     @model_validator(mode="after")
     def _check_precision_exclusivity(self) -> "ModelConfig":
         if self.bf16 and self.fp16:
             raise ValueError("Set at most one of bf16/fp16.")
+        if self.load_4bit and self.load_8bit:
+            raise ValueError("Set at most one of load_4bit/load_8bit.")
         return self
 
     @model_validator(mode="after")
@@ -144,6 +149,7 @@ class TrainingArgs(BaseModel):
     evaluation_strategy: Literal["no", "steps", "epoch"] = "steps"
     eval_steps: Optional[int] = None
     save_total_limit: Optional[int] = 1
+    max_grad_norm: Optional[float] = None
     seed: int = 42
 
     @field_validator("output_dir")
@@ -158,6 +164,38 @@ class SystemArgs(BaseModel):
     use_mps: Optional[bool] = None
     report_to: Optional[str] = "none"
     disable_tqdm: bool = False
+
+
+class TrainingOnlyConfig(BaseModel):
+    """
+    Config used by the fine-tuning entry point.
+
+    Training does not require the experiment `dataset` and `runtime` sections
+    used by `scripts/run_experiment.py`; it consumes a training file directly
+    and writes a checkpoint or adapter directory.
+    """
+
+    model: ModelConfig
+    data: DataArgs
+    training: TrainingArgs
+    system: Optional[SystemArgs] = SystemArgs()
+
+    @model_validator(mode="after")
+    def _check_training_scope(self) -> "TrainingOnlyConfig":
+        import platform
+
+        if not (self.model.base_model or self.model.path):
+            raise ValueError("Training config requires model.base_model or model.path.")
+        if not self.data.train_file:
+            raise ValueError("Training config requires data.train_file.")
+
+        is_mac = platform.system() == "Darwin"
+        if is_mac and (self.model.load_4bit or self.model.load_8bit):
+            raise ValueError(
+                "4-bit/8-bit quantization is not supported on macOS CPU/MPS. "
+                "Set load_4bit=false, load_8bit=false."
+            )
+        return self
 
 
 class FullConfig(BaseModel):
@@ -235,6 +273,14 @@ def load_config(path: str) -> FullConfig:
     if "model" not in raw or "data" not in raw:
         raise ValueError("Config must contain at least 'model' and 'data' sections.")
     return FullConfig(**raw)
+
+
+def load_training_config(path: str) -> TrainingOnlyConfig:
+    raw = read_yaml(path)
+    missing = [section for section in ("model", "data", "training") if section not in raw]
+    if missing:
+        raise ValueError(f"Training config missing required section(s): {', '.join(missing)}.")
+    return TrainingOnlyConfig(**raw)
 
 
 class InferenceOnlyConfig(BaseModel):

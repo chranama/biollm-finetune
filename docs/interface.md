@@ -32,10 +32,10 @@ Important fields:
 | `runtime.inference_config` | Inference config consumed by the generation entry point. |
 | `runtime.device` and `runtime.dtype` | Local execution target and numeric type. |
 | `model.name` and `model.path` | Model label and Hugging Face model path. |
-| `model.adapter` | Optional adapter path for adapter-based inference. |
+| `model.adapter` or `model.adapter_output_dir` | Optional adapter path for adapter-based inference. |
 | `data.include_snippets` | Whether snippets are included in the model input. |
 | `inference.*` | Batch size and generation controls. |
-| `training` | Optional training settings. The active Phase 4 artifact set is inference-only. |
+| `training` | Not used by the experiment runner; training uses its own config shape. |
 
 Minimal config shape:
 
@@ -60,6 +60,61 @@ inference:
   batch_size: 1
   max_new_tokens: 128
 ```
+
+## Training Config
+
+Fine-tuning is driven by a separate YAML shape consumed by
+`biollm_finetune.training.finetune`. It trains a Hugging Face causal language
+model on BioASQ-style prompt/answer rows and writes a final model or PEFT
+adapter directory.
+
+Concrete examples:
+
+- `configs/finetune_tiny.yaml`: local LoRA smoke configuration.
+- `configs/finetune.yaml`: CUDA QLoRA configuration for a larger model and
+  private training data.
+
+Important fields:
+
+| Field | Purpose |
+|---|---|
+| `model.base_model` | Hugging Face model id or local model path used for training. |
+| `model.adapter_output_dir` | Final adapter/model directory used later by inference. |
+| `model.use_peft` | Enables PEFT adapter training when true. |
+| `model.load_4bit` and `model.load_8bit` | CUDA-only quantized loading flags. |
+| `model.lora_*` | LoRA rank, alpha, dropout, and target modules. |
+| `data.train_file` | BioASQ-style JSONL prompt/answer training rows. |
+| `data.include_snippets` | Whether snippets are included in the supervised prompt. |
+| `data.question_field` and `data.answer_field` | Input and target fields read from each row. |
+| `training.output_dir` | Trainer checkpoint and run manifest directory. |
+| `training.max_steps`, `num_train_epochs`, and batch fields | Training length and batch sizing. |
+| `system.device_map` | Local execution target, such as `auto`, `mps`, `cpu`, or `cuda`. |
+
+Minimal local shape:
+
+```yaml
+model:
+  base_model: TinyLlama/TinyLlama-1.1B-Chat-v1.0
+  adapter_output_dir: results/ckpts/tiny_adapter
+  use_peft: true
+  load_4bit: false
+  load_8bit: false
+data:
+  train_file: data/samples/smoke_train.jsonl
+  include_snippets: true
+  question_field: body
+  answer_field: ideal_answer
+training:
+  output_dir: results/ckpts/tiny_run
+  max_steps: 30
+  per_device_train_batch_size: 1
+system:
+  device_map: auto
+```
+
+After training, set an experiment config's `model.adapter_output_dir` to the
+saved adapter path and run `scripts/run_experiment.py` to evaluate the adapter
+with the same metric and artifact workflow used for inference-only runs.
 
 ## Input Data
 

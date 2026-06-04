@@ -178,6 +178,21 @@ def _count_changed(orig: list[dict[str, Any]], pert: list[dict[str, Any]]) -> in
     return changed
 
 
+def _resolve_adapter_path(model_cfg: Any) -> Optional[Path]:
+    """
+    Resolve an optional adapter path from experiment model config.
+
+    `model.adapter` is used for existing adapters that should be validated by
+    config loading. `model.adapter_output_dir` is useful for workflows where a
+    prior fine-tuning step writes the adapter before this runner is invoked.
+    """
+    for attr in ("adapter", "adapter_output_dir"):
+        value = getattr(model_cfg, attr, None)
+        if isinstance(value, str) and value.strip():
+            return Path(value)
+    return None
+
+
 # ---------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------
@@ -201,6 +216,7 @@ def main() -> None:
         "config": args.config,
         "dataset": exp_cfg.dataset.name,
         "model": exp_cfg.model.name,
+        "adapter_path": str(_resolve_adapter_path(exp_cfg.model) or ""),
         "seed": exp_cfg.seed,
         "start_time_utc": _now_utc(),
         "perturbation": exp_cfg.perturbation,
@@ -247,10 +263,7 @@ def main() -> None:
     # Inference
     # -------------------------
     preds_path = exp_dir / "predictions.jsonl"
-    adapter_str = getattr(exp_cfg.model, "adapter", None)
-    adapter_path = (
-        Path(adapter_str) if isinstance(adapter_str, str) and adapter_str.strip() else None
-    )
+    adapter_path = _resolve_adapter_path(exp_cfg.model)
 
     _run_inference(
         runtime=exp_cfg.runtime,
@@ -280,6 +293,7 @@ def main() -> None:
         "run_id": exp_name,
         "dataset": exp_cfg.dataset.name,
         "model": exp_cfg.model.name,
+        "adapter_path": str(adapter_path or ""),
         "seed": exp_cfg.seed,
         "perturbation": exp_cfg.perturbation,
         "task": task,

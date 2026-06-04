@@ -23,6 +23,49 @@ PYTHONPATH=src python -m pytest -q
 python proof/validate_evidence_manifest.py
 ```
 
+## Run A Tiny Fine-Tuning Job
+
+This example trains a small LoRA adapter on the committed smoke training sample.
+It may download model weights from Hugging Face if they are not cached.
+
+```bash
+PYTHONPATH=src python -m biollm_finetune.training.finetune \
+  --config configs/finetune_tiny.yaml
+```
+
+Expected training outputs:
+
+- `results/ckpts/tiny_run/run.json`
+- `results/ckpts/tiny_adapter/`
+- `results/ckpts/tiny_adapter/run.json`
+
+Checkpoint and adapter outputs under `results/ckpts/` are generated artifacts
+and are not tracked by git.
+
+For CUDA QLoRA runs, install the optional GPU dependencies in a CUDA
+environment:
+
+```bash
+pip install -e ".[dev,gpu]"
+```
+
+Then use `configs/finetune.yaml` after providing the private BioASQ-style JSONL
+training file referenced by that config.
+
+## Evaluate A Trained Adapter
+
+After `results/ckpts/tiny_adapter/` exists, run the adapter-aware experiment
+config:
+
+```bash
+PYTHONPATH=src python scripts/run_experiment.py \
+  --config configs/experiments/bioasq_TINY_mps_fp32_lora_clean_seed42.yaml
+```
+
+The runner passes the adapter path into generation, writes the exact inference
+inputs, scores the predictions, and saves the same per-run artifacts as the
+inference-only experiment path.
+
 ## Run A Single Experiment
 
 This example runs one clean BioASQ sample experiment. It may download model
