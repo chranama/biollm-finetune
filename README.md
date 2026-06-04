@@ -1,9 +1,10 @@
 # BioLLM-Finetune
 
 BioLLM-Finetune evaluates how biomedical question-answering models behave when
-question text is changed in controlled ways. It runs config-defined experiments,
-applies deterministic perturbations, scores BioASQ-style answers, and saves
-artifacts that make clean-vs-perturbed behavior inspectable.
+question text is changed in controlled ways. It runs config-defined experiments
+against [BioASQ](https://bioasq.org/)-style biomedical question-answering data,
+applies deterministic perturbations, scores answers, and saves artifacts that
+make clean-vs-perturbed behavior inspectable.
 
 Biomedical QA asks a model to answer domain-specific medical or biological
 questions from structured examples. This project focuses on robustness
